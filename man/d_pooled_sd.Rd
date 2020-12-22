@@ -24,5 +24,7 @@ Descriptive statistics and mean differences
 Standardized mean difference with pooled standard deviation
 }
 \examples{
-d_pooled_sd(iris[iris$Species=="setosa" | iris$Species=="versicolor",], var="Petal.Length", group.var="Species", group.values=c("setosa","versicolor"))
+d_pooled_sd(iris[iris$Species=="setosa" | iris$Species=="versicolor",],
+ var="Petal.Length", group.var="Species",
+  group.values=c("setosa","versicolor"))
 }

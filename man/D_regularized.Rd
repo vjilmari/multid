@@ -2,7 +2,7 @@
 % Please edit documentation in R/D_regularized.R
 \name{D_regularized}
 \alias{D_regularized}
-\title{Title}
+\title{Multivariate group difference estimation with regularized binomial regression}
 \usage{
 D_regularized(
   data,
@@ -13,7 +13,7 @@ D_regularized(
   nfolds = 10,
   s = "lambda.min",
   type.measure = "deviance",
-  rename.output = T
+  rename.output = TRUE
 )
 }
 \arguments{
@@ -36,8 +36,14 @@ D_regularized(
 \item{rename.output}{Logical. Should the output values be renamed according to the group.values? Default TRUE.}
 }
 \value{
-
+\item{D}{Multivariate descriptives and differences}
+\item{pred.dat}{A data.frame with predicted values}
 }
 \description{
-Title
+Multivariate group difference estimation with regularized binomial regression
+}
+\examples{
+D_regularized(data = iris[iris$Species=="setosa" | iris$Species=="versicolor",],
+ mv.vars = c("Sepal.Length","Sepal.Width","Petal.Length","Petal.Width"), 
+ group.var="Species", group.values=c("setosa","versicolor"))$D
 }

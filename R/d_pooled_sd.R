@@ -10,7 +10,9 @@
 #' @export
 #'
 #' @examples
-#' d_pooled_sd(iris[iris$Species=="setosa" | iris$Species=="versicolor",], var="Petal.Length", group.var="Species", group.values=c("setosa","versicolor"))
+#' d_pooled_sd(iris[iris$Species=="setosa" | iris$Species=="versicolor",],
+#'  var="Petal.Length", group.var="Species",
+#'   group.values=c("setosa","versicolor"))
 d_pooled_sd<-
   function(data,
            var,
@@ -21,10 +23,10 @@ d_pooled_sd<-
   dat1<-data[data[,group.var]==group.values[1],]
   dat2<-data[data[,group.var]==group.values[2],]
 
-  sd.1<-sd(dat1[,var])
+  sd.1<-stats::sd(dat1[,var])
   n.1<-length(dat1[,var])
 
-  sd.2<-sd(dat2[,var])
+  sd.2<-stats::sd(dat2[,var])
   n.2<-length(dat2[,var])
 
   pooled.sd<-sqrt(((n.1-1)*sd.1^2+(n.2-1)*sd.2^2)/(n.1+n.2-2))

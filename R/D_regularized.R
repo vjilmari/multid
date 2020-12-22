@@ -1,4 +1,4 @@
-#' Title
+#' Multivariate group difference estimation with regularized binomial regression
 #'
 #' @param data A data.frame
 #' @param mv.vars Character vector. Variable names in the multivariate variable set
@@ -11,9 +11,14 @@
 #' @param rename.output Logical. Should the output values be renamed according to the group.values? Default TRUE.
 #'
 #' @return
+#' \item{D}{Multivariate descriptives and differences}
+#' \item{pred.dat}{A data.frame with predicted values} 
 #' @export
 #'
-#' @examples
+#' @examples D_regularized(data = iris[iris$Species=="setosa" | iris$Species=="versicolor",],
+#'  mv.vars = c("Sepal.Length","Sepal.Width","Petal.Length","Petal.Width"), 
+#'  group.var="Species", group.values=c("setosa","versicolor"))$D
+
 D_regularized<-
   function(data,
            mv.vars,
@@ -23,8 +28,8 @@ D_regularized<-
            nfolds=10,
            s="lambda.min",
            type.measure="deviance",
-           rename.output=T){
-
+           rename.output=TRUE){
+    
   data$group.var.num<-
     ifelse(data[,group.var]==group.values[1],1,
            ifelse(data[,group.var]==group.values[2],0,
@@ -40,9 +45,10 @@ D_regularized<-
   
   preds<-data.frame(
     group=data[,group.var],
-    pred=as.numeric(predict(cv.mod,
-                          newx=as.matrix(data[,c(mv.vars)]),
-                          s=s)))
+    pred=as.numeric(
+      stats::predict(cv.mod,
+              newx=as.matrix(data[,c(mv.vars)]),
+              s=s)))
   
   D<-multid::d_pooled_sd(data = preds,
                  var = "pred",
