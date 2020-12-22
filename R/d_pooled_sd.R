@@ -4,12 +4,13 @@
 #' @param var A continuous variable for which difference is estimated
 #' @param group.var The name of the group variable
 #' @param group.values Vector of length 2, group values (e.g. c("male", "female) or c(0,1))
-#' @param rename.output Logical. Should the output values be renamed according to the group.values?
+#' @param rename.output Logical. Should the output values be renamed according to the group.values? Default TRUE.
 #'
 #' @return Descriptive statistics and mean differences
 #' @export
 #'
 #' @examples
+#' d_pooled_sd(iris[iris$Species=="setosa" | iris$Species=="versicolor",], var="Petal.Length", group.var="Species", group.values=c("setosa","versicolor"))
 d_pooled_sd<-
   function(data,
            var,
