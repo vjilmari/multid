@@ -2,12 +2,12 @@ Package: multid
 Title: Multivariate Difference between Two Groups
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Ville-Juhani",
+           family = "Ilmarinen",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+           email = "vj.ilmarinen@gmail.com",
+           comment = c(ORCID = "0000-0001-9493-379X"))
+Description: Estimation of multivariate differences between two groups (e.g., multivariate sex differences) with regularized methods.
 License: `use_mit_license()`, `use_gpl3_license()` or friends to
     pick a license
 Encoding: UTF-8
