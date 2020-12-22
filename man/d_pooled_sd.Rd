@@ -15,11 +15,14 @@ d_pooled_sd(data, var, group.var, group.values, rename.output = TRUE)
 
 \item{group.values}{Vector of length 2, group values (e.g. c("male", "female) or c(0,1))}
 
-\item{rename.output}{Logical. Should the output values be renamed according to the group.values?}
+\item{rename.output}{Logical. Should the output values be renamed according to the group.values? Default TRUE.}
 }
 \value{
 Descriptive statistics and mean differences
 }
 \description{
 Standardized mean difference with pooled standard deviation
+}
+\examples{
+d_pooled_sd(iris[iris$Species=="setosa" | iris$Species=="versicolor",], var="Petal.Length", group.var="Species", group.values=c("setosa","versicolor"))
 }
