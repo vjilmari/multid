@@ -40,7 +40,7 @@ D_regularized<-
   
   preds<-data.frame(
     group=data[,group.var],
-    pred=as.numeric(glmnet::predict(cv.mod,
+    pred=as.numeric(predict(cv.mod,
                           newx=as.matrix(data[,c(mv.vars)]),
                           s=s)))
   
