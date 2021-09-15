@@ -21,7 +21,7 @@
 #' d <-
 #'   data.frame(
 #'     sex = sample(c("male", "female"), n1 * n2, replace = T),
-#'     fold = sample(x = 1:n2, size = n1 * n2, replace = T),
+#'     fold = sample(x = LETTERS[1:n2], size = n1 * n2, replace = T),
 #'     x1 = rnorm(n1 * n2),
 #'     x2 = rnorm(n1 * n2),
 #'     x3 = rnorm(n1 * n2)
@@ -117,7 +117,7 @@ D_regularized_fold <-
     D.folded.df$d.sd.total <- D.folded.df$diff /
       D.folded.df$pooled.sd.total
 
-    D.folded.df<-D.folded.df[ order(row.names(D.folded.df)), ]
+    D.folded.df <- D.folded.df[order(row.names(D.folded.df)), ]
 
     comb.output <- list(D = D.folded.df, preds = preds, cv.mod = cv.mod)
 
