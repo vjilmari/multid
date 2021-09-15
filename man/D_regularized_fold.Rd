@@ -42,3 +42,24 @@ D_regularized_fold(
 \description{
 Multivariate group difference estimation by regularization with sample folds
 }
+\examples{
+set.seed(34246)
+n1 <- 100
+n2 <- 10
+d <-
+  data.frame(
+    sex = sample(c("male", "female"), n1 * n2, replace = T),
+    fold = sample(x = 1:n2, size = n1 * n2, replace = T),
+    x1 = rnorm(n1 * n2),
+    x2 = rnorm(n1 * n2),
+    x3 = rnorm(n1 * n2)
+  )
+
+D_regularized_fold(
+  data = d,
+  mv.vars = c("x1", "x2", "x3"),
+  group.var = "sex",
+  group.values = c("female", "male"),
+  fold.var = "fold"
+)$D
+}

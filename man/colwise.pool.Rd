@@ -2,7 +2,7 @@
 % Please edit documentation in R/colwise_pool.R
 \name{colwise.pool}
 \alias{colwise.pool}
-\title{Title}
+\title{Column-wise pooling of standard deviations}
 \usage{
 colwise.pool(data, n1, n2, m1, m2, sd1, sd2)
 }
@@ -25,5 +25,5 @@ colwise.pool(data, n1, n2, m1, m2, sd1, sd2)
 pooled SDs for groups and across groups
 }
 \description{
-Title
+Column-wise pooling of standard deviations
 }
