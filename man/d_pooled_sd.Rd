@@ -7,13 +7,13 @@
 d_pooled_sd(data, var, group.var, group.values, rename.output = TRUE)
 }
 \arguments{
-\item{data}{A data.frame in long format}
+\item{data}{A data frame.}
 
-\item{var}{A continuous variable for which difference is estimated}
+\item{var}{A continuous variable for which difference is estimated.}
 
-\item{group.var}{The name of the group variable}
+\item{group.var}{The name of the group variable.}
 
-\item{group.values}{Vector of length 2, group values (e.g. c("male", "female) or c(0,1))}
+\item{group.values}{Vector of length 2, group values (e.g. c("male", "female) or c(0,1)).}
 
 \item{rename.output}{Logical. Should the output values be renamed according to the group.values? Default TRUE.}
 }
@@ -24,7 +24,8 @@ Descriptive statistics and mean differences
 Standardized mean difference with pooled standard deviation
 }
 \examples{
-d_pooled_sd(iris[iris$Species=="setosa" | iris$Species=="versicolor",],
- var="Petal.Length", group.var="Species",
-  group.values=c("setosa","versicolor"))
+d_pooled_sd(iris[iris$Species == "setosa" | iris$Species == "versicolor", ],
+  var = "Petal.Length", group.var = "Species",
+  group.values = c("setosa", "versicolor")
+)
 }

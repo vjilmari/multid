@@ -9,9 +9,11 @@
 #' @param s Which lambda value is used for predicted values? Either "lambda.min" (default) or "lambda.1se".
 #' @param type.measure Which measure is used during cross-validation. Default "deviance".
 #' @param rename.output Logical. Should the output values be renamed according to the group.values? Default TRUE.
-#' @param size
+#' @param size Integer. Size of regularization data per each group. Default 1/4 of cases.
 #'
 #' @return
+#' \item{D}{Multivariate descriptives and differences in an out-of-bag dataset}
+#' \item{pred.dat}{A data.frame with predicted values in an out-of-bag dataset}
 #' @export
 #'
 #' @examples D_regularized_out(
@@ -42,6 +44,8 @@ D_regularized_out <-
           NA
         )
       )
+
+    if (is.null(size)){size=round(nrow(data)/4,0)} else {size=size}
 
     data$row.nmbr <- rownames(data)
 

@@ -40,6 +40,8 @@ This is a basic example which shows you how to measure standardized multivariate
 
 ```{r example}
 library(multid)
+set.seed(91237)
+
 D_regularized(
    data = iris[iris$Species == "setosa" | iris$Species == "versicolor", ],
    mv.vars = c("Sepal.Length", "Sepal.Width",
@@ -47,5 +49,16 @@ D_regularized(
    group.var = "Species",
    group.values = c("setosa", "versicolor")
  )$D
+
+D_regularized(
+  data = iris[iris$Species=="setosa" |
+                iris$Species=="versicolor",],
+  mv.vars = c("Sepal.Length","Sepal.Width",
+              "Petal.Length","Petal.Width"),
+  group.var="Species",
+  group.values=c("setosa","versicolor"),
+  size=35,
+  out=TRUE
+)$D
 ```
 

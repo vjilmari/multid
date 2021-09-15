@@ -9,6 +9,8 @@
 #' @param s Which lambda value is used for predicted values? Either "lambda.min" (default) or "lambda.1se".
 #' @param type.measure Which measure is used during cross-validation. Default "deviance".
 #' @param rename.output Logical. Should the output values be renamed according to the group.values? Default TRUE.
+#' @param out Logical. Should results and predictions be calculated on out-of-bad data set? (Default FALSE)
+#' @param size Integer. Size of regularization data per each group. Default 1/4 of cases.
 #'
 #' @return
 #' \item{D}{Multivariate descriptives and differences}
@@ -31,14 +33,27 @@ D_regularized <-
            type.measure = "deviance",
            rename.output = TRUE,
            out=FALSE,
-           out.size=NULL) {
+           size=NULL) {
     data$group.var.num <-
       ifelse(data[, group.var] == group.values[1], 1,
         ifelse(data[, group.var] == group.values[2], 0,
           NA
         )
       )
+    if (out){
+      multid::D_regularized_out(data=data,
+                                mv.vars=mv.vars,
+                                group.var=group.var,
+                                group.values=group.values,
+                                alpha=alpha,
+                                size=size,
+                                rename.output=rename.output,
+                                type.measure=type.measure,
+                                s=s,
+                                nfolds=nfolds)
+    }
 
+    else {
 
     cv.mod <-
       glmnet::cv.glmnet(
@@ -69,5 +84,5 @@ D_regularized <-
     )
 
     comb.output <- list(D = D, pred.dat = preds)
-    return(comb.output)
+    return(comb.output) }
   }
