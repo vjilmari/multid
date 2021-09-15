@@ -117,6 +117,8 @@ D_regularized_fold <-
     D.folded.df$d.sd.total <- D.folded.df$diff /
       D.folded.df$pooled.sd.total
 
+    D.folded.df<-D.folded.df[ order(row.names(D.folded.df)), ]
+
     comb.output <- list(D = D.folded.df, preds = preds, cv.mod = cv.mod)
 
     return(comb.output)
