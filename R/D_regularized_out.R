@@ -14,7 +14,17 @@
 #' @return
 #' @export
 #'
-#' @examples
+#' @examples D_regularized_out(
+#'   data = iris[iris$Species == "setosa" |
+#'     iris$Species == "versicolor", ],
+#'   mv.vars = c(
+#'     "Sepal.Length", "Sepal.Width",
+#'     "Petal.Length", "Petal.Width"
+#'   ),
+#'   group.var = "Species",
+#'   group.values = c("setosa", "versicolor"),
+#'   size = 40
+#' )$D
 D_regularized_out <-
   function(data,
            mv.vars,
@@ -25,24 +35,25 @@ D_regularized_out <-
            s = "lambda.min",
            type.measure = "deviance",
            rename.output = TRUE,
-           size=NULL) {
+           size = NULL) {
     data$group.var.num <-
       ifelse(data[, group.var] == group.values[1], 1,
-             ifelse(data[, group.var] == group.values[2], 0,
-                    NA
-             )
+        ifelse(data[, group.var] == group.values[2], 0,
+          NA
+        )
       )
 
-    data$row.nmbr<-rownames(data)
+    data$row.nmbr <- rownames(data)
 
-    data.grouped<-dplyr::group_by(data,group.var.num)
+    data.grouped <- dplyr::group_by(data, group.var.num)
 
-    train.data<-dplyr::sample_n(data.grouped,
-                         size = size,
-                         replace = F)
+    train.data <- dplyr::sample_n(data.grouped,
+      size = size,
+      replace = F
+    )
 
-    test.data<-data[!(data$row.nmbr %in% train.data$row.nmbr),]
-    train.data<-dplyr::ungroup(train.data)
+    test.data <- data[!(data$row.nmbr %in% train.data$row.nmbr), ]
+    train.data <- dplyr::ungroup(train.data)
 
     cv.mod <-
       glmnet::cv.glmnet(
@@ -58,8 +69,8 @@ D_regularized_out <-
       group = test.data[, group.var],
       pred = as.numeric(
         stats::predict(cv.mod,
-                       newx = as.matrix(test.data[, c(mv.vars)]),
-                       s = s
+          newx = as.matrix(test.data[, c(mv.vars)]),
+          s = s
         )
       )
     )
