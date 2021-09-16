@@ -103,7 +103,7 @@ D_regularized_fold <-
 
     D.folded.df <- cbind(
       D.folded.df,
-      multid::colwise.pool(
+      multid::colwise_pool(
         data = D.folded.df,
         n1 = "n.1",
         n2 = "n.2",

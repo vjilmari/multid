@@ -9,10 +9,9 @@
 #' @param sd2 Standard deviations of group2.
 #'
 #' @return pooled SDs for groups and across groups
-#' @export
 #'
 #' @examples
-colwise.pool <- function(data, n1, n2, m1, m2, sd1, sd2) {
+colwise_pool <- function(data, n1, n2, m1, m2, sd1, sd2) {
   n1 <- data[, "n.1"]
   n2 <- data[, "n.2"]
   m1 <- data[, "m.1"]
