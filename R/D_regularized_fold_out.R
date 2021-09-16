@@ -5,7 +5,6 @@
 #' @param group.var The name of the group variable.
 #' @param group.values Vector of length 2, group values (e.g. c("male", "female) or c(0,1)).
 #' @param alpha Alpha-value for penalizing function ranging from 0 to 1: 0 = ridge regression, 1 = lasso, 0.5 = elastic net (default).
-#' @param nfolds Number of folds used for obtaining lambda (range from 3 to n-1, default 10).
 #' @param s Which lambda value is used for predicted values? Either "lambda.min" (default) or "lambda.1se".
 #' @param type.measure Which measure is used during cross-validation. Default "deviance".
 #' @param rename.output Logical. Should the output values be renamed according to the group.values? Default TRUE.
@@ -22,8 +21,8 @@
 #' n2 <- 10
 #' d <-
 #'   data.frame(
-#'     sex = sample(c("male", "female"), n1 * n2, replace = T),
-#'     fold = sample(x = LETTERS[1:n2], size = n1 * n2, replace = T),
+#'     sex = sample(c("male", "female"), n1 * n2, replace = TRUE),
+#'     fold = sample(x = LETTERS[1:n2], size = n1 * n2, replace = TRUE),
 #'     x1 = rnorm(n1 * n2),
 #'     x2 = rnorm(n1 * n2),
 #'     x3 = rnorm(n1 * n2)

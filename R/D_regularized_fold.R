@@ -20,8 +20,8 @@
 #' n2 <- 10
 #' d <-
 #'   data.frame(
-#'     sex = sample(c("male", "female"), n1 * n2, replace = T),
-#'     fold = sample(x = LETTERS[1:n2], size = n1 * n2, replace = T),
+#'     sex = sample(c("male", "female"), n1 * n2, replace = TRUE),
+#'     fold = sample(x = LETTERS[1:n2], size = n1 * n2, replace = TRUE),
 #'     x1 = rnorm(n1 * n2),
 #'     x2 = rnorm(n1 * n2),
 #'     x3 = rnorm(n1 * n2)

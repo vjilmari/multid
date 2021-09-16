@@ -2,6 +2,7 @@
 
 export(D_regularized)
 export(D_regularized_fold)
+export(D_regularized_fold_out)
 export(D_regularized_out)
 export(colwise.pool)
 export(d_pooled_sd)
