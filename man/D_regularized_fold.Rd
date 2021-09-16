@@ -2,7 +2,7 @@
 % Please edit documentation in R/D_regularized_fold.R
 \name{D_regularized_fold}
 \alias{D_regularized_fold}
-\title{Multivariate group difference estimation by regularization with sample folds}
+\title{Multivariate group difference estimation by regularization across sample folds}
 \usage{
 D_regularized_fold(
   data,
@@ -38,9 +38,10 @@ D_regularized_fold(
 \value{
 \item{D}{Multivariate descriptives and differences.}
 \item{pred.dat}{A data frame with predicted values.}
+\item{cv.mod}{Regularized regression model from cv.glmnet.}
 }
 \description{
-Multivariate group difference estimation by regularization with sample folds
+Describe what the function does.
 }
 \examples{
 set.seed(34246)
@@ -62,4 +63,7 @@ D_regularized_fold(
   group.values = c("female", "male"),
   fold.var = "fold"
 )$D
+}
+\seealso{
+\code{\link[glmnet]{cv.glmnet}}
 }

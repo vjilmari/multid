@@ -1,4 +1,6 @@
-#' Multivariate group difference estimation by regularization with sample folds
+#' Multivariate group difference estimation by regularization across sample folds.
+#'
+#' Describe what the function does.
 #'
 #' @param data A data frame.
 #' @param mv.vars Character vector. Variable names in the multivariate variable set.
@@ -13,6 +15,8 @@
 #' @return
 #' \item{D}{Multivariate descriptives and differences.}
 #' \item{pred.dat}{A data frame with predicted values.}
+#' \item{cv.mod}{Regularized regression model from cv.glmnet.}
+#' @seealso \code{\link[glmnet]{cv.glmnet}}
 #' @export
 #'
 #' @examples set.seed(34246)
