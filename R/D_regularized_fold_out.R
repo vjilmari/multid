@@ -28,7 +28,7 @@
 #'   group.values = c("setosa", "versicolor"),
 #'   size = 40
 #' )$D
-D_regularized_out <-
+D_regularized_fold_out <-
   function(data,
            mv.vars,
            group.var,
@@ -59,11 +59,13 @@ D_regularized_out <-
     )
 
     if (is.null(size)){
-      size=round((nrow(data)/length(unique(data[, fold.var])))4,0)} else {size=size}
+      size=round((nrow(data)/length(unique(data[, fold.var])))/4,0)} else {size=size}
 
     data$row.nmbr <- rownames(data)
 
-    data.grouped <- dplyr::group_by(data, group.var.num)
+    data.grouped <- dplyr::group_by(data,
+                                    group.var.num,
+                                    fold.num)
 
     train.data <- dplyr::sample_n(data.grouped,
                                   size = size,
@@ -72,19 +74,21 @@ D_regularized_out <-
 
     test.data <- data[!(data$row.nmbr %in% train.data$row.nmbr), ]
     train.data <- dplyr::ungroup(train.data)
+    foldid <- train.data[, "fold.num"]
 
     cv.mod <-
       glmnet::cv.glmnet(
         x = as.matrix(train.data[, c(mv.vars)]),
         y = train.data$group.var.num,
         family = c("binomial"),
-        nfolds = nfolds,
+        foldid = foldid,
         type.measure = type.measure,
         alpha = alpha
       )
 
     preds <- data.frame(
       group = test.data[, group.var],
+      fold = test.data[, "fold"],
       pred = as.numeric(
         stats::predict(cv.mod,
                        newx = as.matrix(test.data[, c(mv.vars)]),
@@ -93,14 +97,40 @@ D_regularized_out <-
       )
     )
 
-    D <- multid::d_pooled_sd(
-      data = preds,
-      var = "pred",
-      group.var = "group",
-      group.values = group.values,
-      rename.output = rename.output
+    D.folded <- list()
+    fold.names <- unique(preds[, "fold"])
+
+    for (i in fold.names) {
+      D.folded[[i]] <- multid::d_pooled_sd(
+        data = preds[preds$fold == i, ],
+        var = "pred",
+        group.var = "group",
+        group.values = group.values,
+        rename.output = FALSE
+      )
+    }
+
+    D.folded.df <- do.call(rbind.data.frame, D.folded)
+
+    D.folded.df <- cbind(
+      D.folded.df,
+      multid::colwise.pool(
+        data = D.folded.df,
+        n1 = "n.1",
+        n2 = "n.2",
+        m1 = "m.1",
+        m2 = "m.1",
+        sd1 = "sd.1",
+        sd2 = "sd.2"
+      )
     )
 
-    comb.output <- list(D = D, pred.dat = preds)
+    D.folded.df$d.sd.total <- D.folded.df$diff /
+      D.folded.df$pooled.sd.total
+
+    D.folded.df <- D.folded.df[order(row.names(D.folded.df)), ]
+
+    comb.output <- list(D = D.folded.df, preds = preds, cv.mod = cv.mod)
+
     return(comb.output)
   }
