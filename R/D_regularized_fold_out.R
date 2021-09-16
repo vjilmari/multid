@@ -126,7 +126,7 @@ D_regularized_fold_out <-
 
     D.folded.df <- cbind(
       D.folded.df,
-      multid::colwise_pool(
+      colwise_pool(
         data = D.folded.df,
         n1 = "n.1",
         n2 = "n.2",
