@@ -17,16 +17,24 @@
 #' \item{pred.dat}{A data.frame with predicted values in an out-of-bag dataset}
 #' @export
 #'
-#' @examples D_regularized_out(
-#'   data = iris[iris$Species == "setosa" |
-#'     iris$Species == "versicolor", ],
-#'   mv.vars = c(
-#'     "Sepal.Length", "Sepal.Width",
-#'     "Petal.Length", "Petal.Width"
-#'   ),
-#'   group.var = "Species",
-#'   group.values = c("setosa", "versicolor"),
-#'   size = 40
+#' @examples set.seed(34246)
+#' n1 <- 100
+#' n2 <- 10
+#' d <-
+#'   data.frame(
+#'     sex = sample(c("male", "female"), n1 * n2, replace = T),
+#'     fold = sample(x = LETTERS[1:n2], size = n1 * n2, replace = T),
+#'     x1 = rnorm(n1 * n2),
+#'     x2 = rnorm(n1 * n2),
+#'     x3 = rnorm(n1 * n2)
+#'   )
+#' D_regularized_fold_out(
+#'   data = d,
+#'   mv.vars = c("x1", "x2", "x3"),
+#'   group.var = "sex",
+#'   group.values = c("female", "male"),
+#'   fold.var = "fold",
+#'   size = 17
 #' )$D
 D_regularized_fold_out <-
   function(data,
@@ -41,9 +49,9 @@ D_regularized_fold_out <-
            fold.var) {
     data$group.var.num <-
       ifelse(data[, group.var] == group.values[1], 1,
-             ifelse(data[, group.var] == group.values[2], 0,
-                    NA
-             )
+        ifelse(data[, group.var] == group.values[2], 0,
+          NA
+        )
       )
 
     fold.num.data <-
@@ -58,18 +66,23 @@ D_regularized_fold_out <-
       by = c("fold")
     )
 
-    if (is.null(size)){
-      size=round((nrow(data)/length(unique(data[, fold.var])))/4,0)} else {size=size}
+    if (is.null(size)) {
+      size <- round((nrow(data) / length(unique(data[, fold.var]))) / 4, 0)
+    } else {
+      size <- size
+    }
 
     data$row.nmbr <- rownames(data)
 
-    data.grouped <- dplyr::group_by(data,
-                                    group.var.num,
-                                    fold.num)
+    data.grouped <- dplyr::group_by(
+      data,
+      group.var.num,
+      fold.num
+    )
 
     train.data <- dplyr::sample_n(data.grouped,
-                                  size = size,
-                                  replace = F
+      size = size,
+      replace = F
     )
 
     test.data <- data[!(data$row.nmbr %in% train.data$row.nmbr), ]
@@ -91,8 +104,8 @@ D_regularized_fold_out <-
       fold = test.data[, "fold"],
       pred = as.numeric(
         stats::predict(cv.mod,
-                       newx = as.matrix(test.data[, c(mv.vars)]),
-                       s = s
+          newx = as.matrix(test.data[, c(mv.vars)]),
+          s = s
         )
       )
     )
