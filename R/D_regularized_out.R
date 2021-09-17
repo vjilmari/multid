@@ -1,4 +1,4 @@
-#' Use out-of-bag predictions with out and size arguments.
+#' Use separate data partition for regularization and estimation.
 #'
 #' @param data A data frame.
 #' @param mv.vars Character vector. Variable names in the multivariate variable set.

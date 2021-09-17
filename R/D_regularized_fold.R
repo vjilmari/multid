@@ -1,4 +1,4 @@
-#' Use folds for fitting and predictions.
+#' Use manually defined data folds for regularization and obtain estimates for each separately.
 #'
 #' @param data A data frame.
 #' @param mv.vars Character vector. Variable names in the multivariate variable set.

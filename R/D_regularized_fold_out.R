@@ -1,4 +1,4 @@
-#' Use out-of-bag predictions across multiple folds.
+#' Use separate data partitions for regularization and estimation across defined data folds.
 #'
 #' @param data A data frame.
 #' @param mv.vars Character vector. Variable names in the multivariate variable set.

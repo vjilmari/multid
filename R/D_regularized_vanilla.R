@@ -1,4 +1,4 @@
-#' Multivariate group difference estimation with regularized binomial regression
+#' Use same data partition for regularization and estimation.
 #'
 #' @param data A data frame.
 #' @param mv.vars Character vector. Variable names in the multivariate variable set.
