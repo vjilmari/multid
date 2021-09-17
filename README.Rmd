@@ -43,22 +43,69 @@ library(multid)
 set.seed(91237)
 
 D_regularized(
-   data = iris[iris$Species == "setosa" | iris$Species == "versicolor", ],
-   mv.vars = c("Sepal.Length", "Sepal.Width",
-               "Petal.Length", "Petal.Width"),
-   group.var = "Species",
-   group.values = c("setosa", "versicolor")
- )$D
-
-D_regularized(
-  data = iris[iris$Species=="setosa" |
-                iris$Species=="versicolor",],
-  mv.vars = c("Sepal.Length","Sepal.Width",
-              "Petal.Length","Petal.Width"),
-  group.var="Species",
-  group.values=c("setosa","versicolor"),
-  size=35,
-  out=TRUE
+  data = iris[iris$Species == "setosa" | iris$Species == "versicolor", ],
+  mv.vars = c(
+    "Sepal.Length", "Sepal.Width",
+    "Petal.Length", "Petal.Width"
+  ),
+  group.var = "Species",
+  group.values = c("setosa", "versicolor")
 )$D
+
+# Use different partitions of data for regularization and estimation
+D_regularized(
+  data = iris[iris$Species == "setosa" |
+    iris$Species == "versicolor", ],
+  mv.vars = c(
+    "Sepal.Length", "Sepal.Width",
+    "Petal.Length", "Petal.Width"
+  ),
+  group.var = "Species",
+  group.values = c("setosa", "versicolor"),
+  size = 35,
+  out = TRUE
+)$D
+
+# multigroup model where the group variable is defined as fold.var, and output is produced separately for each group/fold. Groups are also used as folds in the k-fold cross-validation procedure.
+
+# separate sample folds
+# generate data for 10 groups
+set.seed(34246)
+n1 <- 100
+n2 <- 10
+d <-
+  data.frame(
+    sex = sample(c("male", "female"), n1 * n2, replace = TRUE),
+    fold = sample(x = LETTERS[1:n2], size = n1 * n2, replace = TRUE),
+    x1 = rnorm(n1 * n2),
+    x2 = rnorm(n1 * n2),
+    x3 = rnorm(n1 * n2)
+  )
+#'
+# Fit and predict with same data
+D_regularized(
+  data = d,
+  mv.vars = c("x1", "x2", "x3"),
+  group.var = "sex",
+  group.values = c("female", "male"),
+  fold.var = "fold",
+  fold = TRUE,
+  rename.output = TRUE
+)$D
+#'
+# Different partitions for regularization and estimation for each data fold
+D_regularized(
+  data = d,
+  mv.vars = c("x1", "x2", "x3"),
+  group.var = "sex",
+  group.values = c("female", "male"),
+  fold.var = "fold",
+  size = 17,
+  out = TRUE,
+  fold = TRUE,
+  rename.output = TRUE
+)$D
+
+
 ```
 
