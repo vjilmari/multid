@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 # multid
 
 <!-- badges: start -->
+[![Travis build status](https://travis-ci.com/vjilmari/multid.svg?branch=main)](https://travis-ci.com/vjilmari/multid)
 <!-- badges: end -->
 
 The goal of multid is to provide tools for regularized measurement of multivariate differences between two groups (e.g., sex differences). Regularization via logistic regression variants enables inclusion of large number of correlated variables in the multivariate set while avoiding overfitting. 
