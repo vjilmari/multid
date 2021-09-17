@@ -2,7 +2,7 @@
 % Please edit documentation in R/D_regularized_fold.R
 \name{D_regularized_fold}
 \alias{D_regularized_fold}
-\title{Multivariate group difference estimation by regularization across sample folds.}
+\title{Use folds for fitting and predictions.}
 \usage{
 D_regularized_fold(
   data,
@@ -41,7 +41,7 @@ D_regularized_fold(
 \item{cv.mod}{Regularized regression model from cv.glmnet.}
 }
 \description{
-Describe what the function does.
+Use folds for fitting and predictions.
 }
 \examples{
 set.seed(34246)
