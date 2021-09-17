@@ -1,4 +1,4 @@
-#' Use out-of-bag predictions with out and size arguments.
+#' Multivariate group difference estimation with regularized binomial regression
 #'
 #' @param data A data frame.
 #' @param mv.vars Character vector. Variable names in the multivariate variable set.
@@ -9,25 +9,20 @@
 #' @param s Which lambda value is used for predicted values? Either "lambda.min" (default) or "lambda.1se".
 #' @param type.measure Which measure is used during cross-validation. Default "deviance".
 #' @param rename.output Logical. Should the output values be renamed according to the group.values? Default TRUE.
-#' @param size Integer. Size of regularization data per each group. Default 1/4 of cases.
 #'
 #' @return
-#' \item{D}{Multivariate descriptives and differences in an out-of-bag dataset}
-#' \item{pred.dat}{A data.frame with predicted values in an out-of-bag dataset}
+#' \item{D}{Multivariate descriptives and differences}
+#' \item{pred.dat}{A data.frame with predicted values}
+#' \item{cv.mod}{Regularized regression model from cv.glmnet.}
+#' @seealso \code{\link[glmnet]{cv.glmnet}}
 #' @export
 #'
-#' @examples D_regularized_out(
-#'   data = iris[iris$Species == "setosa" |
-#'     iris$Species == "versicolor", ],
-#'   mv.vars = c(
-#'     "Sepal.Length", "Sepal.Width",
-#'     "Petal.Length", "Petal.Width"
-#'   ),
-#'   group.var = "Species",
-#'   group.values = c("setosa", "versicolor"),
-#'   size = 40
+#' @examples D_regularized(
+#'   data = iris[iris$Species == "setosa" | iris$Species == "versicolor", ],
+#'   mv.vars = c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width"),
+#'   group.var = "Species", group.values = c("setosa", "versicolor")
 #' )$D
-D_regularized_out <-
+D_regularized_vanilla <-
   function(data,
            mv.vars,
            group.var,
@@ -36,8 +31,7 @@ D_regularized_out <-
            nfolds = 10,
            s = "lambda.min",
            type.measure = "deviance",
-           rename.output = TRUE,
-           size = NULL) {
+           rename.output = TRUE) {
     data$group.var.num <-
       ifelse(data[, group.var] == group.values[1], 1,
         ifelse(data[, group.var] == group.values[2], 0,
@@ -45,24 +39,10 @@ D_regularized_out <-
         )
       )
 
-    if (is.null(size)){size=round(nrow(data)/4,0)} else {size=size}
-
-    data$row.nmbr <- rownames(data)
-
-    data.grouped <- dplyr::group_by(data, group.var.num)
-
-    train.data <- dplyr::sample_n(data.grouped,
-      size = size,
-      replace = F
-    )
-
-    test.data <- data[!(data$row.nmbr %in% train.data$row.nmbr), ]
-    train.data <- dplyr::ungroup(train.data)
-
     cv.mod <-
       glmnet::cv.glmnet(
-        x = as.matrix(train.data[, c(mv.vars)]),
-        y = train.data$group.var.num,
+        x = as.matrix(data[, c(mv.vars)]),
+        y = data$group.var.num,
         family = c("binomial"),
         nfolds = nfolds,
         type.measure = type.measure,
@@ -70,10 +50,10 @@ D_regularized_out <-
       )
 
     preds <- data.frame(
-      group = test.data[, group.var],
+      group = data[, group.var],
       pred = as.numeric(
         stats::predict(cv.mod,
-          newx = as.matrix(test.data[, c(mv.vars)]),
+          newx = as.matrix(data[, c(mv.vars)]),
           s = s
         )
       )
@@ -87,8 +67,10 @@ D_regularized_out <-
       rename.output = rename.output
     )
 
-    comb.output <- list(D = D,
-                        pred.dat = preds,
-                        cv.mod = cv.mod)
+    comb.output <- list(
+      D = D,
+      pred.dat = preds,
+      cv.mod = cv.mod
+    )
     return(comb.output)
   }

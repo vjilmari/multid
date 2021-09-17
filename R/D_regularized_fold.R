@@ -10,7 +10,7 @@
 #' @param s Which lambda value is used for predicted values? Either "lambda.min" (default) or "lambda.1se".
 #' @param type.measure Which measure is used during cross-validation. Default "deviance".
 #' @param rename.output Logical. Should the output values be renamed according to the group.values? Default TRUE.
-#' @param fold.var Name of the fold variable.
+#' @param fold.var Character string. Name of the fold variable.
 #'
 #' @return
 #' \item{D}{Multivariate descriptives and differences.}

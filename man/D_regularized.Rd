@@ -15,7 +15,9 @@ D_regularized(
   type.measure = "deviance",
   rename.output = TRUE,
   out = FALSE,
-  size = NULL
+  size = NULL,
+  fold = FALSE,
+  fold.var = NULL
 )
 }
 \arguments{
@@ -39,11 +41,16 @@ D_regularized(
 
 \item{out}{Logical. Should results and predictions be calculated on out-of-bad data set? (Default FALSE)}
 
-\item{size}{Integer. Size of regularization data per each group. Default 1/4 of cases.}
+\item{size}{Integer. Number of cases in regularization data per each group. Default 1/4 of cases.}
+
+\item{fold}{Logical. Is regularization applied across sample folds with separate predictions for each fold? (Default FALSE)}
+
+\item{fold.var}{Character string. Name of the fold variable. (default NULL)}
 }
 \value{
 \item{D}{Multivariate descriptives and differences}
 \item{pred.dat}{A data.frame with predicted values}
+\item{cv.mod}{Regularized regression model from cv.glmnet.}
 }
 \description{
 Multivariate group difference estimation with regularized binomial regression
@@ -54,4 +61,51 @@ D_regularized(
   mv.vars = c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width"),
   group.var = "Species", group.values = c("setosa", "versicolor")
 )$D
+
+# out-of-bag predictions
+D_regularized(
+  data = iris[iris$Species == "setosa" | iris$Species == "versicolor", ],
+  mv.vars = c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width"),
+  group.var = "Species", group.values = c("setosa", "versicolor"),
+  out = TRUE, size = 15
+)$D
+
+# separate sample folds
+# generate data for 10 groups
+set.seed(34246)
+n1 <- 100
+n2 <- 10
+d <-
+  data.frame(
+    sex = sample(c("male", "female"), n1 * n2, replace = TRUE),
+    fold = sample(x = LETTERS[1:n2], size = n1 * n2, replace = TRUE),
+    x1 = rnorm(n1 * n2),
+    x2 = rnorm(n1 * n2),
+    x3 = rnorm(n1 * n2)
+  )
+
+# without out-of-bag predictions
+D_regularized(
+  data = d,
+  mv.vars = c("x1", "x2", "x3"),
+  group.var = "sex",
+  group.values = c("female", "male"),
+  fold.var = "fold",
+  fold = TRUE
+)$D
+
+# with out-of-bag predictions
+D_regularized(
+  data = d,
+  mv.vars = c("x1", "x2", "x3"),
+  group.var = "sex",
+  group.values = c("female", "male"),
+  fold.var = "fold",
+  size = 17,
+  out = TRUE,
+  fold = TRUE
+)$D
+}
+\seealso{
+\code{\link[glmnet]{cv.glmnet}}
 }
