@@ -84,17 +84,18 @@ d <-
     x3 = rnorm(n1 * n2)
   )
 
-# without out-of-bag predictions
+# Fit and predict with same data
 D_regularized(
   data = d,
   mv.vars = c("x1", "x2", "x3"),
   group.var = "sex",
   group.values = c("female", "male"),
   fold.var = "fold",
-  fold = TRUE
+  fold = TRUE,
+  rename.output = TRUE
 )$D
 
-# with out-of-bag predictions
+# Out-of-bag data for each fold
 D_regularized(
   data = d,
   mv.vars = c("x1", "x2", "x3"),
@@ -103,7 +104,8 @@ D_regularized(
   fold.var = "fold",
   size = 17,
   out = TRUE,
-  fold = TRUE
+  fold = TRUE,
+  rename.output = TRUE
 )$D
 }
 \seealso{

@@ -1,6 +1,4 @@
-#' Multivariate group difference estimation by regularization across sample folds.
-#'
-#' Describe what the function does.
+#' Use folds for fitting and predictions.
 #'
 #' @param data A data frame.
 #' @param mv.vars Character vector. Variable names in the multivariate variable set.
