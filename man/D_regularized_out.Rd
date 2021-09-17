@@ -2,7 +2,7 @@
 % Please edit documentation in R/D_regularized_out.R
 \name{D_regularized_out}
 \alias{D_regularized_out}
-\title{Use out-of-bag predictions with out and size arguments.}
+\title{Use separate data partition for regularization and estimation.}
 \usage{
 D_regularized_out(
   data,
@@ -43,7 +43,7 @@ D_regularized_out(
 \item{pred.dat}{A data.frame with predicted values in an out-of-bag dataset}
 }
 \description{
-Use out-of-bag predictions with out and size arguments.
+Use separate data partition for regularization and estimation.
 }
 \examples{
 D_regularized_out(

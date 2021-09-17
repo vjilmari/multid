@@ -2,7 +2,7 @@
 % Please edit documentation in R/D_regularized_vanilla.R
 \name{D_regularized_vanilla}
 \alias{D_regularized_vanilla}
-\title{Multivariate group difference estimation with regularized binomial regression}
+\title{Use same data partition for regularization and estimation.}
 \usage{
 D_regularized_vanilla(
   data,
@@ -41,7 +41,7 @@ D_regularized_vanilla(
 \item{cv.mod}{Regularized regression model from cv.glmnet.}
 }
 \description{
-Multivariate group difference estimation with regularized binomial regression
+Use same data partition for regularization and estimation.
 }
 \examples{
 D_regularized(

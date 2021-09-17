@@ -4,3 +4,4 @@
 ^dev_commands$
 ^LICENSE\.md$
 ^README\.Rmd$
+^cran-comments\.md$

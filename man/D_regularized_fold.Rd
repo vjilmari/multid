@@ -2,7 +2,7 @@
 % Please edit documentation in R/D_regularized_fold.R
 \name{D_regularized_fold}
 \alias{D_regularized_fold}
-\title{Use folds for fitting and predictions.}
+\title{Use manually defined data folds for regularization and obtain estimates for each separately.}
 \usage{
 D_regularized_fold(
   data,
@@ -41,7 +41,7 @@ D_regularized_fold(
 \item{cv.mod}{Regularized regression model from cv.glmnet.}
 }
 \description{
-Use folds for fitting and predictions.
+Use manually defined data folds for regularization and obtain estimates for each separately.
 }
 \examples{
 set.seed(34246)
