@@ -13,15 +13,17 @@ The goal of multid is to provide tools for regularized measurement of
 multivariate differences between two groups (e.g., sex differences).
 Regularization via logistic regression variants enables inclusion of
 large number of correlated variables in the multivariate set while
-avoiding overfitting.
+providing k-fold cross-validation and regularization to avoid
+overfitting.
 
-<!--  ## Installation
+## Installation
 
-You can install the released version of multid from [CRAN](https://CRAN.R-project.org) with:
+You can install the released version of multid from
+[CRAN](https://CRAN.R-project.org) with:
 
 ``` r
 install.packages("multid")
-```-->
+```
 
 You can install the development version from
 [GitHub](https://github.com/) with:
@@ -35,7 +37,9 @@ devtools::install_github("vjilmari/multid")
 
 This is a basic example which shows you how to measure standardized
 multivariate (both Sepal and Petal dimensions, four variables in total)
-distance between setosa and versicolor Species in iris dataset:
+distance between setosa and versicolor Species in iris dataset. Similar
+example is provided with artificially generated multi group data which
+are used as separate data folds in the procedure.
 
 ``` r
 library(multid)
