@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![Travis build
-status](https://travis-ci.com/vjilmari/multid.svg?branch=main)](https://travis-ci.com/vjilmari/multid)
+status](https://app.travis-ci.com/vjilmari/multid.svg?branch=main)](https://app.travis-ci.com/vjilmari/multid/)
 <!-- badges: end -->
 
 The goal of multid is to provide tools for regularized measurement of

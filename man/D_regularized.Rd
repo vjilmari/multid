@@ -48,7 +48,7 @@ D_regularized(
 \item{fold.var}{Character string. Name of the fold variable. (default NULL)}
 }
 \value{
-\item{D}{Multivariate descriptives and differences.}
+\item{D}{Multivariate descriptive statistics and differences.}
 \item{pred.dat}{A data.frame with predicted values.}
 \item{cv.mod}{Regularized regression model from cv.glmnet.}
 }

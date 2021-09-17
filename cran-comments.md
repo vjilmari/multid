@@ -1,3 +1,8 @@
+## Resubmission
+This is a resubmission. In this version I have:
+
+* switched invalid URLs in README to valid URLs
+
 ## Test environments
 * local R installation, R 4.1.1
 * ubuntu 16.04 (on travis-ci), R 4.0.2

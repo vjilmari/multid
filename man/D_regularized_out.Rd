@@ -39,8 +39,9 @@ D_regularized_out(
 \item{size}{Integer. Size of regularization data per each group. Default 1/4 of cases.}
 }
 \value{
-\item{D}{Multivariate descriptives and differences in an out-of-bag dataset}
-\item{pred.dat}{A data.frame with predicted values in an out-of-bag dataset}
+\item{D}{Multivariate descriptive statistics and differences.}
+\item{pred.dat}{A data.frame with predicted values.}
+\item{cv.mod}{Regularized regression model from cv.glmnet.}
 }
 \description{
 Use separate data partition for regularization and estimation.
