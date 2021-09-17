@@ -1,5 +1,5 @@
 Package: multid
-Title: Multivariate Difference between Two Groups
+Title: Multivariate Difference Between Two Groups
 Version: 0.1.0
 Authors@R: 
     person(given = "Ville-Juhani",
