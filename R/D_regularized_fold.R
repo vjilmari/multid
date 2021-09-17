@@ -11,8 +11,8 @@
 #' @param fold.var Character string. Name of the fold variable.
 #'
 #' @return
-#' \item{D}{Multivariate descriptives and differences.}
-#' \item{pred.dat}{A data frame with predicted values.}
+#' \item{D}{Multivariate descriptive statistics and differences.}
+#' \item{pred.dat}{A data.frame with predicted values.}
 #' \item{cv.mod}{Regularized regression model from cv.glmnet.}
 #' @seealso \code{\link[glmnet]{cv.glmnet}}
 #' @export

@@ -11,8 +11,8 @@
 #' @param rename.output Logical. Should the output values be renamed according to the group.values? Default TRUE.
 #'
 #' @return
-#' \item{D}{Multivariate descriptives and differences}
-#' \item{pred.dat}{A data.frame with predicted values}
+#' \item{D}{Multivariate descriptive statistics and differences.}
+#' \item{pred.dat}{A data.frame with predicted values.}
 #' \item{cv.mod}{Regularized regression model from cv.glmnet.}
 #' @seealso \code{\link[glmnet]{cv.glmnet}}
 #' @export

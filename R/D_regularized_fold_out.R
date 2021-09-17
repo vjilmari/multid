@@ -12,8 +12,9 @@
 #' @param fold.var Name of the fold variable.
 #'
 #' @return
-#' \item{D}{Multivariate descriptives and differences in an out-of-bag dataset}
-#' \item{pred.dat}{A data.frame with predicted values in an out-of-bag dataset}
+#' \item{D}{Multivariate descriptive statistics and differences.}
+#' \item{pred.dat}{A data.frame with predicted values.}
+#' \item{cv.mod}{Regularized regression model from cv.glmnet.}
 #' @export
 #'
 #' @examples set.seed(34246)

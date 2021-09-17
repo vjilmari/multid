@@ -12,8 +12,9 @@
 #' @param size Integer. Size of regularization data per each group. Default 1/4 of cases.
 #'
 #' @return
-#' \item{D}{Multivariate descriptives and differences in an out-of-bag dataset}
-#' \item{pred.dat}{A data.frame with predicted values in an out-of-bag dataset}
+#' \item{D}{Multivariate descriptive statistics and differences.}
+#' \item{pred.dat}{A data.frame with predicted values.}
+#' \item{cv.mod}{Regularized regression model from cv.glmnet.}
 #' @export
 #'
 #' @examples D_regularized_out(
