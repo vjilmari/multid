@@ -60,11 +60,16 @@ D_regularized_fold_out <-
         fold = unique(data[, fold.var])
       )
 
+    #data frame joining information
+    join_vars <- colnames(fold.num.data)[2]
+    names(join_vars) <- fold.var
+
     data <- dplyr::left_join(
       x = data,
       y = fold.num.data,
-      by = c("fold")
+      by = join_vars
     )
+
 
     if (is.null(size)) {
       size <- round((nrow(data) / length(unique(data[, fold.var]))) / 4, 0)
@@ -101,7 +106,7 @@ D_regularized_fold_out <-
 
     preds <- data.frame(
       group = test.data[, group.var],
-      fold = test.data[, "fold"],
+      fold = test.data[, fold.var],
       pred = as.numeric(
         stats::predict(cv.mod,
           newx = as.matrix(test.data[, c(mv.vars)]),

@@ -59,10 +59,14 @@ D_regularized_fold <-
         fold = unique(data[, fold.var])
       )
 
+    #data frame joining information
+    join_vars <- colnames(fold.num.data)[2]
+    names(join_vars) <- fold.var
+
     data <- dplyr::left_join(
       x = data,
       y = fold.num.data,
-      by = c("fold")
+      by = join_vars
     )
 
     foldid <- data[, "fold.num"] # $fold.num
@@ -79,7 +83,7 @@ D_regularized_fold <-
 
     preds <- data.frame(
       group = data[, group.var],
-      fold = data[, "fold"],
+      fold = data[, fold.var],
       pred = as.numeric(
         stats::predict(cv.mod,
           newx = as.matrix(data[, c(mv.vars)]),
