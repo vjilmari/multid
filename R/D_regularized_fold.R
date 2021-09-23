@@ -101,7 +101,7 @@ D_regularized_fold <-
         var = "pred",
         group.var = "group",
         group.values = group.values,
-        rename.output = FALSE
+        rename.output = rename.output
       )
     }
 
@@ -111,12 +111,12 @@ D_regularized_fold <-
       D.folded.df,
       colwise_pool(
         data = D.folded.df,
-        n1 = "n.1",
-        n2 = "n.2",
-        m1 = "m.1",
-        m2 = "m.1",
-        sd1 = "sd.1",
-        sd2 = "sd.2"
+        n1 = names(D.folded.df)[1],
+        n2 = names(D.folded.df)[2],
+        m1 = names(D.folded.df)[3],
+        m2 = names(D.folded.df)[4],
+        sd1 = names(D.folded.df)[5],
+        sd2 = names(D.folded.df)[6]
       )
     )
 
