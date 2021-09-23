@@ -60,7 +60,7 @@ D_regularized_fold_out <-
         fold = unique(data[, fold.var])
       )
 
-    #data frame joining information
+    # data frame joining information
     join_vars <- colnames(fold.num.data)[2]
     names(join_vars) <- fold.var
 
@@ -145,6 +145,12 @@ D_regularized_fold_out <-
 
     D.folded.df$d.sd.total <- D.folded.df$diff /
       D.folded.df$pooled.sd.total
+
+    # rename pooled.sd columns if requested
+    if (rename.output) {
+      names(D.folded.df)[names(D.folded.df) == "pooled.sd.1"] <- paste0("pooled.sd.", group.values[1])
+      names(D.folded.df)[names(D.folded.df) == "pooled.sd.2"] <- paste0("pooled.sd.", group.values[2])
+    }
 
     D.folded.df <- D.folded.df[order(row.names(D.folded.df)), ]
 

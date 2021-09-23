@@ -11,7 +11,6 @@
 #' @return pooled SDs for groups and across groups
 #'
 colwise_pool <- function(data, n1, n2, m1, m2, sd1, sd2) {
-
   n1 <- data[, n1]
   n2 <- data[, n2]
   m1 <- data[, m1]
