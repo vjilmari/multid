@@ -7,7 +7,7 @@ Authors@R:
            role = c("aut", "cre"),
            email = "vj.ilmarinen@gmail.com",
            comment = c(ORCID = "0000-0001-9493-379X"))
-Description: Estimation of multivariate differences between two groups (e.g., multivariate sex differences) with regularized regression methods and predictive approach.
+Description: Estimation of multivariate differences between two groups (e.g., multivariate sex differences) with regularized regression methods and predictive approach. See Lönnqvist & Ilmarinen (2021) <doi:10.1007/s11109-021-09681-2> and Ilmarinen et al. (2021) <doi:10.31234/osf.io/j59bs>.
 License: GPL-3
 Encoding: UTF-8
 BugReports: https://github.com/vjilmari/multid/issues
