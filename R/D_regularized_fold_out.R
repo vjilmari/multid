@@ -10,6 +10,7 @@
 #' @param rename.output Logical. Should the output values be renamed according to the group.values? Default TRUE.
 #' @param size Integer. Size of regularization data per each group. Default 1/4 of cases.
 #' @param fold.var Name of the fold variable.
+#' @param pcc Logical. Include probabilities of correct classification? Default FALSE.
 #'
 #' @return
 #' \item{D}{Multivariate descriptive statistics and differences.}
@@ -34,7 +35,8 @@
 #'   group.var = "sex",
 #'   group.values = c("female", "male"),
 #'   fold.var = "fold",
-#'   size = 17
+#'   size = 17,
+#'   pcc = TRUE
 #' )$D
 D_regularized_fold_out <-
   function(data,
@@ -46,7 +48,8 @@ D_regularized_fold_out <-
            type.measure = "deviance",
            rename.output = TRUE,
            size = NULL,
-           fold.var) {
+           fold.var,
+           pcc = FALSE) {
     data$group.var.num <-
       ifelse(data[, group.var] == group.values[1], 1,
         ifelse(data[, group.var] == group.values[2], 0,
@@ -126,6 +129,30 @@ D_regularized_fold_out <-
         group.values = group.values,
         rename.output = rename.output
       )
+
+      # Add pcc
+
+      if (pcc) {
+        pcc.out <-
+          pcc(
+            data = preds[preds$fold == i, ],
+            pred.var = "pred",
+            group.var = "group",
+            group.values = group.values
+          )
+
+        # inherit naming from D frame
+        colnames(pcc.out) <-
+          c(
+            paste0(
+              "pcc.",
+              substr(colnames(D.folded[[i]])[1:2], 3, stop = 999)
+            ),
+            "pcc.total"
+          )
+
+        D.folded[[i]] <- cbind(D.folded[[i]], pcc.out)
+      }
     }
 
     D.folded.df <- do.call(rbind.data.frame, D.folded)

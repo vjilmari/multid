@@ -13,6 +13,7 @@
 #' @param size Integer. Number of cases in regularization data per each group. Default 1/4 of cases.
 #' @param fold Logical. Is regularization applied across sample folds with separate predictions for each fold? (Default FALSE)
 #' @param fold.var Character string. Name of the fold variable. (default NULL)
+#' @param pcc Logical. Include probabilities of correct classification? Default FALSE.
 #'
 #' @return
 #' \item{D}{Multivariate descriptive statistics and differences.}
@@ -85,7 +86,8 @@ D_regularized <-
            out = FALSE,
            size = NULL,
            fold = FALSE,
-           fold.var = NULL) {
+           fold.var = NULL,
+           pcc = FALSE) {
 
     # out-of-bag and folds (fold_out)?
     if (out & fold) {
@@ -99,7 +101,8 @@ D_regularized <-
         type.measure = type.measure,
         rename.output = rename.output,
         size = size,
-        fold.var = fold.var
+        fold.var = fold.var,
+        pcc = pcc
       )
     } # out-of-bag and no folds (out)?
     else if (out & !fold) {
@@ -112,7 +115,8 @@ D_regularized <-
         size = size,
         s = s,
         type.measure = type.measure,
-        rename.output = rename.output
+        rename.output = rename.output,
+        pcc = pcc
       )
     } # not out-of-bag and folds (fold)?
     else if (!out & fold) {
