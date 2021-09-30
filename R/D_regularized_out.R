@@ -10,6 +10,7 @@
 #' @param type.measure Which measure is used during cross-validation. Default "deviance".
 #' @param rename.output Logical. Should the output values be renamed according to the group.values? Default TRUE.
 #' @param size Integer. Size of regularization data per each group. Default 1/4 of cases.
+#' @param pcc Logical. Include probabilities of correct classification? Default FALSE.
 #'
 #' @return
 #' \item{D}{Multivariate descriptive statistics and differences.}
@@ -26,7 +27,8 @@
 #'   ),
 #'   group.var = "Species",
 #'   group.values = c("setosa", "versicolor"),
-#'   size = 40
+#'   size = 40,
+#'   pcc = TRUE
 #' )$D
 D_regularized_out <-
   function(data,
@@ -38,7 +40,8 @@ D_regularized_out <-
            s = "lambda.min",
            type.measure = "deviance",
            rename.output = TRUE,
-           size = NULL) {
+           size = NULL,
+           pcc = FALSE) {
     data$group.var.num <-
       ifelse(data[, group.var] == group.values[1], 1,
         ifelse(data[, group.var] == group.values[2], 0,
@@ -46,7 +49,11 @@ D_regularized_out <-
         )
       )
 
-    if (is.null(size)){size=round(nrow(data)/4,0)} else {size=size}
+    if (is.null(size)) {
+      size <- round(nrow(data) / 4, 0)
+    } else {
+      size <- size
+    }
 
     data$row.nmbr <- rownames(data)
 
@@ -88,8 +95,29 @@ D_regularized_out <-
       rename.output = rename.output
     )
 
-    comb.output <- list(D = D,
-                        pred.dat = preds,
-                        cv.mod = cv.mod)
+    # Add pcc
+
+    if (pcc) {
+      pcc.out <-
+        pcc(
+          data = preds,
+          pred.var = "pred",
+          group.var = "group",
+          group.values = group.values
+        )
+
+      # inherit naming from D frame
+      colnames(pcc.out) <-
+        c(paste0("pcc.", substr(colnames(D)[1:2], 3, stop = 999)),
+          "pcc.total")
+
+      D <- cbind(D, pcc.out)
+    }
+
+    comb.output <- list(
+      D = D,
+      pred.dat = preds,
+      cv.mod = cv.mod
+    )
     return(comb.output)
   }

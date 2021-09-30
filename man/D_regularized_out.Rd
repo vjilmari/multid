@@ -14,7 +14,8 @@ D_regularized_out(
   s = "lambda.min",
   type.measure = "deviance",
   rename.output = TRUE,
-  size = NULL
+  size = NULL,
+  pcc = FALSE
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ D_regularized_out(
 \item{rename.output}{Logical. Should the output values be renamed according to the group.values? Default TRUE.}
 
 \item{size}{Integer. Size of regularization data per each group. Default 1/4 of cases.}
+
+\item{pcc}{Logical. Include probabilities of correct classification? Default FALSE.}
 }
 \value{
 \item{D}{Multivariate descriptive statistics and differences.}
@@ -56,6 +59,7 @@ D_regularized_out(
   ),
   group.var = "Species",
   group.values = c("setosa", "versicolor"),
-  size = 40
+  size = 40,
+  pcc = TRUE
 )$D
 }
