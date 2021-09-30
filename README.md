@@ -136,7 +136,8 @@ round(D_regularized(
 #> I             0.07           0.06            0.07       0.49
 #> J             0.07           0.06            0.07       0.10
 #'
-# Different partitions for regularization and estimation for each data fold
+# Different partitions for regularization and estimation for each data fold.
+# Add probabilities of correct classification (pcc) as well.
 round(D_regularized(
   data = d,
   mv.vars = c("x1", "x2", "x3"),
@@ -146,7 +147,8 @@ round(D_regularized(
   size = 17,
   out = TRUE,
   fold = TRUE,
-  rename.output = TRUE
+  rename.output = TRUE,
+  pcc = TRUE
 )$D,2)
 #>   n.female n.male m.female m.male sd.female sd.male pooled.sd  diff     D
 #> A       36     31     0.00  -0.01      0.18    0.15      0.17  0.00  0.03
@@ -159,15 +161,26 @@ round(D_regularized(
 #> H       30     34     0.04   0.01      0.16    0.15      0.16  0.03  0.18
 #> I       25     28     0.02  -0.03      0.14    0.14      0.14  0.05  0.35
 #> J       31     40     0.00   0.00      0.15    0.15      0.15  0.00  0.02
-#>   pooled.sd.female pooled.sd.male pooled.sd.total d.sd.total
-#> A             0.15           0.15            0.15       0.03
-#> B             0.15           0.15            0.15      -0.04
-#> C             0.15           0.15            0.15      -0.54
-#> D             0.15           0.15            0.15      -0.01
-#> E             0.15           0.15            0.15      -0.48
-#> F             0.15           0.15            0.15      -0.54
-#> G             0.15           0.15            0.15       0.06
-#> H             0.15           0.15            0.15       0.19
-#> I             0.15           0.15            0.15       0.32
-#> J             0.15           0.15            0.15       0.02
+#>   pcc.female pcc.male pcc.total pooled.sd.female pooled.sd.male pooled.sd.total
+#> A       0.56     0.39      0.48             0.15           0.15            0.15
+#> B       0.36     0.61      0.48             0.15           0.15            0.15
+#> C       0.32     0.46      0.41             0.15           0.15            0.15
+#> D       0.53     0.49      0.51             0.15           0.15            0.15
+#> E       0.37     0.49      0.44             0.15           0.15            0.15
+#> F       0.44     0.36      0.42             0.15           0.15            0.15
+#> G       0.38     0.59      0.48             0.15           0.15            0.15
+#> H       0.73     0.47      0.59             0.15           0.15            0.15
+#> I       0.48     0.64      0.57             0.15           0.15            0.15
+#> J       0.55     0.45      0.49             0.15           0.15            0.15
+#>   d.sd.total
+#> A       0.03
+#> B      -0.04
+#> C      -0.54
+#> D      -0.01
+#> E      -0.48
+#> F      -0.54
+#> G       0.06
+#> H       0.19
+#> I       0.32
+#> J       0.02
 ```
