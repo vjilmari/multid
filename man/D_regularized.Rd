@@ -17,7 +17,8 @@ D_regularized(
   out = FALSE,
   size = NULL,
   fold = FALSE,
-  fold.var = NULL
+  fold.var = NULL,
+  pcc = FALSE
 )
 }
 \arguments{
@@ -46,6 +47,8 @@ D_regularized(
 \item{fold}{Logical. Is regularization applied across sample folds with separate predictions for each fold? (Default FALSE)}
 
 \item{fold.var}{Character string. Name of the fold variable. (default NULL)}
+
+\item{pcc}{Logical. Include probabilities of correct classification? Default FALSE.}
 }
 \value{
 \item{D}{Multivariate descriptive statistics and differences.}

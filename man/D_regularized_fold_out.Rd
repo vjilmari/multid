@@ -14,7 +14,8 @@ D_regularized_fold_out(
   type.measure = "deviance",
   rename.output = TRUE,
   size = NULL,
-  fold.var
+  fold.var,
+  pcc = FALSE
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ D_regularized_fold_out(
 \item{size}{Integer. Size of regularization data per each group. Default 1/4 of cases.}
 
 \item{fold.var}{Name of the fold variable.}
+
+\item{pcc}{Logical. Include probabilities of correct classification? Default FALSE.}
 }
 \value{
 \item{D}{Multivariate descriptive statistics and differences.}
@@ -64,6 +67,7 @@ D_regularized_fold_out(
   group.var = "sex",
   group.values = c("female", "male"),
   fold.var = "fold",
-  size = 17
+  size = 17,
+  pcc = TRUE
 )$D
 }
