@@ -101,7 +101,7 @@ round(D_regularized(
   rename.output = TRUE
 )$D,2)
 #'
-# Different partitions for regularization and estimation for each data fold
+# Different partitions for regularization and estimation for each data fold. Add probabilities of correct classification (pcc) as well.
 round(D_regularized(
   data = d,
   mv.vars = c("x1", "x2", "x3"),

@@ -136,7 +136,7 @@ round(D_regularized(
 #> I             0.07           0.06            0.07       0.49
 #> J             0.07           0.06            0.07       0.10
 #'
-# Different partitions for regularization and estimation for each data fold
+# Different partitions for regularization and estimation for each data fold. Add probabilities of correct classification (pcc) as well.
 round(D_regularized(
   data = d,
   mv.vars = c("x1", "x2", "x3"),
