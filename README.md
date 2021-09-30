@@ -16,10 +16,10 @@ large number of correlated variables in the multivariate set while
 providing k-fold cross-validation and regularization to avoid
 overfitting.
 
-Studies in which the method has been used: \* [Lönnqvist & Ilmarinen
+Studies in which the method has been used: 1. [Lönnqvist & Ilmarinen
 (2021). Using a Continuous Measure of Genderedness to Assess Sex
 Differences in the Attitudes of the Political Elite. Political
-Behavior.](https://doi.org/10.1007/s11109-021-09681-2) \* [Ilmarinen et
+Behavior.](https://doi.org/10.1007/s11109-021-09681-2) 2. [Ilmarinen et
 al. (2021). Is There a g-factor of Genderedness? Using a Continuous
 Measure of Genderedness to Assess Sex Differences in Personality,
 Values, Cognitive Ability, School Grades, and Educational Track.
