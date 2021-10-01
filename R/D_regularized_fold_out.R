@@ -11,6 +11,7 @@
 #' @param size Integer. Size of regularization data per each group. Default 1/4 of cases.
 #' @param fold.var Name of the fold variable.
 #' @param pcc Logical. Include probabilities of correct classification? Default FALSE.
+#' @param auc Logical. Include area under the receiver operating characteristics? Default FALSE.
 #'
 #' @return
 #' \item{D}{Multivariate descriptive statistics and differences.}
@@ -49,7 +50,8 @@ D_regularized_fold_out <-
            rename.output = TRUE,
            size = NULL,
            fold.var,
-           pcc = FALSE) {
+           pcc = FALSE,
+           auc = FALSE) {
     data$group.var.num <-
       ifelse(data[, group.var] == group.values[1], 1,
         ifelse(data[, group.var] == group.values[2], 0,
@@ -152,6 +154,18 @@ D_regularized_fold_out <-
           )
 
         D.folded[[i]] <- cbind(D.folded[[i]], pcc.out)
+      }
+
+      # add auc
+
+      if (auc){
+        auc<-pROC::roc(response=preds[preds$fold == i,"group"],
+                       predictor=preds[preds$fold == i,"pred"],
+                       direction=">",
+                       levels=group.values,
+                       quiet=TRUE)$auc[1]
+        D.folded[[i]] <- cbind(D.folded[[i]], auc)
+
       }
     }
 

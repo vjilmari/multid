@@ -18,7 +18,8 @@ D_regularized(
   size = NULL,
   fold = FALSE,
   fold.var = NULL,
-  pcc = FALSE
+  pcc = FALSE,
+  auc = FALSE
 )
 }
 \arguments{
@@ -49,6 +50,8 @@ D_regularized(
 \item{fold.var}{Character string. Name of the fold variable. (default NULL)}
 
 \item{pcc}{Logical. Include probabilities of correct classification? Default FALSE.}
+
+\item{auc}{Logical. Include area under the receiver operating characteristics? Default FALSE.}
 }
 \value{
 \item{D}{Multivariate descriptive statistics and differences.}

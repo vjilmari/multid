@@ -15,7 +15,8 @@ D_regularized_out(
   type.measure = "deviance",
   rename.output = TRUE,
   size = NULL,
-  pcc = FALSE
+  pcc = FALSE,
+  auc = FALSE
 )
 }
 \arguments{
@@ -40,6 +41,8 @@ D_regularized_out(
 \item{size}{Integer. Size of regularization data per each group. Default 1/4 of cases.}
 
 \item{pcc}{Logical. Include probabilities of correct classification? Default FALSE.}
+
+\item{auc}{Logical. Include area under the receiver operating characteristics? Default FALSE.}
 }
 \value{
 \item{D}{Multivariate descriptive statistics and differences.}

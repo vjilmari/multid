@@ -15,7 +15,8 @@ D_regularized_fold_out(
   rename.output = TRUE,
   size = NULL,
   fold.var,
-  pcc = FALSE
+  pcc = FALSE,
+  auc = FALSE
 )
 }
 \arguments{
@@ -40,6 +41,8 @@ D_regularized_fold_out(
 \item{fold.var}{Name of the fold variable.}
 
 \item{pcc}{Logical. Include probabilities of correct classification? Default FALSE.}
+
+\item{auc}{Logical. Include area under the receiver operating characteristics? Default FALSE.}
 }
 \value{
 \item{D}{Multivariate descriptive statistics and differences.}

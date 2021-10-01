@@ -11,6 +11,7 @@
 #' @param rename.output Logical. Should the output values be renamed according to the group.values? Default TRUE.
 #' @param size Integer. Size of regularization data per each group. Default 1/4 of cases.
 #' @param pcc Logical. Include probabilities of correct classification? Default FALSE.
+#' @param auc Logical. Include area under the receiver operating characteristics? Default FALSE.
 #'
 #' @return
 #' \item{D}{Multivariate descriptive statistics and differences.}
@@ -41,7 +42,8 @@ D_regularized_out <-
            type.measure = "deviance",
            rename.output = TRUE,
            size = NULL,
-           pcc = FALSE) {
+           pcc = FALSE,
+           auc = FALSE) {
     data$group.var.num <-
       ifelse(data[, group.var] == group.values[1], 1,
         ifelse(data[, group.var] == group.values[2], 0,
@@ -112,6 +114,16 @@ D_regularized_out <-
           "pcc.total")
 
       D <- cbind(D, pcc.out)
+    }
+
+    if (auc){
+      auc<-pROC::roc(response=preds[,"group"],
+                     predictor=preds[,"pred"],
+                     direction=">",
+                     levels=group.values,
+                     quiet=TRUE)$auc[1]
+      D <- cbind(D, auc)
+
     }
 
     comb.output <- list(

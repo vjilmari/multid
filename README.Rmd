@@ -102,7 +102,7 @@ round(D_regularized(
 )$D,2)
 #'
 
-# Different partitions for regularization and estimation for each data fold. Add probabilities of correct classification (pcc) as well.
+# Different partitions for regularization and estimation for each data fold. Add probabilities of correct classification (pcc) and area under the receiver operating characteristics as well.
 
 round(D_regularized(
   data = d,
@@ -114,7 +114,8 @@ round(D_regularized(
   out = TRUE,
   fold = TRUE,
   rename.output = TRUE,
-  pcc = TRUE
+  pcc = TRUE,
+  auc = TRUE
 )$D,2)
 
 
