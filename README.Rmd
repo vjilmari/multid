@@ -63,7 +63,8 @@ D_regularized(
 )$D
 
 # Use different partitions of data for regularization and estimation
-D_regularized(
+D_out<-
+  D_regularized(
   data = iris[iris$Species == "setosa" |
     iris$Species == "versicolor", ],
   mv.vars = c(
@@ -73,8 +74,17 @@ D_regularized(
   group.var = "Species",
   group.values = c("setosa", "versicolor"),
   size = 35,
-  out = TRUE
-)$D
+  out = TRUE,
+  pred.prob = TRUE,
+  prob.cutoffs = seq(0,1,0.25)
+  
+)
+
+# print group differences (D)
+D_out$D
+
+# print table of predicted probabilities
+D_out$P.table
 ```
 
 This example first generates artificial multi-group data which are then used as separate data folds in the regularization procedure following separate predictions made for each fold. 
@@ -105,7 +115,9 @@ round(D_regularized(
 )$D,2)
 #'
 
-# Different partitions for regularization and estimation for each data fold. Request probabilities of correct classification (pcc) and area under the receiver operating characteristics (auc) for output.
+# Different partitions for regularization and estimation for each data fold.
+
+#Request probabilities of correct classification (pcc) and area under the receiver operating characteristics (auc) for the output.
 
 round(D_regularized(
   data = d,
