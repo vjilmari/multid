@@ -21,7 +21,9 @@ knitr::opts_chunk$set(
 
 The goal of multid is to provide tools for regularized measurement of multivariate differences between two groups (e.g., sex differences). Regularization via logistic regression variants enables inclusion of large number of correlated variables in the multivariate set while providing k-fold cross-validation and regularization to avoid overfitting. 
 
-Studies in which the method has been used:
+Predictive approach as implemented with regularized methods also allows for examination of group-membership probabilities and their distributions across individuals. In the context of statistical predictions of sex, these distributions are an updated variant to gender-typicality distributions used in gender diagnosticity methodology [(Lippa & Connelly, 1990)](https://doi.org/10.1037/0022-3514.59.5.1051).
+
+Studies in which these methods have been used:
 
 1. [Lönnqvist & Ilmarinen (2021). Using a Continuous Measure of Genderedness to Assess Sex Differences in the Attitudes of the Political Elite. Political Behavior.](https://doi.org/10.1007/s11109-021-09681-2)
 2. [Ilmarinen et al. (2021). Is There a g-factor of Genderedness? Using a Continuous Measure of Genderedness to Assess Sex Differences in Personality, Values, Cognitive Ability, School Grades, and Educational Track. Manuscript in review.](https://doi.org/10.31234/osf.io/j59bs)
@@ -44,9 +46,9 @@ devtools::install_github("vjilmari/multid")
 ```
 ## Example
 
-This is a basic example which shows you how to measure standardized multivariate (both Sepal and Petal dimensions, four variables in total) distance between setosa and versicolor Species in iris dataset. Similar example is provided with artificially generated multi group data which are used as separate data folds in the procedure. 
+This example shows how to measure standardized multivariate (both Sepal and Petal dimensions, four variables in total) distance between setosa and versicolor Species in iris dataset. 
 
-```{r example}
+```{r example1}
 library(multid)
 set.seed(91237)
 
@@ -73,10 +75,11 @@ D_regularized(
   size = 35,
   out = TRUE
 )$D
+```
 
-# multigroup model where the group variable is defined as fold.var, and output is produced separately for each group/fold. Groups are also used as folds in the k-fold cross-validation procedure.
+This example first generates artificial multi-group data which are then used as separate data folds in the regularization procedure following separate predictions made for each fold. 
 
-# separate sample folds
+```{r example2}
 # generate data for 10 groups
 set.seed(34246)
 n1 <- 100
@@ -102,7 +105,7 @@ round(D_regularized(
 )$D,2)
 #'
 
-# Different partitions for regularization and estimation for each data fold. Add probabilities of correct classification (pcc) and area under the receiver operating characteristics as well.
+# Different partitions for regularization and estimation for each data fold. Request probabilities of correct classification (pcc) and area under the receiver operating characteristics (auc) for output.
 
 round(D_regularized(
   data = d,

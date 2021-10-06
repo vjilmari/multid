@@ -16,7 +16,14 @@ large number of correlated variables in the multivariate set while
 providing k-fold cross-validation and regularization to avoid
 overfitting.
 
-Studies in which the method has been used:
+Predictive approach as implemented with regularized methods also allows
+for examination of group-membership probabilities and their
+distributions across individuals. In the context of statistical
+predictions of sex, these distributions are an updated variant to
+gender-typicality distributions used in gender diagnosticity methodology
+[(Lippa & Connelly, 1990)](https://doi.org/10.1037/0022-3514.59.5.1051).
+
+Studies in which these methods have been used:
 
 1.  [Lönnqvist & Ilmarinen (2021). Using a Continuous Measure of
     Genderedness to Assess Sex Differences in the Attitudes of the
@@ -47,11 +54,9 @@ devtools::install_github("vjilmari/multid")
 
 ## Example
 
-This is a basic example which shows you how to measure standardized
-multivariate (both Sepal and Petal dimensions, four variables in total)
-distance between setosa and versicolor Species in iris dataset. Similar
-example is provided with artificially generated multi group data which
-are used as separate data folds in the procedure.
+This example shows how to measure standardized multivariate (both Sepal
+and Petal dimensions, four variables in total) distance between setosa
+and versicolor Species in iris dataset.
 
 ``` r
 library(multid)
@@ -87,9 +92,13 @@ D_regularized(
 #> [1,]       15           15 7.614128    -8.973335   1.79109      2.353035
 #>      pooled.sd     diff        D
 #> [1,]  2.091026 16.58746 7.932692
-# multigroup model where the group variable is defined as fold.var, and output is produced separately for each group/fold. Groups are also used as folds in the k-fold cross-validation procedure.
+```
 
-# separate sample folds
+This example first generates artificial multi-group data which are then
+used as separate data folds in the regularization procedure following
+separate predictions made for each fold.
+
+``` r
 # generate data for 10 groups
 set.seed(34246)
 n1 <- 100
@@ -137,7 +146,7 @@ round(D_regularized(
 #> J             0.07           0.06            0.07       0.10
 #'
 
-# Different partitions for regularization and estimation for each data fold. Add probabilities of correct classification (pcc) and area under the receiver operating characteristics as well.
+# Different partitions for regularization and estimation for each data fold. Request probabilities of correct classification (pcc) and area under the receiver operating characteristics (auc) for output.
 
 round(D_regularized(
   data = d,
@@ -163,26 +172,26 @@ round(D_regularized(
 #> H       30     34     0.04   0.01      0.16    0.15      0.16  0.03  0.18
 #> I       25     28     0.02  -0.03      0.14    0.14      0.14  0.05  0.35
 #> J       31     40     0.00   0.00      0.15    0.15      0.15  0.00  0.02
-#>   pcc.female pcc.male pcc.total pooled.sd.female pooled.sd.male pooled.sd.total
-#> A       0.56     0.39      0.48             0.15           0.15            0.15
-#> B       0.36     0.61      0.48             0.15           0.15            0.15
-#> C       0.32     0.46      0.41             0.15           0.15            0.15
-#> D       0.53     0.49      0.51             0.15           0.15            0.15
-#> E       0.37     0.49      0.44             0.15           0.15            0.15
-#> F       0.44     0.36      0.42             0.15           0.15            0.15
-#> G       0.38     0.59      0.48             0.15           0.15            0.15
-#> H       0.73     0.47      0.59             0.15           0.15            0.15
-#> I       0.48     0.64      0.57             0.15           0.15            0.15
-#> J       0.55     0.45      0.49             0.15           0.15            0.15
-#>   d.sd.total
-#> A       0.03
-#> B      -0.04
-#> C      -0.54
-#> D      -0.01
-#> E      -0.48
-#> F      -0.54
-#> G       0.06
-#> H       0.19
-#> I       0.32
-#> J       0.02
+#>   pcc.female pcc.male pcc.total  auc pooled.sd.female pooled.sd.male
+#> A       0.56     0.39      0.48 0.49             0.15           0.15
+#> B       0.36     0.61      0.48 0.50             0.15           0.15
+#> C       0.32     0.46      0.41 0.34             0.15           0.15
+#> D       0.53     0.49      0.51 0.49             0.15           0.15
+#> E       0.37     0.49      0.44 0.37             0.15           0.15
+#> F       0.44     0.36      0.42 0.39             0.15           0.15
+#> G       0.38     0.59      0.48 0.53             0.15           0.15
+#> H       0.73     0.47      0.59 0.57             0.15           0.15
+#> I       0.48     0.64      0.57 0.60             0.15           0.15
+#> J       0.55     0.45      0.49 0.52             0.15           0.15
+#>   pooled.sd.total d.sd.total
+#> A            0.15       0.03
+#> B            0.15      -0.04
+#> C            0.15      -0.54
+#> D            0.15      -0.01
+#> E            0.15      -0.48
+#> F            0.15      -0.54
+#> G            0.15       0.06
+#> H            0.15       0.19
+#> I            0.15       0.32
+#> J            0.15       0.02
 ```
