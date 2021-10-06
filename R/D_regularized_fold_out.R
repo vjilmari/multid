@@ -12,11 +12,14 @@
 #' @param fold.var Name of the fold variable.
 #' @param pcc Logical. Include probabilities of correct classification? Default FALSE.
 #' @param auc Logical. Include area under the receiver operating characteristics? Default FALSE.
+#' @param pred.prob Logical. Include table of predicted probabilities? Default FALSE.
+#' @param prob.cutoffs Vector. Cutoffs for table of predicted probabilities. Default seq(0,1,0.20).
 #'
 #' @return
 #' \item{D}{Multivariate descriptive statistics and differences.}
 #' \item{pred.dat}{A data.frame with predicted values.}
 #' \item{cv.mod}{Regularized regression model from cv.glmnet.}
+#' \item{P.table}{Table of predicted probabilities by cutoffs.}
 #' @export
 #'
 #' @examples set.seed(34246)
@@ -51,7 +54,9 @@ D_regularized_fold_out <-
            size = NULL,
            fold.var,
            pcc = FALSE,
-           auc = FALSE) {
+           auc = FALSE,
+           pred.prob = FALSE,
+           prob.cutoffs = seq(from = 0, to = 1, by = 0.20)) {
     data$group.var.num <-
       ifelse(data[, group.var] == group.values[1], 1,
         ifelse(data[, group.var] == group.values[2], 0,
@@ -158,14 +163,15 @@ D_regularized_fold_out <-
 
       # add auc
 
-      if (auc){
-        auc<-pROC::roc(response=preds[preds$fold == i,"group"],
-                       predictor=preds[preds$fold == i,"pred"],
-                       direction=">",
-                       levels=group.values,
-                       quiet=TRUE)$auc[1]
+      if (auc) {
+        auc <- pROC::roc(
+          response = preds[preds$fold == i, "group"],
+          predictor = preds[preds$fold == i, "pred"],
+          direction = ">",
+          levels = group.values,
+          quiet = TRUE
+        )$auc[1]
         D.folded[[i]] <- cbind(D.folded[[i]], auc)
-
       }
     }
 
@@ -195,7 +201,34 @@ D_regularized_fold_out <-
 
     D.folded.df <- D.folded.df[order(row.names(D.folded.df)), ]
 
-    comb.output <- list(D = D.folded.df, preds = preds, cv.mod = cv.mod)
+
+    if (pred.prob) {
+      # calculate probability
+      preds$P <- exp(preds$pred) / (1 + exp(preds$pred))
+      # cutoffs frequencies
+      preds$cut.groups <-
+        cut(preds$P,
+          breaks = prob.cutoffs,
+          include.lowest = TRUE, right = FALSE
+        )
+      # probability table
+      P.table <-
+        prop.table(table(
+          as.character(preds$group),
+          preds$cut.groups,
+          as.character(preds$fold)
+        ), c(1, 3))
+    } else {
+      P.table <- NULL
+    }
+
+    comb.output <-
+      list(
+        D = D.folded.df,
+        preds = preds,
+        cv.mod = cv.mod,
+        P.table = P.table
+      )
 
     return(comb.output)
   }

@@ -48,12 +48,12 @@ D_regularized_out <-
            pcc = FALSE,
            auc = FALSE,
            pred.prob = FALSE,
-           prob.cutoffs = seq(from=0,to=1,by=0.20)) {
+           prob.cutoffs = seq(from = 0, to = 1, by = 0.20)) {
     data$group.var.num <-
       ifelse(data[, group.var] == group.values[1], 1,
-             ifelse(data[, group.var] == group.values[2], 0,
-                    NA
-             )
+        ifelse(data[, group.var] == group.values[2], 0,
+          NA
+        )
       )
 
     if (is.null(size)) {
@@ -67,8 +67,8 @@ D_regularized_out <-
     data.grouped <- dplyr::group_by(data, group.var.num)
 
     train.data <- dplyr::sample_n(data.grouped,
-                                  size = size,
-                                  replace = F
+      size = size,
+      replace = F
     )
 
     test.data <- data[!(data$row.nmbr %in% train.data$row.nmbr), ]
@@ -88,8 +88,8 @@ D_regularized_out <-
       group = test.data[, group.var],
       pred = as.numeric(
         stats::predict(cv.mod,
-                       newx = as.matrix(test.data[, c(mv.vars)]),
-                       s = s
+          newx = as.matrix(test.data[, c(mv.vars)]),
+          s = s
         )
       )
     )
@@ -115,39 +115,46 @@ D_regularized_out <-
 
       # inherit naming from D frame
       colnames(pcc.out) <-
-        c(paste0("pcc.", substr(colnames(D)[1:2], 3, stop = 999)),
-          "pcc.total")
+        c(
+          paste0("pcc.", substr(colnames(D)[1:2], 3, stop = 999)),
+          "pcc.total"
+        )
 
       D <- cbind(D, pcc.out)
     }
 
-    if (auc){
-      auc<-pROC::roc(response=preds[,"group"],
-                     predictor=preds[,"pred"],
-                     direction=">",
-                     levels=group.values,
-                     quiet=TRUE)$auc[1]
+    if (auc) {
+      auc <- pROC::roc(
+        response = preds[, "group"],
+        predictor = preds[, "pred"],
+        direction = ">",
+        levels = group.values,
+        quiet = TRUE
+      )$auc[1]
       D <- cbind(D, auc)
-
     }
 
-    if (pred.prob){
+    if (pred.prob) {
       # calculate probability
-      preds$P<-exp(preds$pred)/(1+exp(preds$pred))
+      preds$P <- exp(preds$pred) / (1 + exp(preds$pred))
       # cutoffs frequencies
-      preds$cut.groups<-
+      preds$cut.groups <-
         cut(preds$P,
-            breaks = prob.cutoffs,
-            include.lowest = TRUE,right = FALSE)
+          breaks = prob.cutoffs,
+          include.lowest = TRUE, right = FALSE
+        )
       # probability table
-      P.table<-
+      P.table <-
         prop.table(
-          table(as.character(preds$group),
-                preds$cut.groups),margin = 1)
-
+          table(
+            as.character(preds$group),
+            preds$cut.groups
+          ),
+          margin = 1
+        )
     } else {
-      P.table<-NULL
-      }
+      P.table <- NULL
+    }
 
     comb.output <- list(
       D = D,

@@ -93,7 +93,7 @@ D_regularized <-
            pcc = FALSE,
            auc = FALSE,
            pred.prob = FALSE,
-           prob.cutoffs = seq(0,1,0.20)) {
+           prob.cutoffs = seq(0, 1, 0.20)) {
 
     # out-of-bag and folds (fold_out)?
     if (out & fold) {
@@ -109,7 +109,9 @@ D_regularized <-
         size = size,
         fold.var = fold.var,
         pcc = pcc,
-        auc = auc
+        auc = auc,
+        pred.prob = pred.prob,
+        prob.cutoffs = prob.cutoffs
       )
     } # out-of-bag and no folds (out)?
     else if (out & !fold) {

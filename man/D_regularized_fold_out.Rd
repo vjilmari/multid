@@ -16,7 +16,9 @@ D_regularized_fold_out(
   size = NULL,
   fold.var,
   pcc = FALSE,
-  auc = FALSE
+  auc = FALSE,
+  pred.prob = FALSE,
+  prob.cutoffs = seq(from = 0, to = 1, by = 0.2)
 )
 }
 \arguments{
@@ -43,11 +45,16 @@ D_regularized_fold_out(
 \item{pcc}{Logical. Include probabilities of correct classification? Default FALSE.}
 
 \item{auc}{Logical. Include area under the receiver operating characteristics? Default FALSE.}
+
+\item{pred.prob}{Logical. Include table of predicted probabilities? Default FALSE.}
+
+\item{prob.cutoffs}{Vector. Cutoffs for table of predicted probabilities. Default seq(0,1,0.20).}
 }
 \value{
 \item{D}{Multivariate descriptive statistics and differences.}
 \item{pred.dat}{A data.frame with predicted values.}
 \item{cv.mod}{Regularized regression model from cv.glmnet.}
+\item{P.table}{Table of predicted probabilities by cutoffs.}
 }
 \description{
 Use separate data partitions for regularization and estimation across defined data folds.
