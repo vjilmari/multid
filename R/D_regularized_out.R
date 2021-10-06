@@ -12,11 +12,14 @@
 #' @param size Integer. Size of regularization data per each group. Default 1/4 of cases.
 #' @param pcc Logical. Include probabilities of correct classification? Default FALSE.
 #' @param auc Logical. Include area under the receiver operating characteristics? Default FALSE.
+#' @param pred.prob Logical. Include table of predicted probabilities? Default FALSE.
+#' @param prob.cutoffs Vector. Cutoffs for table of predicted probabilities. Default seq(0,1,0.20).
 #'
 #' @return
 #' \item{D}{Multivariate descriptive statistics and differences.}
 #' \item{pred.dat}{A data.frame with predicted values.}
 #' \item{cv.mod}{Regularized regression model from cv.glmnet.}
+#' \item{P.table}{Table of predicted probabilities by cutoffs.}
 #' @export
 #'
 #' @examples D_regularized_out(
@@ -43,12 +46,14 @@ D_regularized_out <-
            rename.output = TRUE,
            size = NULL,
            pcc = FALSE,
-           auc = FALSE) {
+           auc = FALSE,
+           pred.prob = FALSE,
+           prob.cutoffs = seq(from=0,to=1,by=0.20)) {
     data$group.var.num <-
       ifelse(data[, group.var] == group.values[1], 1,
-        ifelse(data[, group.var] == group.values[2], 0,
-          NA
-        )
+             ifelse(data[, group.var] == group.values[2], 0,
+                    NA
+             )
       )
 
     if (is.null(size)) {
@@ -62,8 +67,8 @@ D_regularized_out <-
     data.grouped <- dplyr::group_by(data, group.var.num)
 
     train.data <- dplyr::sample_n(data.grouped,
-      size = size,
-      replace = F
+                                  size = size,
+                                  replace = F
     )
 
     test.data <- data[!(data$row.nmbr %in% train.data$row.nmbr), ]
@@ -83,8 +88,8 @@ D_regularized_out <-
       group = test.data[, group.var],
       pred = as.numeric(
         stats::predict(cv.mod,
-          newx = as.matrix(test.data[, c(mv.vars)]),
-          s = s
+                       newx = as.matrix(test.data[, c(mv.vars)]),
+                       s = s
         )
       )
     )
@@ -126,10 +131,29 @@ D_regularized_out <-
 
     }
 
+    if (pred.prob){
+      # calculate probability
+      preds$P<-exp(preds$pred)/(1+exp(preds$pred))
+      # cutoffs frequencies
+      preds$cut.groups<-
+        cut(preds$P,
+            breaks = prob.cutoffs,
+            include.lowest = TRUE,right = FALSE)
+      # probability table
+      P.table<-
+        prop.table(
+          table(as.character(preds$group),
+                preds$cut.groups),margin = 1)
+
+    } else {
+      P.table<-NULL
+      }
+
     comb.output <- list(
       D = D,
       pred.dat = preds,
-      cv.mod = cv.mod
+      cv.mod = cv.mod,
+      P.table = P.table
     )
     return(comb.output)
   }
