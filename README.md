@@ -412,3 +412,70 @@ D.ela.zero_out$P.table
 #>   female       0         0         1         0       0
 #>   male         0         0         1         0       0
 ```
+
+### Distribution overlap
+
+This example shows how the degree of overlap between the predicted
+values across the two groups can be visualized and estimated.
+
+For parametric variants, see [Del Giudice (in
+press)](https://marcodgdotnet.files.wordpress.com/2019/04/delgiudice_measuring_sex-differences-similarities_pre.pdf).
+
+For non-parametric variants, see [Pastore
+(2018)](https://doi.org/10.21105/joss.01023) and [Pastore & Calcagnì
+(2019)](https://doi.org/10.3389/fpsyg.2019.01089).
+
+``` r
+# Use predicted values from elastic net D (out) when difference in population exists-
+
+library(ggplot2)
+
+ggplot(D.ela_out$pred.dat,
+       aes(x=pred,fill=group))+
+  geom_density(alpha=0.5)+
+  xlab("Predicted log odds of being male (FM-score)")
+```
+
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+
+``` r
+# parametric overlap 
+
+## Proportion of overlap relative to a single distribution (OVL)
+
+## obtain D first
+(D<-unname(D.ela_out$D[,"D"]))
+#> [1] 0.8884007
+(OVL<-2*pnorm((-D/2)))
+#> [1] 0.6568977
+## Proportion of overlap relative to the joint distribution
+
+(OVL2<-OVL/(2-OVL))
+#> [1] 0.4890899
+# non-parametric overlap
+
+library(overlapping)
+
+np.overlap<-
+  overlap(x = list(D.ela_out$pred.dat[
+  D.ela_out$pred.dat$group=="male","pred"],
+  D.ela_out$pred.dat[
+  D.ela_out$pred.dat$group=="female","pred"]),
+  plot=T)
+```
+
+<img src="man/figures/README-unnamed-chunk-4-2.png" width="100%" />
+
+``` r
+# this corresponds to Proportion of overlap relative to the joint distribution (OVL2)
+(np.OVL2<-unname(np.overlap$OV))
+#> [1] 0.5412493
+# from which Proportion of overlap relative to a single distribution (OVL) is approximated at
+(np.OVL<-(2*np.OVL2)/(1+np.OVL2))
+#> [1] 0.7023514
+# compare overlaps
+
+round(cbind(OVL,np.OVL,OVL2,np.OVL2),2)
+#>       OVL np.OVL OVL2 np.OVL2
+#> [1,] 0.66    0.7 0.49    0.54
+```
