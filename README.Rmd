@@ -44,7 +44,9 @@ You can install the development version from [GitHub](https://github.com/) with:
 # install.packages("devtools")
 devtools::install_github("vjilmari/multid")
 ```
-## Example
+## Examples
+
+### Single sample with two groups
 
 This example shows how to measure standardized multivariate (both Sepal and Petal dimensions, four variables in total) distance between setosa and versicolor Species in iris dataset. 
 
@@ -52,7 +54,8 @@ This example shows how to measure standardized multivariate (both Sepal and Peta
 library(multid)
 set.seed(91237)
 
-D_regularized(
+D.iris<-
+  D_regularized(
   data = iris[iris$Species == "setosa" | iris$Species == "versicolor", ],
   mv.vars = c(
     "Sepal.Length", "Sepal.Width",
@@ -60,10 +63,12 @@ D_regularized(
   ),
   group.var = "Species",
   group.values = c("setosa", "versicolor")
-)$D
+)
+
+round(D.iris$D,2)
 
 # Use different partitions of data for regularization and estimation
-D_out<-
+D.iris_out<-
   D_regularized(
   data = iris[iris$Species == "setosa" |
     iris$Species == "versicolor", ],
@@ -81,11 +86,13 @@ D_out<-
 )
 
 # print group differences (D)
-D_out$D
+round(D.iris_out$D,2)
 
 # print table of predicted probabilities
-D_out$P.table
+D.iris_out$P.table
 ```
+
+### Multiple samples with two groups in each
 
 This example first generates artificial multi-group data which are then used as separate data folds in the regularization procedure following separate predictions made for each fold. 
 
@@ -117,7 +124,7 @@ round(D_regularized(
 
 # Different partitions for regularization and estimation for each data fold.
 
-#Request probabilities of correct classification (pcc) and area under the receiver operating characteristics (auc) for the output.
+# Request probabilities of correct classification (pcc) and area under the receiver operating characteristics (auc) for the output.
 
 round(D_regularized(
   data = d,
@@ -136,3 +143,170 @@ round(D_regularized(
 
 ```
 
+### Comparison of Mahalanobis' D and Regularized D when Difference in Population Exists
+
+This example compares a measure of standardized distance between group centroids (Mahalanobis' D) and a regularized variant provided in the multid-package in small-sample scenario when the distance between group centroids in the population is D = 1.
+
+```{r}
+set.seed(8327482)
+# generate data from sixteen correlated (r = .20) variables each with d = .50 difference (equals to Mahalanobis' D = 1)
+k=16
+r=0.2
+d=0.5
+n=200
+
+# population correlation matrix
+cor_mat<-matrix(ncol=k,nrow=k,rep(r,k*k))
+diag(cor_mat)<-1
+
+# population difference vector
+d_vector<-rep(d,k)
+
+# population Mahalanobis' D is exactly 1
+
+sqrt(t(d_vector) %*% solve(cor_mat) %*% d_vector)
+
+# generate data
+library(MASS)
+
+male.dat<-
+  data.frame(sex="male",
+             mvrnorm(n = n/2,
+                     mu = 0.5*d_vector,
+                     Sigma = cor_mat,empirical = F))
+
+female.dat<-
+  data.frame(sex="female",
+             mvrnorm(n = n/2,
+                     mu = -0.5*d_vector,
+                     Sigma = cor_mat,empirical = F))
+
+dat<-rbind(male.dat,female.dat)
+
+# sample Mahalanobis' D
+
+# obtain mean differences
+
+d_vector_sample<-rep(NA,k)
+
+for (i in 1:k){
+  d_vector_sample[i]<-mean(male.dat[,i+1]-female.dat[,i+1])
+  
+}
+
+# sample pooled covariance matrix (use mean, because equal sample sizes)
+
+cov_mat_sample<-
+  (cov(male.dat[,2:17])+cov(female.dat[,2:17]))/2
+
+# calculate sample Mahalanobis' D
+sqrt(t(d_vector_sample) %*% solve(cov_mat_sample) %*% d_vector_sample)
+
+# calculate elastic net D
+
+D.ela<-
+  D_regularized(data=dat,
+              mv.vars=paste0("X",1:k),
+              group.var = "sex",
+              group.values = c("male","female"))
+
+round(D.ela$D,2)
+
+# use separate data for regularization and estimation
+
+D.ela_out<-D_regularized(data=dat,
+              mv.vars=paste0("X",1:k),
+              group.var = "sex",
+              group.values = c("male","female"),
+              out=T,size = 50,pcc = T, auc=T,pred.prob = T)
+
+round(D.ela_out$D,2)
+
+# Table of predicted probabilites
+D.ela_out$P.table
+
+```
+
+### Comparison of Mahalanobis' D and Regularized D when Sex Difference in Population Does Not Exist
+
+This example compares a measure of standardized distance between group centroids (Mahalanobis' D) and a regularized variant provided in the multid-package in small-sample scenario when the group centroids in the population is are at the same location, D = 0. In this sample, Mahalanobis' D is measured at D = 0.5, elastic net D with same data used for regularization and estimation at D = 0.35, whereas elastic net D with independent estimation data shows D = 0.
+
+```{r}
+set.seed(8327482)
+# generate data from sixteen correlated (r = .20) variables each with d = .00 difference (equals to Mahalanobis' D = 0)
+k=16
+r=0.2
+d=0.0
+n=200
+
+# population correlation matrix
+cor_mat<-matrix(ncol=k,nrow=k,rep(r,k*k))
+diag(cor_mat)<-1
+
+# population difference vector
+d_vector<-rep(d,k)
+
+# population Mahalanobis' D is exactly 1
+
+sqrt(t(d_vector) %*% solve(cor_mat) %*% d_vector)
+
+# generate data
+
+male.dat<-
+  data.frame(sex="male",
+             mvrnorm(n = n/2,
+                     mu = 0.5*d_vector,
+                     Sigma = cor_mat,empirical = F))
+
+female.dat<-
+  data.frame(sex="female",
+             mvrnorm(n = n/2,
+                     mu = -0.5*d_vector,
+                     Sigma = cor_mat,empirical = F))
+
+dat<-rbind(male.dat,female.dat)
+
+# sample Mahalanobis' D
+
+# obtain mean differences
+
+d_vector_sample<-rep(NA,k)
+
+for (i in 1:k){
+  d_vector_sample[i]<-mean(male.dat[,i+1]-female.dat[,i+1])
+  
+}
+
+# sample pooled covariance matrix (use mean, because equal sample sizes)
+
+cov_mat_sample<-
+  (cov(male.dat[,2:17])+cov(female.dat[,2:17]))/2
+
+# calculate sample Mahalanobis' D
+sqrt(t(d_vector_sample) %*% solve(cov_mat_sample) %*% d_vector_sample)
+
+# calculate elastic net D
+
+D.ela.zero<-
+  D_regularized(data=dat,
+              mv.vars=paste0("X",1:k),
+              group.var = "sex",
+              group.values = c("male","female"))
+
+round(D.ela.zero$D,2)
+
+# use separate data for regularization and estimation
+
+D.ela.zero_out<-
+  D_regularized(data=dat,
+              mv.vars=paste0("X",1:k),
+              group.var = "sex",
+              group.values = c("male","female"),
+              out=T,size = 50,pcc = T, auc=T,pred.prob = T)
+
+round(D.ela.zero_out$D,2)
+
+# Table of predicted probabilites
+D.ela.zero_out$P.table
+
+```
