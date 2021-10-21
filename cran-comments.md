@@ -1,7 +1,5 @@
-## Resubmission
-This is a resubmission. In this version I have:
-
-* switched invalid URLs in README to valid URLs
+## Submission
+This is a version 0.2.0 of multid package 
 
 ## Test environments
 * local R installation, R 4.1.1
@@ -11,5 +9,3 @@ This is a resubmission. In this version I have:
 ## R CMD check results
 
 0 errors | 0 warnings | 0 note
-
-* This is a new release.
