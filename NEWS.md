@@ -1,3 +1,7 @@
+# multid 0.2.0.9000
+
+* Development version
+
 # multid 0.2.0
 
 * Fixed bug: renaming output in D_regularized_fold functions
