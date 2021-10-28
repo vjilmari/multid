@@ -1,6 +1,7 @@
 # multid 0.2.0.9000
 
 * Development version
+* Added diff_dv_sem function for estimation, testing assumptions, and model comparison for difference scores as dependent variables in regression analysis
 
 # multid 0.2.0
 
