@@ -2,6 +2,7 @@
 
 * Development version
 * Added diff_dv_sem function for estimation, testing assumptions, and model comparison for difference scores as dependent variables in regression analysis
+* Added diff_score_correlations function for predicting difference scores
 
 # multid 0.2.0
 
