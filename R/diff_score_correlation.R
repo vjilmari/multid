@@ -17,11 +17,15 @@
 #' @export
 #'
 #' @examples set.seed(342356)
-#' d<-data.frame(var1=rnorm(50),
-#'               var2=rnorm(50),
-#'                  x=rnorm(50))
-#' diff_score_correlation(data=d,var1="var1",var2="var2",
-#'                          predictor="x",center=TRUE,scale=TRUE)
+#' d <- data.frame(
+#'   var1 = rnorm(50),
+#'   var2 = rnorm(50),
+#'   x = rnorm(50)
+#' )
+#' diff_score_correlation(
+#'   data = d, var1 = "var1", var2 = "var2",
+#'   predictor = "x", center = TRUE, scale = TRUE
+#' )
 diff_score_correlation <- function(data,
                                    var1,
                                    var2,
@@ -30,6 +34,35 @@ diff_score_correlation <- function(data,
                                    predictor,
                                    estimator = "MLR",
                                    sampling.weights = NULL) {
+  vt <- stats::var.test(
+    data[, var1], data[, var2]
+  )
+
+  F.test <-
+    paste0(
+      "F test: F(",
+      unname(vt$parameter[1]), ", ",
+      unname(vt$parameter[2]), ") = ",
+      unname(as.character(round(vt$statistic, 5))),
+      ", p = ",
+      unname(as.character(round(vt$p.value, 8)))
+    )
+
+  fl <- stats::fligner.test(list(
+    data[, var1],
+    data[, var2]
+  ))
+
+  fl.test <-
+    paste0(
+      "Fligner-Killeen test: chi-squared(df = ",
+      unname(fl$parameter), ") = ",
+      unname(as.character(round(fl$statistic, 5))),
+      ", p = ",
+      unname(as.character(round(fl$p.value, 8)))
+    )
+
+  variances <- unname(rbind(F.test, fl.test))
 
 
   if (center) {
@@ -44,14 +77,13 @@ diff_score_correlation <- function(data,
     pooled_sd <-
       sqrt(((nrow(data) - 1) * stats::sd(data[, var1])^2 +
         (nrow(data) - 1) * stats::sd(data[, var2])^2) /
-          (nrow(data) * 2 - 2))
+        (nrow(data) * 2 - 2))
 
     data[, var1] <- data[, var1] / pooled_sd
     data[, var2] <- data[, var2] / pooled_sd
     data[, predictor] <-
-      (data[, predictor] - mean(data[, predictor]))/
-      stats::sd(data[, predictor])
-
+      (data[, predictor] - mean(data[, predictor])) /
+        stats::sd(data[, predictor])
   }
 
 
@@ -101,6 +133,7 @@ diff_score_correlation <- function(data,
 
 
   output <- list(
+    variances = variances,
     descriptives = descriptives,
     results = pretty.out
   )

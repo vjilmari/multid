@@ -41,11 +41,15 @@ Test assumptions and infer about associations with algebraic difference scores
 }
 \examples{
 set.seed(342356)
-d<-data.frame(var1=rnorm(50),
-              var2=rnorm(50),
-                 x=rnorm(50))
-diff_score_correlation(data=d,var1="var1",var2="var2",
-                         predictor="x",center=TRUE,scale=TRUE)
+d <- data.frame(
+  var1 = rnorm(50),
+  var2 = rnorm(50),
+  x = rnorm(50)
+)
+diff_score_correlation(
+  data = d, var1 = "var1", var2 = "var2",
+  predictor = "x", center = TRUE, scale = TRUE
+)
 }
 \references{
 Edwards, J. R. (1995). Alternatives to Difference Scores as Dependent Variables in the Study of Congruence in Organizational Research. Organizational Behavior and Human Decision Processes, 64(3), 307–324. \url{doi:10.1006/obhd.1995.1108}.
