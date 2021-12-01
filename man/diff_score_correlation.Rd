@@ -35,6 +35,8 @@ diff_score_correlation(
 \value{
 \item{descriptives}{Means, standard deviations, and intercorrelations.}
 \item{results}{Parameter estimates from the structural equation model.}
+\item{variances}{F test and Fligner-Killeen test for homogeneity of variances between var1 and var2.}
+\item{transformed_data}{Data frame with variables used in SEM.}
 }
 \description{
 Test assumptions and infer about associations with algebraic difference scores

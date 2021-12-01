@@ -12,6 +12,8 @@
 #' @return
 #' \item{descriptives}{Means, standard deviations, and intercorrelations.}
 #' \item{results}{Parameter estimates from the structural equation model.}
+#' \item{variances}{F test and Fligner-Killeen test for homogeneity of variances between var1 and var2.}
+#' \item{transformed_data}{Data frame with variables used in SEM.}
 #' @references Edwards, J. R. (1995). Alternatives to Difference Scores as Dependent Variables in the Study of Congruence in Organizational Research. Organizational Behavior and Human Decision Processes, 64(3), 307–324. <doi:10.1006/obhd.1995.1108>.
 #'
 #' @export
@@ -131,11 +133,15 @@ diff_score_correlation <- function(data,
   pretty.out <-
     lavaan::parameterestimates(fit, output = "pretty")
 
+  output.data <-
+    data[, c(var1, var2, "diff", predictor)]
+
 
   output <- list(
     variances = variances,
     descriptives = descriptives,
-    results = pretty.out
+    results = pretty.out,
+    transformed_data = output.data
   )
 
   return(output)
