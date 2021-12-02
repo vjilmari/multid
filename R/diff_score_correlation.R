@@ -7,6 +7,9 @@
 #' @param estimator Character string. Estimator used in SEM (Default "MLR").
 #' @param scale Logical. Are var1 and var2 scaled with their pooled sd? (Default FALSE)
 #' @param center Logical. Are var1 and var2 centered around their grand mean? (Default FALSE)
+#' @param level Numeric. The confidence level required for the result output (Default .95)
+#' @param bound_l Equivalence test lower bound based on SESOI (smallest effect size of interest; Default = -0.05).
+#' @param bound_u Equivalence test upper bound based on SESOI (smallest effect size of interest; Default = 0.05).
 #' @param sampling.weights Character string. Name of sampling weights variable.
 #'
 #' @return
@@ -14,6 +17,7 @@
 #' \item{results}{Parameter estimates from the structural equation model.}
 #' \item{variances}{F test and Fligner-Killeen test for homogeneity of variances between var1 and var2.}
 #' \item{transformed_data}{Data frame with variables used in SEM.}
+#' \item{coef_sum_equivalence}{Equivalence test for sum of regression coefficiens for var1 and var2.}
 #' @references Edwards, J. R. (1995). Alternatives to Difference Scores as Dependent Variables in the Study of Congruence in Organizational Research. Organizational Behavior and Human Decision Processes, 64(3), 307–324. <doi:10.1006/obhd.1995.1108>.
 #'
 #' @export
@@ -35,6 +39,9 @@ diff_score_correlation <- function(data,
                                    scale = FALSE,
                                    predictor,
                                    estimator = "MLR",
+                                   level = .95,
+                                   bound_l = -0.05,
+                                   bound_u = 0.05,
                                    sampling.weights = NULL) {
   vt <- stats::var.test(
     data[, var1], data[, var2]
@@ -119,7 +126,10 @@ diff_score_correlation <- function(data,
       "coef_diff_std:=((b_11-b_21)*sqrt(pred_var))/",
       as.character(round(descriptives["diff", 2], 5))
     ), "\n",
-    paste0("coef_sum:=b_21+b_11")
+    paste0("coef_sum:=b_11+b_21"), "\n",
+    # paste0("sum_eq_lower:=(b_11+b_21)-", as.character(bound_l)), "\n",
+    # paste0("sum_eq_upper:=(b_11+b_21)-", as.character(bound_u)), "\n",
+    paste0("diff_abs_magnitude:=sqrt(b_11^2)-sqrt(b_21^2)")
   )
 
   fit <-
@@ -131,17 +141,40 @@ diff_score_correlation <- function(data,
     )
 
   pretty.out <-
-    lavaan::parameterestimates(fit, output = "pretty")
+    lavaan::parameterestimates(fit,
+      output = "pretty",
+      rsquare = TRUE, level = level
+    )
 
   output.data <-
     data[, c(var1, var2, "diff", predictor)]
+
+  pars <- data.frame(lavaan::parameterestimates(fit))
+
+
+  coef_sum_equivalence <-
+    c(
+      Estimate = pars[pars$label == "coef_sum", "est"],
+      "Std. Error" = pars[pars$label == "coef_sum", "se"]
+    )
+
+  coef_sum_equivalence["z_lower"] <-
+    (coef_sum_equivalence["Estimate"] - (bound_l)) / coef_sum_equivalence["Std. Error"]
+  coef_sum_equivalence["z_upper"] <-
+    (coef_sum_equivalence["Estimate"] - (bound_u)) / coef_sum_equivalence["Std. Error"]
+  coef_sum_equivalence["p_lower"] <-
+    stats::pnorm(coef_sum_equivalence["z_lower"], lower.tail = F)
+  coef_sum_equivalence["p_upper"] <-
+    stats::pnorm(coef_sum_equivalence["z_upper"], lower.tail = T)
+  coef_sum_equivalence
 
 
   output <- list(
     variances = variances,
     descriptives = descriptives,
     results = pretty.out,
-    transformed_data = output.data
+    transformed_data = output.data,
+    coef_sum_equivalence = coef_sum_equivalence
   )
 
   return(output)

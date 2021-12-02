@@ -12,6 +12,9 @@ diff_score_correlation(
   scale = FALSE,
   predictor,
   estimator = "MLR",
+  level = 0.95,
+  bound_l = -0.05,
+  bound_u = 0.05,
   sampling.weights = NULL
 )
 }
@@ -30,6 +33,12 @@ diff_score_correlation(
 
 \item{estimator}{Character string. Estimator used in SEM (Default "MLR").}
 
+\item{level}{Numeric. The confidence level required for the result output (Default .95)}
+
+\item{bound_l}{Equivalence test lower bound based on SESOI (smallest effect size of interest; Default = -0.05).}
+
+\item{bound_u}{Equivalence test upper bound based on SESOI (smallest effect size of interest; Default = 0.05).}
+
 \item{sampling.weights}{Character string. Name of sampling weights variable.}
 }
 \value{
@@ -37,6 +46,7 @@ diff_score_correlation(
 \item{results}{Parameter estimates from the structural equation model.}
 \item{variances}{F test and Fligner-Killeen test for homogeneity of variances between var1 and var2.}
 \item{transformed_data}{Data frame with variables used in SEM.}
+\item{coef_sum_equivalence}{Equivalence test for sum of regression coefficiens for var1 and var2.}
 }
 \description{
 Test assumptions and infer about associations with algebraic difference scores
