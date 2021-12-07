@@ -18,6 +18,7 @@
 #' \item{variances}{F test and Fligner-Killeen test for homogeneity of variances between var1 and var2.}
 #' \item{transformed_data}{Data frame with variables used in SEM.}
 #' \item{coef_sum_equivalence}{Equivalence test for sum of regression coefficiens for var1 and var2.}
+#' \item{abs_test_one_sided}{One sided abs_test for positivity of abs(b_11-b_21)-abs(b_11+b_21).}
 #' @references Edwards, J. R. (1995). Alternatives to Difference Scores as Dependent Variables in the Study of Congruence in Organizational Research. Organizational Behavior and Human Decision Processes, 64(3), 307–324. <doi:10.1006/obhd.1995.1108>.
 #'
 #' @export
@@ -130,7 +131,7 @@ diff_score_correlation <- function(data,
     # paste0("sum_eq_lower:=(b_11+b_21)-", as.character(bound_l)), "\n",
     # paste0("sum_eq_upper:=(b_11+b_21)-", as.character(bound_u)), "\n",
     paste0("diff_abs_magnitude:=sqrt(b_11^2)-sqrt(b_21^2)"), "\n",
-    paste0("abs_test:=sqrt((b_11-b_21)^2)-sqrt((b_11+b_21)^2)")
+    paste0("abs_test_two_sided:=sqrt((b_11-b_21)^2)-sqrt((b_11+b_21)^2)")
   )
 
   fit <-
@@ -167,7 +168,16 @@ diff_score_correlation <- function(data,
     stats::pnorm(coef_sum_equivalence["z_lower"], lower.tail = F)
   coef_sum_equivalence["p_upper"] <-
     stats::pnorm(coef_sum_equivalence["z_upper"], lower.tail = T)
-  coef_sum_equivalence
+
+
+  abs_test_one_sided <- c(
+    Estimate = pars[pars$label == "abs_test_two_sided", "est"],
+    "Std. Error" = pars[pars$label == "abs_test_two_sided", "se"],
+    z = pars[pars$label == "abs_test_two_sided", "z"]
+  )
+
+  abs_test_one_sided["p.pos"] <-
+    stats::pnorm(abs_test_one_sided["z"], lower.tail = F)
 
 
   output <- list(
@@ -175,7 +185,8 @@ diff_score_correlation <- function(data,
     descriptives = descriptives,
     results = pretty.out,
     transformed_data = output.data,
-    coef_sum_equivalence = coef_sum_equivalence
+    coef_sum_equivalence = coef_sum_equivalence,
+    abs_test_one_sided = abs_test_one_sided
   )
 
   return(output)
