@@ -129,7 +129,8 @@ diff_score_correlation <- function(data,
     paste0("coef_sum:=b_11+b_21"), "\n",
     # paste0("sum_eq_lower:=(b_11+b_21)-", as.character(bound_l)), "\n",
     # paste0("sum_eq_upper:=(b_11+b_21)-", as.character(bound_u)), "\n",
-    paste0("diff_abs_magnitude:=sqrt(b_11^2)-sqrt(b_21^2)")
+    paste0("diff_abs_magnitude:=sqrt(b_11^2)-sqrt(b_21^2)"), "\n",
+    paste0("abs_test:=sqrt((b_11-b_21)^2)-sqrt((b_11+b_21)^2)")
   )
 
   fit <-
