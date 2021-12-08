@@ -126,12 +126,14 @@ diff_score_correlation <- function(data,
     paste0("coef_diff:=b_11-b_21"), "\n",
     paste0(
       "coef_diff_std:=((b_11-b_21)*sqrt(pred_var))/",
-      as.character(round(descriptives["diff", 2], 5))
+      as.character(round(descriptives["diff", "SD"], 8))
     ), "\n",
     paste0("coef_sum:=b_11+b_21"), "\n",
     # paste0("sum_eq_lower:=(b_11+b_21)-", as.character(bound_l)), "\n",
     # paste0("sum_eq_upper:=(b_11+b_21)-", as.character(bound_u)), "\n",
     paste0("diff_abs_magnitude:=sqrt(b_11^2)-sqrt(b_21^2)"), "\n",
+    paste0("abs_coef_diff:=sqrt((b_11-b_21)^2)"), "\n",
+    paste0("abs_coef_sum:=sqrt((b_11+b_21)^2)"), "\n",
     paste0("abs_test_two_sided:=sqrt((b_11-b_21)^2)-sqrt((b_11+b_21)^2)")
   )
 
