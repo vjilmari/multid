@@ -143,18 +143,13 @@ diff_score_correlation <- function(data,
       sampling.weights = sampling.weights
     )
 
-  pretty.out <-
-    lavaan::parameterestimates(fit,
-      output = "pretty",
-      rsquare = TRUE, level = level
-    )
-
   output.data <-
     data[, c(var1, var2, "diff", predictor)]
 
   pars <- data.frame(lavaan::parameterestimates(fit,
-                                                rsquare = TRUE,
-                                                level = level))
+    rsquare = TRUE,
+    level = level
+  ))
 
 
   coef_sum_equivalence <-
@@ -182,24 +177,28 @@ diff_score_correlation <- function(data,
   abs_test_one_sided["p.pos"] <-
     stats::pnorm(abs_test_one_sided["z"], lower.tail = F)
 
-  rsquared=pars[pars[,"op"]=="r2",c(1,5)]
-  rownames(rsquared)<-NULL
-  colnames(rsquared)<-c("component","r2")
+  rsquared <- pars[pars[, "op"] == "r2", c(1, 5)]
+  rownames(rsquared) <- NULL
+  colnames(rsquared) <- c("component", "r2")
 
-  res.pars<-c("b_11","b_21","b_10","b_20","rescov_12",
-              "coef_diff","coef_diff_std",
-              "coef_sum","diff_abs_magnitude",
-              "abs_test_two_sided")
+  res.pars <- c(
+    "b_11", "b_21", "b_10", "b_20", "rescov_12",
+    "coef_diff", "coef_diff_std",
+    "coef_sum", "diff_abs_magnitude",
+    "abs_test_two_sided"
+  )
 
-  results<-pars[pars$label %in% res.pars,4:ncol(pars)]
-  rownames(results)<-results$label
-  results<-results[,2:ncol(results)]
+  results <- pars[pars$label %in% res.pars, 4:ncol(pars)]
+  rownames(results) <- results$label
+  results <- results[, 2:ncol(results)]
 
 
-  results["abs_test_two_sided","pvalue"]<-
+  results["abs_test_two_sided", "pvalue"] <-
     unname(abs_test_one_sided["p.pos"])
-  rownames(results)<-c(rownames(results)[1:(nrow(results)-1)],
-                       "abs_test_one_sided")
+  rownames(results) <- c(
+    rownames(results)[1:(nrow(results) - 1)],
+    "abs_test_one_sided"
+  )
 
   output <- list(
     variances = variances,
@@ -208,8 +207,8 @@ diff_score_correlation <- function(data,
     transformed_data = output.data,
     coef_sum_equivalence = coef_sum_equivalence,
     abs_test_one_sided = abs_test_one_sided,
-    rsquared=rsquared,
-    results=results
+    rsquared = rsquared,
+    results = results
   )
 
   return(output)
