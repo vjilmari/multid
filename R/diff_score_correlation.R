@@ -14,11 +14,12 @@
 #'
 #' @return
 #' \item{descriptives}{Means, standard deviations, and intercorrelations.}
-#' \item{results}{Parameter estimates from the structural equation model.}
+#' \item{parameter_estimates}{Parameter estimates from the structural equation model.}
 #' \item{variances}{F test and Fligner-Killeen test for homogeneity of variances between var1 and var2.}
 #' \item{transformed_data}{Data frame with variables used in SEM.}
 #' \item{coef_sum_equivalence}{Equivalence test for sum of regression coefficiens for var1 and var2.}
 #' \item{abs_test_one_sided}{One sided abs_test for positivity of abs(b_11-b_21)-abs(b_11+b_21).}
+#' \item{results}{Summary of key results.}
 #' @references Edwards, J. R. (1995). Alternatives to Difference Scores as Dependent Variables in the Study of Congruence in Organizational Research. Organizational Behavior and Human Decision Processes, 64(3), 307–324. <doi:10.1006/obhd.1995.1108>.
 #'
 #' @export
@@ -151,7 +152,9 @@ diff_score_correlation <- function(data,
   output.data <-
     data[, c(var1, var2, "diff", predictor)]
 
-  pars <- data.frame(lavaan::parameterestimates(fit))
+  pars <- data.frame(lavaan::parameterestimates(fit,
+                                                rsquare = TRUE,
+                                                level = level))
 
 
   coef_sum_equivalence <-
@@ -179,14 +182,34 @@ diff_score_correlation <- function(data,
   abs_test_one_sided["p.pos"] <-
     stats::pnorm(abs_test_one_sided["z"], lower.tail = F)
 
+  rsquared=pars[pars[,"op"]=="r2",c(1,5)]
+  rownames(rsquared)<-NULL
+  colnames(rsquared)<-c("component","r2")
+
+  res.pars<-c("b_11","b_21","b_10","b_20","rescov_12",
+              "coef_diff","coef_diff_std",
+              "coef_sum","diff_abs_magnitude",
+              "abs_test_two_sided")
+
+  results<-pars[pars$label %in% res.pars,4:ncol(pars)]
+  rownames(results)<-results$label
+  results<-results[,2:ncol(results)]
+
+
+  results["abs_test_two_sided","pvalue"]<-
+    unname(abs_test_one_sided["p.pos"])
+  rownames(results)<-c(rownames(results)[1:(nrow(results)-1)],
+                       "abs_test_one_sided")
 
   output <- list(
     variances = variances,
     descriptives = descriptives,
-    results = pretty.out,
+    parameter_estimates = pars,
     transformed_data = output.data,
     coef_sum_equivalence = coef_sum_equivalence,
-    abs_test_one_sided = abs_test_one_sided
+    abs_test_one_sided = abs_test_one_sided,
+    rsquared=rsquared,
+    results=results
   )
 
   return(output)

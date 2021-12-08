@@ -43,11 +43,12 @@ diff_score_correlation(
 }
 \value{
 \item{descriptives}{Means, standard deviations, and intercorrelations.}
-\item{results}{Parameter estimates from the structural equation model.}
+\item{parameter_estimates}{Parameter estimates from the structural equation model.}
 \item{variances}{F test and Fligner-Killeen test for homogeneity of variances between var1 and var2.}
 \item{transformed_data}{Data frame with variables used in SEM.}
 \item{coef_sum_equivalence}{Equivalence test for sum of regression coefficiens for var1 and var2.}
 \item{abs_test_one_sided}{One sided abs_test for positivity of abs(b_11-b_21)-abs(b_11+b_21).}
+\item{results}{Summary of key results.}
 }
 \description{
 Test assumptions and infer about associations with algebraic difference scores
