@@ -27,8 +27,9 @@ ml_dadas<-function(model,
 
   temp.cont<-
     emmeans::contrast(trends,
-                      method=list(abs_diff=(c(-1*sqrt((-1)^2),sqrt(1^2))),
-                                  abs_sum=(c(sqrt((-1)^2),+1*sqrt(1^2)))
+                      method=list(abs_diff=c(-1*sqrt((-1)^2),sqrt(1^2)),
+                                  #abs_sum=(c(sqrt((-1)^2),+1*sqrt(1^2)))
+                                  abs_sum=c(-1*sqrt(1^2),-1*sqrt(1^2))
                       ))
 
   ml_abstest<-
