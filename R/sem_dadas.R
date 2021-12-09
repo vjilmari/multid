@@ -155,10 +155,6 @@ sem_dadas <- function(data,
   dadas["p.pos"] <-
     stats::pnorm(dadas["z"], lower.tail = F)
 
-  rsquared <- pars[pars[, "op"] == "r2", c(1, 5)]
-  rownames(rsquared) <- NULL
-  colnames(rsquared) <- c("component", "r2")
-
   res.pars <- c(
     "b_11", "b_21", "b_10", "b_20", "rescov_12",
     "coef_diff", "coef_diff_std",
@@ -178,6 +174,28 @@ sem_dadas <- function(data,
     rownames(results)[1:(nrow(results) - 1)],
     "dadas"
   )
+
+  rsquared <- pars[pars[, "op"] == "r2", c(1, 5)]
+  rownames(rsquared) <- NULL
+  colnames(rsquared) <- c("score", "r2")
+
+  b_11 <- results["b_11", "est"]
+  b_21 <- results["b_21", "est"]
+  sd_predictor <- descriptives[predictor, "SD"]
+  cov_C1C2 <- cov(output.data[, c(var1, var2)])
+
+  r_diff <- (b_11 - b_21) * sd_predictor /
+    sqrt(cov_C1C2[var1, var1] + cov_C1C2[var2, var2]
+         - 2 * cov_C1C2[var1, var2])
+  r2_diff <- r_diff^2
+
+  r2_diff_row <-
+    cbind.data.frame(
+      score = "difference",
+      r2 = r2_diff
+    )
+  rsquared <-
+    rbind(rsquared, r2_diff_row)
 
   output <- list(
     variances = variances,
