@@ -182,7 +182,7 @@ sem_dadas <- function(data,
   b_11 <- results["b_11", "est"]
   b_21 <- results["b_21", "est"]
   sd_predictor <- descriptives[predictor, "SD"]
-  cov_C1C2 <- cov(output.data[, c(var1, var2)])
+  cov_C1C2 <- stats::cov(output.data[, c(var1, var2)])
 
   r_diff <- (b_11 - b_21) * sd_predictor /
     sqrt(cov_C1C2[var1, var1] + cov_C1C2[var2, var2]
