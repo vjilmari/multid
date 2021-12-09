@@ -127,7 +127,7 @@ sem_dadas <- function(data,
     paste0("diff_abs_magnitude:=sqrt(b_11^2)-sqrt(b_21^2)"), "\n",
     paste0("abs_coef_diff:=sqrt((b_11-b_21)^2)"), "\n",
     paste0("abs_coef_sum:=sqrt((b_11+b_21)^2)"), "\n",
-    paste0("abs_test_two_sided:=sqrt((b_11-b_21)^2)-sqrt((b_11+b_21)^2)")
+    paste0("dadas_two_sided:=sqrt((b_11-b_21)^2)-sqrt((b_11+b_21)^2)")
   )
 
   fit <-
@@ -147,9 +147,9 @@ sem_dadas <- function(data,
   ))
 
   dadas <- c(
-    Estimate = pars[pars$label == "abs_test_two_sided", "est"],
-    "Std. Error" = pars[pars$label == "abs_test_two_sided", "se"],
-    z = pars[pars$label == "abs_test_two_sided", "z"]
+    Estimate = pars[pars$label == "dadas_two_sided", "est"],
+    "Std. Error" = pars[pars$label == "dadas_two_sided", "se"],
+    z = pars[pars$label == "dadas_two_sided", "z"]
   )
 
   dadas["p.pos"] <-
@@ -163,7 +163,8 @@ sem_dadas <- function(data,
     "b_11", "b_21", "b_10", "b_20", "rescov_12",
     "coef_diff", "coef_diff_std",
     "coef_sum", "diff_abs_magnitude",
-    "abs_test_two_sided"
+    "abs_coef_diff", "abs_coef_sum",
+    "dadas_two_sided"
   )
 
   results <- pars[pars$label %in% res.pars, 4:ncol(pars)]
@@ -171,7 +172,7 @@ sem_dadas <- function(data,
   results <- results[, 2:ncol(results)]
 
 
-  results["abs_test_two_sided", "pvalue"] <-
+  results["dadas_two_sided", "pvalue"] <-
     unname(dadas["p.pos"])
   rownames(results) <- c(
     rownames(results)[1:(nrow(results) - 1)],
