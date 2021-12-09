@@ -124,8 +124,6 @@ sem_dadas <- function(data,
       as.character(round(descriptives["diff", "SD"], 8))
     ), "\n",
     paste0("coef_sum:=b_11+b_21"), "\n",
-    # paste0("sum_eq_lower:=(b_11+b_21)-", as.character(bound_l)), "\n",
-    # paste0("sum_eq_upper:=(b_11+b_21)-", as.character(bound_u)), "\n",
     paste0("diff_abs_magnitude:=sqrt(b_11^2)-sqrt(b_21^2)"), "\n",
     paste0("abs_coef_diff:=sqrt((b_11-b_21)^2)"), "\n",
     paste0("abs_coef_sum:=sqrt((b_11+b_21)^2)"), "\n",
@@ -147,23 +145,6 @@ sem_dadas <- function(data,
     rsquare = TRUE,
     level = level
   ))
-
-
-  coef_sum_equivalence <-
-    c(
-      Estimate = pars[pars$label == "coef_sum", "est"],
-      "Std. Error" = pars[pars$label == "coef_sum", "se"]
-    )
-
-  coef_sum_equivalence["z_lower"] <-
-    (coef_sum_equivalence["Estimate"] - (bound_l)) / coef_sum_equivalence["Std. Error"]
-  coef_sum_equivalence["z_upper"] <-
-    (coef_sum_equivalence["Estimate"] - (bound_u)) / coef_sum_equivalence["Std. Error"]
-  coef_sum_equivalence["p_lower"] <-
-    stats::pnorm(coef_sum_equivalence["z_lower"], lower.tail = F)
-  coef_sum_equivalence["p_upper"] <-
-    stats::pnorm(coef_sum_equivalence["z_upper"], lower.tail = T)
-
 
   dadas <- c(
     Estimate = pars[pars$label == "abs_test_two_sided", "est"],
