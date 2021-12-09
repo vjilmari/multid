@@ -24,13 +24,37 @@ ml_dadas<-function(model,
                             disable.pbkrtest=TRUE,
                             infer = c(FALSE, TRUE),
                             at=at.list)
+  # obtain trend signs for correct contrasts
+
+  df.trends<-data.frame(trends)
+  trend.signs<-c(df.trends[1,2]/abs(df.trends[1,2]),
+                 df.trends[2,2]/abs(df.trends[2,2]))
+
+  # define correct contrasts based on signs
+
+
+  if (trend.signs[1]==-1 & trend.signs[2]==-1){
+    mlist<-list(
+      abs_diff=c(-1,1),
+      abs_sum=c(-1,-1))
+  } else if (trend.signs[1]==1 & trend.signs[2]==1) {
+    mlist<-list(
+      abs_diff=c(-1,1),
+      abs_sum=c(1,1))
+  } else if (trend.signs[1]==-1 & trend.signs[2]==1) {
+    mlist<-list(
+      abs_diff=c(-1,1),
+      abs_sum=c(-1,-1))
+
+  } else if (trend.signs[1]==1 & trend.signs[2]==-1) {
+    mlist<-list(
+      abs_diff=c(1,-1),
+      abs_sum=c(-1,-1))
+  }
 
   temp.cont<-
     emmeans::contrast(trends,
-                      method=list(abs_diff=c(-1*sqrt((-1)^2),sqrt(1^2)),
-                                  #abs_sum=(c(sqrt((-1)^2),+1*sqrt(1^2)))
-                                  abs_sum=c(-1*sqrt(1^2),-1*sqrt(1^2))
-                      ))
+                      method=mlist)
 
   ml_abstest<-
     data.frame(emmeans::contrast(temp.cont,
