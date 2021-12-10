@@ -87,5 +87,10 @@ ml_dadas <- function(model,
   rownames(output) <- output$contrast
   output <- output[, 2:ncol(output)]
 
+  rownames(output) <- c(
+    rownames(output)[1:(nrow(output) - 1)],
+    "dadas"
+  )
+
   return(output)
 }
