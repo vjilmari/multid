@@ -13,6 +13,12 @@ ml_dadas <- function(model,
                      predictor,
                      diff_var,
                      diff_var_values) {
+
+  # reorder diff_var_values
+  diff_var_values<-
+    diff_var_values[order(diff_var_values)]
+
+  # format list for contrast values
   at.list <- list(diff_var_values)
   names(at.list) <- diff_var
 
@@ -38,12 +44,12 @@ ml_dadas <- function(model,
 
   if (trend.signs[1] == -1 & trend.signs[2] == -1) {
     mlist <- list(
-      abs_diff = c(-1, 1),
+      abs_diff = c(1, -1),
       abs_sum = c(-1, -1)
     )
   } else if (trend.signs[1] == 1 & trend.signs[2] == 1) {
     mlist <- list(
-      abs_diff = c(-1, 1),
+      abs_diff = c(1, -1),
       abs_sum = c(1, 1)
     )
   } else if (trend.signs[1] == -1 & trend.signs[2] == 1) {
