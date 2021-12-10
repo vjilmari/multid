@@ -20,4 +20,5 @@ Imports:
     stats (>= 4.0.2),
     pROC (>= 1.18.0),
     lavaan (>= 0.6.9),
-    emmeans (>= 1.6.3)
+    emmeans (>= 1.6.3),
+    lmerTest (>= 3.1.3)
