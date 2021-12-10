@@ -14,24 +14,27 @@
 #'
 #' dat <- data.frame(
 #'   group = rep(c(LETTERS[1:n1]), each = n2),
-#'   x = sample(c(-0.5,0.5), n1 * n2, replace = TRUE),
+#'   x = sample(c(-0.5, 0.5), n1 * n2, replace = TRUE),
 #'   w = rep(sample(1:5, n1, replace = TRUE), each = n2),
 #'   y = sample(1:5, n1 * n2, replace = TRUE)
 #' )
 #'
-#' fit<-lmerTest::lmer(y ~ x*w + (x | group),
-#'                     data = dat)
+#' fit <- lmerTest::lmer(y ~ x * w + (x | group),
+#'   data = dat
+#' )
 #'
-#' round(ml_dadas(fit,predictor = "w",
-#'                diff_var = "x",
-#'                diff_var_values = c(0.5, -0.5)),3)
+#' round(ml_dadas(fit,
+#'   predictor = "w",
+#'   diff_var = "x",
+#'   diff_var_values = c(0.5, -0.5)
+#' ), 3)
 ml_dadas <- function(model,
                      predictor,
                      diff_var,
                      diff_var_values) {
 
   # reorder diff_var_values
-  diff_var_values<-
+  diff_var_values <-
     diff_var_values[order(diff_var_values)]
 
   # format list for contrast values
@@ -50,39 +53,40 @@ ml_dadas <- function(model,
   # obtain trend signs for correct contrasts
 
   df.trends <- data.frame(trends)
-  trend.signs <- c(
-    df.trends[1, 2] / abs(df.trends[1, 2]),
-    df.trends[2, 2] / abs(df.trends[2, 2])
-  )
+
+  trend.diff <- df.trends[1, 2] - df.trends[2, 2]
+  trend.sum <- df.trends[1, 2] + df.trends[2, 2]
+
+  trend.strength <- df.trends[1, 2] - df.trends[2, 2]
 
   # define correct contrasts based on signs
 
-
-  if (trend.signs[1] == -1 & trend.signs[2] == -1) {
+  if (trend.diff > 0 & trend.sum < 0) {
     mlist <- list(
       abs_diff = c(1, -1),
       abs_sum = c(-1, -1)
     )
-  } else if (trend.signs[1] == 1 & trend.signs[2] == 1) {
+  } else if (trend.diff > 0 & trend.sum > 0) {
     mlist <- list(
       abs_diff = c(1, -1),
       abs_sum = c(1, 1)
     )
-  } else if (trend.signs[1] == -1 & trend.signs[2] == 1) {
+  } else if (trend.diff < 0 & trend.sum < 0) {
     mlist <- list(
       abs_diff = c(-1, 1),
       abs_sum = c(-1, -1)
     )
-  } else if (trend.signs[1] == 1 & trend.signs[2] == -1) {
+  } else if (trend.diff < 0 & trend.sum > 0) {
     mlist <- list(
-      abs_diff = c(1, -1),
-      abs_sum = c(-1, -1)
+      abs_diff = c(-1, 1),
+      abs_sum = c(1, 1)
     )
   }
 
   temp.cont <-
     emmeans::contrast(trends,
-      method = mlist
+      method = mlist,
+      side = ">"
     )
 
   ml_abstest <-

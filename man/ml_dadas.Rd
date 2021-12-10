@@ -28,15 +28,18 @@ n2 <- 10 # observations per group
 
 dat <- data.frame(
   group = rep(c(LETTERS[1:n1]), each = n2),
-  x = sample(c(-0.5,0.5), n1 * n2, replace = TRUE),
+  x = sample(c(-0.5, 0.5), n1 * n2, replace = TRUE),
   w = rep(sample(1:5, n1, replace = TRUE), each = n2),
   y = sample(1:5, n1 * n2, replace = TRUE)
 )
 
-fit<-lmerTest::lmer(y ~ x*w + (x | group),
-                    data = dat)
+fit <- lmerTest::lmer(y ~ x * w + (x | group),
+  data = dat
+)
 
-round(ml_dadas(fit,predictor = "w",
-               diff_var = "x",
-               diff_var_values = c(0.5, -0.5)),3)
+round(ml_dadas(fit,
+  predictor = "w",
+  diff_var = "x",
+  diff_var_values = c(0.5, -0.5)
+), 3)
 }
