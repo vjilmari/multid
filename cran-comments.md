@@ -1,19 +1,14 @@
 ## Update
 
-This is an update (version 0.2.0). Changes to this version can be found below.
+This is an update (version 0.3.0). Changes to this version can be found below.
 
 ## Changes
 
-* Fixed bug: renaming output in D_regularized_fold functions
-* Fixed joining data frames by fold.var in D_regularized_fold functions
-* Added statistical inference to d_pooled_sd
-* Added probabilities of correct classification option to D_regularized_out and D_regularized_fold_out
-* Added area under the receiver operating characteristics to D_regularized_out and D_regularized_fold_out
-* Added probability classification tables to D_regularized_out and D_regularized_fold_out
+* Added sem_dadas and ml_dadas functions for predicting algebraic difference scores in structural equation (sem_dadas) and multilevel model (ml_dadas). DADAS acronym follows from the joint hypothesis test of Difference between Absolute Differences and Absolute Sums between (regression coefficients on difference score components)
 * Added more examples to README file
 
 ## Test environments
-* local R installation, R 4.1.1
+* local R installation, R 4.1.2
 * win-builder (devel)
 * Linux, using devtools::check_rhub()
 
