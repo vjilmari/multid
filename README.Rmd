@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 [![Travis build status](https://app.travis-ci.com/vjilmari/multid.svg?branch=main)](https://app.travis-ci.com/vjilmari/multid/)
 <!-- badges: end -->
 
-The goal of multid is to provide tools for regularized measurement of multivariate differences between two groups (e.g., sex differences). Regularization via logistic regression variants enables inclusion of large number of correlated variables in the multivariate set while providing k-fold cross-validation and regularization to avoid overfitting. 
+multid provides tools for regularized measurement of multivariate differences between two groups (e.g., sex differences). Regularization via logistic regression variants enables inclusion of large number of correlated variables in the multivariate set while providing k-fold cross-validation and regularization to avoid overfitting. 
 
 Predictive approach as implemented with regularized methods also allows for examination of group-membership probabilities and their distributions across individuals. In the context of statistical predictions of sex, these distributions are an updated variant to gender-typicality distributions used in gender diagnosticity methodology [(Lippa & Connelly, 1990)](https://doi.org/10.1037/0022-3514.59.5.1051).
 
@@ -28,6 +28,7 @@ Studies in which these methods have been used:
 1. [Lönnqvist & Ilmarinen (2021). Using a Continuous Measure of Genderedness to Assess Sex Differences in the Attitudes of the Political Elite. Political Behavior.](https://doi.org/10.1007/s11109-021-09681-2)
 2. [Ilmarinen et al. (2021). Is There a g-factor of Genderedness? Using a Continuous Measure of Genderedness to Assess Sex Differences in Personality, Values, Cognitive Ability, School Grades, and Educational Track. Manuscript in review.](https://doi.org/10.31234/osf.io/j59bs)
 
+In addition, multid also includes functions for testing hypothesis that consider predicting algebraic difference scores. A joint test that focuses on the regression coefficients on the difference score components (minuend and subtrahend) is provided in the structural equation modeling framework (sem_dadas) and multilevel models (ml_dadas). Difference between Absolute Difference and Absolute Sum of the regression coefficients (DADAS) is used for direct test of whether the coefficients can be interpreted as predicting a difference score.
 
 
 ## Installation
@@ -361,5 +362,45 @@ np.overlap<-
 # compare overlaps
 
 round(cbind(OVL,np.OVL,OVL2,np.OVL2),2)
+
+```
+
+### Predicting Difference Scores
+
+```{r}
+# sem example
+set.seed(342356)
+d <- data.frame(
+ var1 = rnorm(50),
+ var2 = rnorm(50),
+ x = rnorm(50)
+)
+round(sem_dadas(
+   data = d, var1 = "var1", var2 = "var2",
+   predictor = "x", center = TRUE, scale = TRUE
+ )$results,3)
+
+# multilevel example
+
+set.seed(95332)
+n1 <- 10 # groups
+n2 <- 10 # observations per group
+
+dat <- data.frame(
+  group = rep(c(LETTERS[1:n1]), each = n2),
+  x = sample(c(-0.5, 0.5), n1 * n2, replace = TRUE),
+  w = rep(sample(1:5, n1, replace = TRUE), each = n2),
+  y = sample(1:5, n1 * n2, replace = TRUE)
+)
+library(lmerTest)
+fit <- lmerTest::lmer(y ~ x * w + (x | group),
+  data = dat
+)
+
+round(ml_dadas(fit,
+  predictor = "w",
+  diff_var = "x",
+  diff_var_values = c(0.5, -0.5)
+), 3)
 
 ```
