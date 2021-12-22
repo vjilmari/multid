@@ -544,16 +544,6 @@ dat <- data.frame(
   y = sample(1:5, n1 * n2, replace = TRUE)
 )
 library(lmerTest)
-#> Loading required package: lme4
-#> Loading required package: Matrix
-#> 
-#> Attaching package: 'lmerTest'
-#> The following object is masked from 'package:lme4':
-#> 
-#>     lmer
-#> The following object is masked from 'package:stats':
-#> 
-#>     step
 fit <- lmerTest::lmer(y ~ x * w + (x | group),
   data = dat
 )

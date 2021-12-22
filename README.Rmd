@@ -367,7 +367,7 @@ round(cbind(OVL,np.OVL,OVL2,np.OVL2),2)
 
 ### Predicting Difference Scores
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 # sem example
 set.seed(342356)
 d <- data.frame(
