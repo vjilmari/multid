@@ -17,7 +17,7 @@
 #' \item{transformed_data}{Data frame with variables used in SEM.}
 #' \item{dadas}{One sided dadas-test for positivity of abs(b_11-b_21)-abs(b_11+b_21).}
 #' \item{results}{Summary of key results.}
-#' @references Edwards, J. R. (1995). Alternatives to Difference Scores as Dependent Variables in the Study of Congruence in Organizational Research. Organizational Behavior and Human Decision Processes, 64(3), 307–324. <doi:10.1006/obhd.1995.1108>.
+#' @references Edwards, J. R. (1995). Alternatives to Difference Scores as Dependent Variables in the Study of Congruence in Organizational Research. Organizational Behavior and Human Decision Processes, 64(3), 307–324.
 #'
 #' @export
 #'
