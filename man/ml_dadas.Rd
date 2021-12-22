@@ -22,6 +22,7 @@ A data frame including regression coefficients for component scores and dadas (O
 Predicting algebraic difference scores in multilevel model
 }
 \examples{
+\dontrun{
 set.seed(95332)
 n1 <- 10 # groups
 n2 <- 10 # observations per group
@@ -32,7 +33,7 @@ dat <- data.frame(
   w = rep(sample(1:5, n1, replace = TRUE), each = n2),
   y = sample(1:5, n1 * n2, replace = TRUE)
 )
-
+library(lmerTest)
 fit <- lmerTest::lmer(y ~ x * w + (x | group),
   data = dat
 )
@@ -42,4 +43,5 @@ round(ml_dadas(fit,
   diff_var = "x",
   diff_var_values = c(0.5, -0.5)
 ), 3)
+}
 }
