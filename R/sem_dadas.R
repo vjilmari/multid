@@ -202,7 +202,6 @@ sem_dadas <- function(data,
     descriptives = descriptives,
     parameter_estimates = pars,
     transformed_data = output.data,
-    dadas = dadas,
     rsquared = rsquared,
     results = results
   )
