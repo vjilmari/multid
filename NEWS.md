@@ -2,6 +2,7 @@
 
 * Development version
 * Replaced two-sided tests in sem_dadas for absolute parameters with one-sided tests
+* Added three variants of coefficient of variance variation in cvv -function (CVV=coefficient of variance variation, SVH=standardized variance heterogeneity, and VR=variance ration between the largest and the smallest variance)
 
 # multid 0.3.0
 
