@@ -17,7 +17,7 @@ vpc_at(model, lvl1.var, lvl1.values)
 Data frame of level 2 variance and std.dev. estimates at level 1 variable values and respective VPCs.
 }
 \description{
-Calculates variance estimates (level-2 Intercept variance) and variance partition coefficients (i.e., intra-class correlation) at manually selected values in two-level linear models with random effects (intercept, slope, and their covariation).
+Calculates variance estimates (level-2 Intercept variance) and variance partition coefficients (i.e., intra-class correlation) at selected values of predictor values in two-level linear models with random effects (intercept, slope, and their covariation).
 }
 \examples{
 fit <- lme4::lmer(Sepal.Length ~ Petal.Length +
