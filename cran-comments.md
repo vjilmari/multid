@@ -1,11 +1,12 @@
 ## Update
 
-This is an update (version 0.3.0). Changes to this version can be found below.
+This is an update (version 0.3.0.9000). Changes to this version can be found below.
 
 ## Changes
 
-* Added sem_dadas and ml_dadas functions for predicting algebraic difference scores in structural equation (sem_dadas) and multilevel model (ml_dadas). DADAS acronym follows from the joint hypothesis test of Difference between Absolute Differences and Absolute Sums between (regression coefficients on difference score components)
-* Added more examples to README file
+* Replaced two-sided tests in sem_dadas for absolute parameters with one-sided tests
+* Added three variants of coefficient of variance variation in cvv -function (CVV=coefficient of variance variation, SVH=standardized variance heterogeneity, and VR=variance ration between the largest and the smallest variance)
+* Added vpc_at -function for calculation of intercept variances and variance partition coefficients (VPCs) at selected values of level-1 predictors in two-level models
 
 ## Test environments
 * local R installation, R 4.1.2
