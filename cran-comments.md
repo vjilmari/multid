@@ -1,6 +1,6 @@
 ## Update
 
-This is an update (version 0.3.0.9000). Changes to this version can be found below.
+This is an update (version 0.4.0). Changes to this version can be found below.
 
 ## Changes
 
