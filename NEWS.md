@@ -1,3 +1,7 @@
+# multid 0.4.0.9000
+
+* Development version
+
 # multid 0.4.0
 
 * Replaced two-sided tests in sem_dadas for absolute parameters with one-sided tests
