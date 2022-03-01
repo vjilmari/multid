@@ -40,9 +40,6 @@ sem_dadas <- function(data,
                       estimator = "MLR",
                       level = .95,
                       sampling.weights = NULL) {
-  vt <- stats::var.test(
-    data[, var1], data[, var2]
-  )
 
   if (center) {
     pooled_mean <-
