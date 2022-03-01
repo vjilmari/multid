@@ -4,6 +4,7 @@
 #' @param var1 Character string. Variable name of first component score of difference score (Y_1).
 #' @param var2 Character string. Variable name of second component score of difference score (Y_2).
 #' @param predictor Character string. Variable name of independent variable predicting difference score.
+#' @param covariates Character string or vector. Variable names of covariates (Default NULL).
 #' @param estimator Character string. Estimator used in SEM (Default "MLR").
 #' @param scale Logical. Are var1 and var2 scaled with their pooled sd? (Default FALSE)
 #' @param center Logical. Are var1 and var2 centered around their grand mean? (Default FALSE)
@@ -37,10 +38,10 @@ sem_dadas <- function(data,
                       center = FALSE,
                       scale = FALSE,
                       predictor,
+                      covariates = NULL,
                       estimator = "MLR",
                       level = .95,
                       sampling.weights = NULL) {
-
   if (center) {
     pooled_mean <-
       mean(c(mean(data[, var1]), mean(data[, var2])))
@@ -100,6 +101,29 @@ sem_dadas <- function(data,
     paste0("abs_coef_sum:=sqrt((b_11+b_21)^2)"), "\n",
     paste0("dadas_two_sided:=sqrt((b_11-b_21)^2)-sqrt((b_11+b_21)^2)")
   )
+
+  # include covariates to the model
+
+
+  if (!is.null(covariates)) {
+    model <- paste0(model, "\n")
+    model <- paste0(
+      model,
+      paste0(var1, "~", covariates, collapse = "\n")
+    )
+    model <- paste0(model, "\n")
+    model <- paste0(
+      model,
+      paste0(var2, "~", covariates, collapse = "\n")
+    )
+    model <- paste0(model, "\n")
+    model <- paste0(
+      model,
+      paste0(predictor, "~~", covariates, collapse = "\n")
+    )
+  }
+
+  # fit model
 
   fit <-
     lavaan::sem(

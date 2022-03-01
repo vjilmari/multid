@@ -11,6 +11,7 @@ sem_dadas(
   center = FALSE,
   scale = FALSE,
   predictor,
+  covariates = NULL,
   estimator = "MLR",
   level = 0.95,
   sampling.weights = NULL
@@ -28,6 +29,8 @@ sem_dadas(
 \item{scale}{Logical. Are var1 and var2 scaled with their pooled sd? (Default FALSE)}
 
 \item{predictor}{Character string. Variable name of independent variable predicting difference score.}
+
+\item{covariates}{Character string or vector. Variable names of covariates (Default NULL).}
 
 \item{estimator}{Character string. Estimator used in SEM (Default "MLR").}
 
