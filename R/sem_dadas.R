@@ -13,7 +13,7 @@
 #' @return
 #' \item{descriptives}{Means, standard deviations, and intercorrelations.}
 #' \item{parameter_estimates}{Parameter estimates from the structural equation model.}
-#' \item{variances}{F test and Fligner-Killeen test for homogeneity of variances between var1 and var2.}
+#' \item{variance_test}{Variances and covariances of component scores.}
 #' \item{transformed_data}{Data frame with variables used in SEM.}
 #' \item{dadas}{One sided dadas-test for positivity of abs(b_11-b_21)-abs(b_11+b_21).}
 #' \item{results}{Summary of key results.}
@@ -43,33 +43,6 @@ sem_dadas <- function(data,
   vt <- stats::var.test(
     data[, var1], data[, var2]
   )
-
-  F.test <-
-    paste0(
-      "F test: F(",
-      unname(vt$parameter[1]), ", ",
-      unname(vt$parameter[2]), ") = ",
-      unname(as.character(round(vt$statistic, 5))),
-      ", p = ",
-      unname(as.character(round(vt$p.value, 8)))
-    )
-
-  fl <- stats::fligner.test(list(
-    data[, var1],
-    data[, var2]
-  ))
-
-  fl.test <-
-    paste0(
-      "Fligner-Killeen test: chi-squared(df = ",
-      unname(fl$parameter), ") = ",
-      unname(as.character(round(fl$statistic, 5))),
-      ", p = ",
-      unname(as.character(round(fl$p.value, 8)))
-    )
-
-  variances <- unname(rbind(F.test, fl.test))
-
 
   if (center) {
     pooled_mean <-
@@ -197,8 +170,33 @@ sem_dadas <- function(data,
   rsquared <-
     rbind(rsquared, r2_diff_row)
 
+  # variance test in a separate model
+
+  var_model <- paste0(
+    paste0(var1, "~~cov_12*", var2), "\n",
+    paste0(var1, "~~var_1*", var1), "\n",
+    paste0(var2, "~~var_2*", var2), "\n",
+    paste0("var_diff:=var_1-var_2")
+  )
+
+  var_fit <-
+    lavaan::sem(
+      model = var_model,
+      data = data,
+      estimator = estimator,
+      sampling.weights = sampling.weights
+    )
+
+  var_pars <- data.frame(lavaan::parameterestimates(var_fit,
+    level = level
+  ))
+
+  var_results <- var_pars[, 4:ncol(var_pars)]
+  rownames(var_results) <- var_results$label
+  var_results <- var_results[, 2:ncol(var_results)]
+
   output <- list(
-    variances = variances,
+    variance_test = var_results,
     descriptives = descriptives,
     parameter_estimates = pars,
     transformed_data = output.data,
