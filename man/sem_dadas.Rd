@@ -38,7 +38,7 @@ sem_dadas(
 \value{
 \item{descriptives}{Means, standard deviations, and intercorrelations.}
 \item{parameter_estimates}{Parameter estimates from the structural equation model.}
-\item{variances}{F test and Fligner-Killeen test for homogeneity of variances between var1 and var2.}
+\item{variance_test}{Variances and covariances of component scores.}
 \item{transformed_data}{Data frame with variables used in SEM.}
 \item{dadas}{One sided dadas-test for positivity of abs(b_11-b_21)-abs(b_11+b_21).}
 \item{results}{Summary of key results.}
