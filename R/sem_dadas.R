@@ -197,7 +197,9 @@ sem_dadas <- function(data,
     paste0(var1, "~~cov_12*", var2), "\n",
     paste0(var1, "~~var_1*", var1), "\n",
     paste0(var2, "~~var_2*", var2), "\n",
-    paste0("var_diff:=var_1-var_2")
+    paste0("var_diff:=var_1-var_2"), "\n",
+    paste0("var_ratio:=var_1/var_2"), "\n",
+    paste0("cor_12:=cov_12/(sqrt(var_1)*sqrt(var_2))")
   )
 
   var_fit <-
