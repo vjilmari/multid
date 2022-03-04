@@ -366,7 +366,7 @@ ml_dadas <- function(model,
       c(
         est = est.ratio.var,
         sd.boot = sd.ratio.var.boot,
-        p = 2 * (1 - stats::pnorm(abs(est.ratio.var / sd.ratio.var.boot))),
+        p = 2 * (1 - stats::pnorm(abs((est.ratio.var - 1) / sd.ratio.var.boot))),
         LL = est.ratio.var + stats::qnorm((1 - level) / 2) * sd.ratio.var.boot,
         UL = est.ratio.var + stats::qnorm(1 - (1 - level) / 2) * sd.ratio.var.boot
       )
@@ -429,8 +429,10 @@ ml_dadas <- function(model,
     ratio.var.bias <-
       c(
         est = est.ratio.var,
-        LL = unname(stats::quantile(intvar1 - intvar2, stats::pnorm(ratio.LQ))),
-        UL = unname(stats::quantile(intvar1 - intvar2, stats::pnorm(ratio.UQ)))
+        LL = unname(stats::quantile(intvar1 / intvar2,
+                                    stats::pnorm(ratio.LQ))),
+        UL = unname(stats::quantile(intvar1 / intvar2,
+                                    stats::pnorm(ratio.UQ)))
       )
 
     boot_var_diffs <-
