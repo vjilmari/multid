@@ -10,7 +10,11 @@ ml_dadas(
   diff_var,
   diff_var_values,
   scaled_estimates = FALSE,
-  re_cov_test = FALSE
+  re_cov_test = FALSE,
+  var_boot_test = FALSE,
+  nsim = NULL,
+  level = 0.95,
+  seed = NULL
 )
 }
 \arguments{
@@ -25,12 +29,21 @@ ml_dadas(
 \item{scaled_estimates}{Logical. Are scaled estimates obtained? Does fit a reduced model for correct standard deviations. (Default FALSE)}
 
 \item{re_cov_test}{Logical. Significance test for random effect covariation? Does fit a reduced model without the correlation. (Default FALSE)}
+
+\item{var_boot_test}{Logical. Compare variance by lower-level groups at the upper-level in a reduced model with bootstrap? (Default FALSE)}
+
+\item{nsim}{Numeric. Number of bootstrap simulations.}
+
+\item{level}{Numeric. The confidence level required for the var_boot_test output (Default .95)}
+
+\item{seed}{Numeric. Seed number for bootstrap simulations.}
 }
 \value{
 \item{dadas}{A data frame including regression coefficients for component scores and dadas.}
 \item{scaled_estimates}{Scaled regression coefficients for difference score components and difference score.}
 \item{vpc_at_reduced}{Variance partition coefficients in the model without the predictor and interactions.}
 \item{re_cov_test}{Likelihood ratio significance test for random effect covariation.}
+\item{boot_var_diffs}{List of different variance bootstrap tests.}
 }
 \description{
 Decomposes difference score predictions to predictions of difference score components by probing simple effects at the levels of the binary moderator.

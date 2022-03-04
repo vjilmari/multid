@@ -8,12 +8,17 @@
 #' @param diff_var_values Vector. Values of the component score groups in diff_var.
 #' @param scaled_estimates Logical. Are scaled estimates obtained? Does fit a reduced model for correct standard deviations. (Default FALSE)
 #' @param re_cov_test Logical. Significance test for random effect covariation? Does fit a reduced model without the correlation. (Default FALSE)
+#' @param var_boot_test Logical. Compare variance by lower-level groups at the upper-level in a reduced model with bootstrap? (Default FALSE)
+#' @param nsim Numeric. Number of bootstrap simulations.
+#' @param seed Numeric. Seed number for bootstrap simulations.
+#' @param level Numeric. The confidence level required for the var_boot_test output (Default .95)
 #'
 #' @return
 #' \item{dadas}{A data frame including regression coefficients for component scores and dadas.}
 #' \item{scaled_estimates}{Scaled regression coefficients for difference score components and difference score.}
 #' \item{vpc_at_reduced}{Variance partition coefficients in the model without the predictor and interactions.}
 #' \item{re_cov_test}{Likelihood ratio significance test for random effect covariation.}
+#' \item{boot_var_diffs}{List of different variance bootstrap tests.}
 #' @export
 #'
 #' @examples
@@ -44,7 +49,11 @@ ml_dadas <- function(model,
                      diff_var,
                      diff_var_values,
                      scaled_estimates = FALSE,
-                     re_cov_test = FALSE) {
+                     re_cov_test = FALSE,
+                     var_boot_test = FALSE,
+                     nsim = NULL,
+                     level = .95,
+                     seed = NULL) {
 
   # reorder diff_var_values
   diff_var_values <-
@@ -127,7 +136,7 @@ ml_dadas <- function(model,
 
   output <- list(dadas = dadas)
 
-  if (scaled_estimates | re_cov_test) {
+  if (scaled_estimates | re_cov_test | var_boot_test) {
     # refit a reduced model to obtain scaled estimates
     # obtain fixed effects as character vector
 
@@ -288,6 +297,157 @@ ml_dadas <- function(model,
       scaled_estimates = scaled_estimates_df,
       vpc_at_reduced = vpc_at_reduced,
       re_cov_test = re_cov_test_df
+    )
+  }
+
+  if (var_boot_test) {
+
+    # obtain covariance matrix in variance metric
+
+    ranefmat <- function(.) {
+      c(
+        ranefcovmat = unlist(lme4::VarCorr(.)),
+        sigma2 = stats::sigma(.)^2
+      )
+    }
+
+    # parametric bootstrap for the covariance matrix
+
+    boot.fit <-
+      lme4::bootMer(reduced_model,
+        FUN = ranefmat,
+        nsim = nsim,
+        seed = seed,
+        use.u = FALSE,
+        type = c("parametric"),
+        verbose = FALSE
+      )
+
+    # obtain the variance estimates at lower-level values across bootstraps
+
+    intvar1 <-
+      boot.fit$t[, 1] +
+      2 * boot.fit$t[, 2] * diff_var_values[1] +
+      boot.fit$t[, 4] * diff_var_values[1]^2
+
+    intvar2 <- boot.fit$t[, 1] +
+      2 * boot.fit$t[, 2] * diff_var_values[2] +
+      boot.fit$t[, 4] * diff_var_values[2]^2
+
+    # obtain the values in the estimated model
+
+    intvar1.t0 <-
+      unname(boot.fit$t0[1] +
+        2 * boot.fit$t0[2] * diff_var_values[1] +
+        boot.fit$t0[4] * diff_var_values[1]^2)
+
+    intvar2.t0 <- unname(boot.fit$t0[1] +
+      2 * boot.fit$t0[2] * diff_var_values[2] +
+      boot.fit$t0[4] * diff_var_values[2]^2)
+
+    # estimate for the difference in variance and in variance ratio
+
+    est.diff.var <- intvar1.t0 - intvar2.t0
+    sd.diff.var.boot <- stats::sd(intvar1 - intvar2)
+
+    est.ratio.var <- intvar1.t0 / intvar2.t0
+    sd.ratio.var.boot <- stats::sd(intvar1 / intvar2)
+
+    diff.var.norm <-
+      c(
+        est = est.diff.var,
+        sd.boot = sd.diff.var.boot,
+        p = 2 * (1 - stats::pnorm(abs(est.diff.var / sd.diff.var.boot))),
+        LL = est.diff.var + stats::qnorm((1 - level) / 2) * sd.diff.var.boot,
+        UL = est.diff.var + stats::qnorm(1 - (1 - level) / 2) * sd.diff.var.boot
+      )
+
+    ratio.var.norm <-
+      c(
+        est = est.ratio.var,
+        sd.boot = sd.ratio.var.boot,
+        p = 2 * (1 - stats::pnorm(abs(est.ratio.var / sd.ratio.var.boot))),
+        LL = est.ratio.var + stats::qnorm((1 - level) / 2) * sd.ratio.var.boot,
+        UL = est.ratio.var + stats::qnorm(1 - (1 - level) / 2) * sd.ratio.var.boot
+      )
+
+    # simple percentile interval
+
+    diff.var.perc <-
+      c(
+        est = est.diff.var,
+        LL = unname(stats::quantile(
+          intvar1 - intvar2,
+          stats::pnorm(stats::qnorm((1 - level) / 2))
+        )),
+        UL = unname(stats::quantile(
+          intvar1 - intvar2,
+          stats::pnorm(stats::qnorm(1 - (1 - level) / 2))
+        ))
+      )
+
+    ratio.var.perc <-
+      c(
+        est = est.ratio.var,
+        LL = unname(stats::quantile(
+          intvar1 / intvar2,
+          stats::pnorm(stats::qnorm((1 - level) / 2))
+        )),
+        UL = unname(stats::quantile(
+          intvar1 / intvar2,
+          stats::pnorm(stats::qnorm(1 - (1 - level) / 2))
+        ))
+      )
+
+    # bias corrected
+
+    bias.diff <-
+      sum((intvar1 - intvar2) > est.diff.var) / length(intvar1)
+
+    diff.LQ <- stats::qnorm(.025) - 2 * stats::qnorm(bias.diff)
+    diff.UQ <- stats::qnorm(.975) - 2 * stats::qnorm(bias.diff)
+
+    diff.var.bias <-
+      c(
+        est = est.diff.var,
+        LL = unname(stats::quantile(
+          intvar1 - intvar2,
+          stats::pnorm(diff.LQ)
+        )),
+        UL = unname(stats::quantile(
+          intvar1 - intvar2,
+          stats::pnorm(diff.UQ)
+        ))
+      )
+
+    bias.ratio <-
+      sum((intvar1 / intvar2) > est.ratio.var) / length(intvar1)
+
+    ratio.LQ <- stats::qnorm(.025) - 2 * stats::qnorm(bias.ratio)
+    ratio.UQ <- stats::qnorm(.975) - 2 * stats::qnorm(bias.ratio)
+
+    ratio.var.bias <-
+      c(
+        est = est.ratio.var,
+        LL = unname(stats::quantile(intvar1 - intvar2, stats::pnorm(ratio.LQ))),
+        UL = unname(stats::quantile(intvar1 - intvar2, stats::pnorm(ratio.UQ)))
+      )
+
+    boot_var_diffs <-
+      list(
+        norm_boot_var_diff = diff.var.norm,
+        perc_boot_var_diff = diff.var.perc,
+        bias_boot_var_diff = diff.var.bias,
+        norm_boot_var_ratio = ratio.var.norm,
+        perc_boot_var_ratio = ratio.var.perc,
+        bias_boot_var_ratio = ratio.var.bias
+      )
+
+    output <- list(
+      dadas = dadas,
+      scaled_estimates = scaled_estimates_df,
+      vpc_at_reduced = vpc_at_reduced,
+      boot_var_diffs = boot_var_diffs
     )
   }
 
