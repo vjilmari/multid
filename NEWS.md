@@ -5,6 +5,7 @@
 * Added option to test for random effect covariation with likelihood ratio test in ml_dadas from a reduced model without the predictor and the interaction between predictor and moderator
 * Added option to include covariates in sem_dadas
 * Added variance test with sem in sem_dadas
+* Added variance test via parametric bootstrap in ml_dadas
 
 # multid 0.4.0
 
