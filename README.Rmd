@@ -16,20 +16,22 @@ knitr::opts_chunk$set(
 # multid
 
 <!-- badges: start -->
+
 [![Travis build status](https://app.travis-ci.com/vjilmari/multid.svg?branch=main)](https://app.travis-ci.com/vjilmari/multid/)
+
 <!-- badges: end -->
 
-multid provides tools for regularized measurement of multivariate differences between two groups (e.g., sex differences). Regularization via logistic regression variants enables inclusion of large number of correlated variables in the multivariate set while providing k-fold cross-validation and regularization to avoid overfitting. 
+multid provides tools for regularized measurement of multivariate differences between two groups (e.g., sex differences). Regularization via logistic regression variants enables inclusion of large number of correlated variables in the multivariate set while providing k-fold cross-validation and regularization to avoid overfitting.
 
 Predictive approach as implemented with regularized methods also allows for examination of group-membership probabilities and their distributions across individuals. In the context of statistical predictions of sex, these distributions are an updated variant to gender-typicality distributions used in gender diagnosticity methodology [(Lippa & Connelly, 1990)](https://doi.org/10.1037/0022-3514.59.5.1051).
 
 Studies in which these methods have been used:
 
-1. [Lönnqvist & Ilmarinen (2021). Using a Continuous Measure of Genderedness to Assess Sex Differences in the Attitudes of the Political Elite. Political Behavior.](https://doi.org/10.1007/s11109-021-09681-2)
-2. [Ilmarinen et al. (2021). Is There a g-factor of Genderedness? Using a Continuous Measure of Genderedness to Assess Sex Differences in Personality, Values, Cognitive Ability, School Grades, and Educational Track. Manuscript in review.](https://doi.org/10.31234/osf.io/j59bs)
+1.  [Lönnqvist, J. E., & Ilmarinen, V. J. (2021). Using a continuous measure of genderedness to assess sex differences in the attitudes of the political elite. *Political Behavior, 43*, 1779–1800.](https://doi.org/10.1007/s11109-021-09681-2)
+
+2.  [Ilmarinen, V. J., Vainikainen, M. P., & Lönnqvist, J. E. (2022). Is there a g-factor of genderedness? Using a continuous measure of genderedness to assess sex differences in personality, values, cognitive ability, school grades, and educational track. *European Journal of Personality*.](https://doi.org/10.1177/08902070221088155)
 
 In addition, multid also includes functions for testing hypothesis that consider predicting algebraic difference scores. A joint test that focuses on the regression coefficients on the difference score components (minuend and subtrahend) is provided in the structural equation modeling framework (sem_dadas) and multilevel models (ml_dadas). Difference between Absolute Difference and Absolute Sum of the regression coefficients (DADAS) is used for direct test of whether the coefficients can be interpreted as predicting a difference score.
-
 
 ## Installation
 
@@ -45,11 +47,12 @@ You can install the development version from [GitHub](https://github.com/) with:
 # install.packages("devtools")
 devtools::install_github("vjilmari/multid")
 ```
+
 ## Examples
 
 ### Single sample with two groups
 
-This example shows how to measure standardized multivariate (both Sepal and Petal dimensions, four variables in total) distance between setosa and versicolor Species in iris dataset. 
+This example shows how to measure standardized multivariate (both Sepal and Petal dimensions, four variables in total) distance between setosa and versicolor Species in iris dataset.
 
 ```{r example1}
 library(multid)
@@ -95,7 +98,7 @@ D.iris_out$P.table
 
 ### Multiple samples with two groups in each
 
-This example first generates artificial multi-group data which are then used as separate data folds in the regularization procedure following separate predictions made for each fold. 
+This example first generates artificial multi-group data which are then used as separate data folds in the regularization procedure following separate predictions made for each fold.
 
 ```{r example2}
 # generate data for 10 groups
@@ -311,6 +314,7 @@ round(D.ela.zero_out$D,2)
 D.ela.zero_out$P.table
 
 ```
+
 ### Distribution overlap
 
 This example shows how the degree of overlap between the predicted values across the two groups can be visualized and estimated.
@@ -398,9 +402,8 @@ fit <- lmerTest::lmer(y ~ x * w + (x | group),
 )
 
 round(ml_dadas(fit,
-  predictor = "w",
-  diff_var = "x",
-  diff_var_values = c(0.5, -0.5)
-), 3)
+               predictor = "w",
+               diff_var = "x",
+               diff_var_values = c(0.5, -0.5))$dadas, 3)
 
 ```
