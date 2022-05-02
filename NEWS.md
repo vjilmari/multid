@@ -1,3 +1,7 @@
+# multid 0.5.0.9000
+
+* Development version
+
 # multid 0.5.0
 
 * Added option to obtain scaled estimates in ml_dadas. Scaling is done for both difference score components and the difference scores, based on random intercept SDs and random slope SD, respectively, in a reduced model without the predictor and the interaction between predictor and moderator
