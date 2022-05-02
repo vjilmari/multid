@@ -180,7 +180,8 @@ round(D_regularized(
 
 # Different partitions for regularization and estimation for each data fold.
 
-# Request probabilities of correct classification (pcc) and area under the receiver operating characteristics (auc) for the output.
+# Request probabilities of correct classification (pcc) and 
+# area under the receiver operating characteristics (auc) for the output.
 
 round(D_regularized(
   data = d,
@@ -239,7 +240,8 @@ centroids in the population is D = 1.
 
 ``` r
 set.seed(8327482)
-# generate data from sixteen correlated (r = .20) variables each with d = .50 difference (equals to Mahalanobis' D = 1)
+# generate data from sixteen correlated (r = .20) variables each with d = .50 difference 
+#(equals to Mahalanobis' D = 1)
 k=16
 r=0.2
 d=0.5
@@ -342,7 +344,8 @@ with independent estimation data shows D = 0.
 
 ``` r
 set.seed(8327482)
-# generate data from sixteen correlated (r = .20) variables each with d = .00 difference (equals to Mahalanobis' D = 0)
+# generate data from sixteen correlated (r = .20) variables each with d = .00 difference 
+# (equals to Mahalanobis' D = 0)
 k=16
 r=0.2
 d=0.0
