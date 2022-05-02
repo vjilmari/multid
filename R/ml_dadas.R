@@ -235,12 +235,6 @@ ml_dadas <- function(model,
 
     rownames(scaled_estimates_df) <-
       c(diff_var_values, "difference")
-
-    output <- list(
-      dadas = dadas,
-      scaled_estimates = scaled_estimates_df,
-      vpc_at_reduced = vpc_at_reduced
-    )
   }
 
   if (re_cov_test) {
@@ -291,13 +285,6 @@ ml_dadas <- function(model,
         Df = re.cov.test$Df[2],
         p = re.cov.test$`Pr(>Chisq)`[2]
       )
-
-    output <- list(
-      dadas = dadas,
-      scaled_estimates = scaled_estimates_df,
-      vpc_at_reduced = vpc_at_reduced,
-      re_cov_test = re_cov_test_df
-    )
   }
 
   if (var_boot_test) {
@@ -429,10 +416,14 @@ ml_dadas <- function(model,
     ratio.var.bias <-
       c(
         est = est.ratio.var,
-        LL = unname(stats::quantile(intvar1 / intvar2,
-                                    stats::pnorm(ratio.LQ))),
-        UL = unname(stats::quantile(intvar1 / intvar2,
-                                    stats::pnorm(ratio.UQ)))
+        LL = unname(stats::quantile(
+          intvar1 / intvar2,
+          stats::pnorm(ratio.LQ)
+        )),
+        UL = unname(stats::quantile(
+          intvar1 / intvar2,
+          stats::pnorm(ratio.UQ)
+        ))
       )
 
     boot_var_diffs <-
@@ -444,12 +435,31 @@ ml_dadas <- function(model,
         perc_boot_var_ratio = ratio.var.perc,
         bias_boot_var_ratio = ratio.var.bias
       )
+  }
 
-    output <- list(
-      dadas = dadas,
-      scaled_estimates = scaled_estimates_df,
-      vpc_at_reduced = vpc_at_reduced,
-      boot_var_diffs = boot_var_diffs
+  # Compile output based on arguments
+
+  if (scaled_estimates | re_cov_test | var_boot_test) {
+    output <- c(output,
+      vpc_at_reduced = list(vpc_at_reduced)
+    )
+  }
+
+  if (scaled_estimates) {
+    output <- c(output,
+      scaled_estimates = list(scaled_estimates_df)
+    )
+  }
+
+  if (var_boot_test) {
+    output <- c(output,
+      boot_var_diffs = list(boot_var_diffs)
+    )
+  }
+
+  if (re_cov_test) {
+    output <- c(output,
+      re_cov_test = list(re_cov_test_df)
     )
   }
 
