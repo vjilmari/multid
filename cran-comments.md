@@ -1,15 +1,18 @@
 ## Update
 
-This is an update (version 0.4.0). Changes to this version can be found below.
+This is an update (version 0.5.0). Changes to this version can be found below.
 
 ## Changes
 
-* Replaced two-sided tests in sem_dadas for absolute parameters with one-sided tests
-* Added three variants of coefficient of variance variation in cvv -function (CVV=coefficient of variance variation, SVH=standardized variance heterogeneity, and VR=variance ration between the largest and the smallest variance)
-* Added vpc_at -function for calculation of intercept variances and variance partition coefficients (VPCs) at selected values of level-1 predictors in two-level models
+* Added option to obtain scaled estimates in ml_dadas. Scaling is done for both difference score components and the difference scores, based on random intercept SDs and random slope SD, respectively, in a reduced model without the predictor and the interaction between predictor and moderator
+* Added option to test for random effect covariation with likelihood ratio test in ml_dadas from a reduced model without the predictor and the interaction between predictor and moderator
+* Added option to include covariates in sem_dadas
+* Added variance test with sem in sem_dadas
+* Added variance test via parametric bootstrap in ml_dadas
+* Added cvv_manual -function for calculation of coefficients of variance variation from manually inputted sample sizes and variances of multiple variables
 
 ## Test environments
-* local R installation, R 4.1.2
+* local R installation, R 4.2.0
 * win-builder (devel)
 * Linux, using devtools::check_rhub()
 
