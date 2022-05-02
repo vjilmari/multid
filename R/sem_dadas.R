@@ -31,7 +31,7 @@
 #' sem_dadas(
 #'   data = d, var1 = "var1", var2 = "var2",
 #'   predictor = "x", center = TRUE, scale = TRUE
-#' )
+#' )$results
 sem_dadas <- function(data,
                       var1,
                       var2,
