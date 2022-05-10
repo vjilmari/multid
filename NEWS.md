@@ -1,6 +1,7 @@
 # multid 0.5.0.9000
 
 * Development version
+* Bug fix in D_regularized_out
 
 # multid 0.5.0
 

@@ -68,7 +68,7 @@ D_regularized_out <-
 
     train.data <- dplyr::sample_n(data.grouped,
       size = size,
-      replace = F
+      replace = FALSE
     )
 
     test.data <- data[!(data$row.nmbr %in% train.data$row.nmbr), ]
