@@ -2,7 +2,7 @@
 
 * Development version
 * Bug fixed in D_regularized_out
-* Addend.data argument added to all D_regularized functions. In _fold functions, test-partition of the data is appended, else the entire data frame is added.
+* Addend.data argument added to all D_regularized -functions. In _fold -functions, test-partition of the data is appended, else the entire data frame is added.
 
 # multid 0.5.0
 
