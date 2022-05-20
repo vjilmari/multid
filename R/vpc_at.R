@@ -6,8 +6,9 @@
 #' @param lvl1.var Character string. Level 1 variable name to which random slope is also estimated.
 #' @param lvl1.values Level 1 variable values.
 #'
-#' @return Data frame of level 2 variance and std.dev. estimates at level 1 variable values and respective VPCs.
+#' @return Data frame of level 2 variance and std.dev. estimates at level 1 variable values, respective VPCs (ICC1s) and group-mean reliabilities (ICC2s) (Bliese, 2000).
 #' @references Goldstein, H., Browne, W., & Rasbash, J. (2002). Partitioning Variation in Multilevel Models. Understanding Statistics, 1(4), 223–231. https://doi.org/10.1207/S15328031US0104_02
+#' @references Bliese, P. D. (2000). Within-group agreement, non-independence, and reliability: Implications for data aggregation and analysis. In K. J. Klein & S. W. J. Kozlowski (Eds.), Multilevel theory, research, and methods in organizations: Foundations, extensions, and new directions (pp. 349–381). Jossey-Bass.
 #' @export
 #'
 #' @examples
@@ -53,14 +54,26 @@ vpc_at <- function(model, lvl1.var, lvl1.values) {
         VC.frame[, "var2"] == "empty", "vcov"] * (lvl1.values[i])^2
   }
 
+  # obtain mean group size
+
+  mean.n.obs <-
+    unname(lme4::getME(model, "n") /
+      lme4::getME(model, "l_i"))
+
   output <- cbind.data.frame(
     lvl1.value = lvl1.values,
     Intercept.var = cond.lvl2.values,
     Intercept.sd = sqrt(cond.lvl2.values)
   )
+
   output$Total.var <- output$Intercept.var +
     VC.frame[VC.frame[, "grp"] == "Residual", "vcov"]
   output$VPC <- output$Intercept.var / output$Total.var
+  output$ICC2 <- (output$VPC * mean.n.obs) /
+    (output$VPC * mean.n.obs +
+      VC.frame[VC.frame[, "grp"] == "Residual", "vcov"])
+  output$ICC2_SP <- (output$VPC * mean.n.obs) /
+    (1 + (mean.n.obs - 1) * output$VPC)
 
   return(output)
 }
