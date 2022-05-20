@@ -31,49 +31,67 @@
 #' )
 vpc_at <- function(model, lvl1.var, lvl1.values) {
   VC <- as.data.frame(lme4::VarCorr(model))
-
-  VC.frame <-
-    cbind(VC[, c(1:3)],
-      sdcor = VC[, 5],
-      vcov = VC[, 4]
-    )
-
-  # rename <NA> in the frame as "empty
+  VC.frame <- cbind(VC[, c(1:3)], sdcor = VC[, 5], vcov = VC[
+    ,
+    4
+  ])
   VC.frame[is.na(VC.frame)] <- "empty"
-
-  # placeholder vector for variances at each value
   cond.lvl2.values <- rep(NA, length(lvl1.values))
 
   for (i in 1:length(lvl1.values)) {
-    cond.lvl2.values[i] <-
-      VC.frame[VC.frame[, "var1"] == "(Intercept)" &
-        VC.frame[, "var2"] == "empty", "vcov"] +
+    cond.lvl2.values[i] <- VC.frame[VC.frame[, "var1"] ==
+      "(Intercept)" & VC.frame[, "var2"] == "empty", "vcov"] +
       2 * VC.frame[VC.frame[, "var1"] == "(Intercept)" &
         VC.frame[, "var2"] == lvl1.var, "vcov"] * (lvl1.values[i]) +
-      VC.frame[VC.frame[, "var1"] == lvl1.var &
-        VC.frame[, "var2"] == "empty", "vcov"] * (lvl1.values[i])^2
+      VC.frame[VC.frame[, "var1"] == lvl1.var & VC.frame[
+        ,
+        "var2"
+      ] == "empty", "vcov"] * (lvl1.values[i])^2
   }
 
-  # obtain mean group size
+  output <-
+    cbind.data.frame(
+      lvl1.value = lvl1.values,
+      Intercept.var = cond.lvl2.values,
+      Intercept.sd = sqrt(cond.lvl2.values)
+    )
 
-  mean.n.obs <-
-    unname(lme4::getME(model, "n") /
-      lme4::getME(model, "l_i"))
+  output$Residual.var <-
+    VC.frame[VC.frame[
+      ,
+      "grp"
+    ] == "Residual", "vcov"]
+  output$Total.var <-
+    output$Intercept.var + output$Residual.var
 
-  output <- cbind.data.frame(
-    lvl1.value = lvl1.values,
-    Intercept.var = cond.lvl2.values,
-    Intercept.sd = sqrt(cond.lvl2.values)
-  )
+  output$VPC <-
+    output$Intercept.var / output$Total.var
 
-  output$Total.var <- output$Intercept.var +
-    VC.frame[VC.frame[, "grp"] == "Residual", "vcov"]
-  output$VPC <- output$Intercept.var / output$Total.var
-  output$ICC2 <- (output$VPC * mean.n.obs) /
-    (output$VPC * mean.n.obs +
-      VC.frame[VC.frame[, "grp"] == "Residual", "vcov"])
-  output$ICC2_SP <- (output$VPC * mean.n.obs) /
-    (1 + (mean.n.obs - 1) * output$VPC)
+  # extract the data used in the model
+
+  data <- model@frame
+
+  # only calculate ICC2 if there are at most 5 different values for level-1 predictor
+  # and these values are represented in the data many times
+  if (all(lvl1.values %in% names(table(data[, lvl1.var]))) &
+    length(table(data[, lvl1.var])) < 6) {
+    n.groups <- unname(lme4::getME(model, "l_i"))
+    n.obs <- table(data[, lvl1.var])
+
+    # limit to the requested "at" values
+    n.obs <- n.obs[lvl1.values %in% names(n.obs)]
+
+    mean.n.obs <- n.obs / n.groups
+
+    output$mean.n.obs <- as.numeric(unname(mean.n.obs))
+
+    output$ICC2 <-
+      (output$VPC * output$mean.n.obs) / (output$VPC * output$mean.n.obs +
+        output$Residual.var)
+    output$ICC2_SP <-
+      (output$VPC * output$mean.n.obs) /
+        (1 + (output$mean.n.obs - 1) * output$VPC)
+  }
 
   return(output)
 }
