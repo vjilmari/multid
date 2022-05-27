@@ -4,6 +4,7 @@
 * Bug fixed in D_regularized_out
 * Addend.data argument added to all D_regularized -functions. In _fold -functions, test-partition of the data is appended, else the entire data frame is added.
 * Include ICC2 (group-mean reliability) for vpc_at. Enables calculation of sub-group mean-level reliabilities, in case the "at" is a group
+* Include reliability_dms that calculates difference score reliability coefficient for data that is difference score between two mean values across some upper-level units (e.g., sex differences across countries)
 
 # multid 0.5.0
 
