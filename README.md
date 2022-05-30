@@ -10,6 +10,9 @@ version](https://www.r-pkg.org/badges/version/multid)](https://www.r-pkg.org/bad
 
 [![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/multid)](https://cranlogs.r-pkg.org/badges/grand-total/multid)
 
+[![CRAN
+version](https://www.r-pkg.org/badges/version/multid)](https://www.r-pkg.org/badges/version/multid)
+
 <!-- badges: end -->
 
 multid provides tools for regularized measurement of multivariate
