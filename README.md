@@ -8,6 +8,9 @@
 [![Travis build
 status](https://app.travis-ci.com/vjilmari/multid.svg?branch=main)](https://app.travis-ci.com/vjilmari/multid/)
 
+[![CRAN
+version](https://www.r-pkg.org/badges/version/multid)](https://www.r-pkg.org/badges/version/multid)
+
 <!-- badges: end -->
 
 multid provides tools for regularized measurement of multivariate

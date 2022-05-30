@@ -19,6 +19,9 @@ knitr::opts_chunk$set(
 
 [![Travis build status](https://app.travis-ci.com/vjilmari/multid.svg?branch=main)](https://app.travis-ci.com/vjilmari/multid/)
 
+[![CRAN version](https://www.r-pkg.org/badges/version/multid)](https://www.r-pkg.org/badges/version/multid)
+
+
 <!-- badges: end -->
 
 multid provides tools for regularized measurement of multivariate differences between two groups (e.g., sex differences). Regularization via logistic regression variants enables inclusion of large number of correlated variables in the multivariate set while providing k-fold cross-validation and regularization to avoid overfitting.
