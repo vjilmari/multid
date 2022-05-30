@@ -5,8 +5,10 @@
 
 <!-- badges: start -->
 
-[![Travis build
-status](https://app.travis-ci.com/vjilmari/multid.svg?branch=main)](https://app.travis-ci.com/vjilmari/multid/)
+[![CRAN
+version](https://www.r-pkg.org/badges/version/multid)](https://www.r-pkg.org/badges/version/multid)
+
+[![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/multid)](https://cranlogs.r-pkg.org/badges/grand-total/multid)
 
 <!-- badges: end -->
 
