@@ -25,5 +25,7 @@ Imports:
     lme4 (>= 1.1.27.1)
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    overlapping (>= 1.7),
+    rio (>= 0.5.29)
 VignetteBuilder: knitr
