@@ -1,0 +1,19 @@
+---
+title: "multivariate_sex_differences_in_personality"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{multivariate_sex_differences_in_personality}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(multid)
+```

@@ -23,3 +23,7 @@ Imports:
     lavaan (>= 0.6.9),
     emmeans (>= 1.6.3),
     lme4 (>= 1.1.27.1)
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
