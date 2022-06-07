@@ -1,5 +1,6 @@
 ---
-title: "multivariate_sex_differences_in_personality"
+title: "Multivariate Sex Differences in Personality with Regularized Regression in multid -package"
+author: "Ville-Juhani Ilmarinen"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{multivariate_sex_differences_in_personality}
@@ -14,6 +15,411 @@ knitr::opts_chunk$set(
 )
 ```
 
+This vignette details the procedures by which multivariate sex differences in personality traits of multiple bandwidhts (trait domains and items) can be calculated by using regularized logistic regression and gender diagnosticity approach with *multid* package. The data are answers to the Big Five Personality Test, constructed with items from the International Personality Item Pool, obtained from https://openpsychometrics.org/.
+
+The predictive approach as implemented with regularized methods also allows for examination of group-membership probabilities and their distributions across individuals. In the context of statistical predictions of sex, these distributions are an updated variant to gender-typicality distributions used in gender diagnosticity methodology [(Lippa & Connelly, 1990)](https://doi.org/10.1037/0022-3514.59.5.1051).
+
+Studies in which the demonstrated methods of sex difference estimation have thus far been used:
+
+1.  [Lönnqvist, J. E., & Ilmarinen, V. J. (2021). Using a continuous measure of genderedness to assess sex differences in the attitudes of the political elite. *Political Behavior, 43*, 1779–1800.](https://doi.org/10.1007/s11109-021-09681-2)
+
+2.  [Ilmarinen, V. J., Vainikainen, M. P., & Lönnqvist, J. E. (2022). Is there a g-factor of genderedness? Using a continuous measure of genderedness to assess sex differences in personality, values, cognitive ability, school grades, and educational track. *European Journal of Personality*.](https://doi.org/10.1177/08902070221088155)
+
+
+# Preparations
+
+## Packages
+
 ```{r setup}
+library(rio)
 library(multid)
+```
+
+## Data
+
+In this exemplary vignette, openly available data "Answers to the Big Five Personality Test, constructed with items from the International Personality Item Pool" from <https://openpsychometrics.org> will be used. The dataset is directly downloaded from the page (by this approach <https://stackoverflow.com/a/66351588/8995170>) and therefore each step of the analysis can be fully reproduced.
+
+```{r importdata}
+# create a temporary directory
+td <- tempdir()
+
+# create a temporary file
+tf <- tempfile(tmpdir=td, fileext=".zip")
+
+# download file from internet into temporary location
+download.file("http://openpsychometrics.org/_rawdata/BIG5.zip", tf)
+
+# list zip archive
+file_names <- unzip(tf, list=TRUE)
+
+# extract files from zip file
+unzip(tf, exdir=td, overwrite=TRUE)
+
+# use when zip file has only one file
+dat <- import(file.path(td, "BIG5/data.csv"))
+
+# delete the files and directories
+unlink(td)
+```
+
+## Variable transformations
+
+```{r}
+# print variable names in the data
+names(dat)
+
+# save names of personality items to a vector
+per.items<-names(dat)[which(names(dat)=="E1"):
+                        which(names(dat)=="O10")]
+
+# code item response 0 (zero) to not available (NA) on all these items
+
+dat[,per.items]<-
+  sapply(dat[,per.items],function(x){ifelse(x==0,NA,x)})
+
+table(dat[,per.items]==0)
+
+# check that the numerical range makes sense
+
+range(dat[,per.items],na.rm=T)
+
+# calculate sum scores for Big Five
+
+dat$N<-rowMeans(
+  cbind(dat[,c("N1","N3","N5","N6","N7","N8","N9","N10")],
+        6-dat[,c("N2","N4")]),na.rm=T)
+
+dat$E<-rowMeans(
+  cbind(dat[,c("E1","E3","E5","E7","E9")],
+        6-dat[,c("E2","E4","E6","E8","E10")]),na.rm=T)
+
+dat$O<-rowMeans(
+  cbind(dat[,c("O1","O3","O5","O7","O8","O9","O10")],
+        6-dat[,c("O2","O4","O6")]),na.rm=T)
+
+dat$A<-rowMeans(
+  cbind(dat[,c("A2","A4","A6","A8","A9","A10")],
+        6-dat[,c("A1","A3","A5","A7")]),na.rm=T)
+
+dat$C<-rowMeans(
+  cbind(dat[,c("C1","C3","C5","C7","C9","C10")],
+        6-dat[,c("C2","C4","C6","C8")]),na.rm=T)
+
+```
+
+# Sex differences in one country
+
+For the purpose of this example, only US responses will be analyzed for sex differences. Only include participants reported being male (gender=1) or female (gender=2), and who did not have any missing responses.
+
+```{r}
+US.dat<-
+  na.omit(dat[dat$country=="US" & (dat$gender==1 | dat$gender==2),
+              c("gender",per.items,"N","E","O","A","C")])
+
+# code categorical gender variables
+US.dat$gender.cat<-
+  ifelse(US.dat$gender==1,"Male","Female")
+
+```
+
+## Univariate differences in trait sum scores using the d_pooled_sd -function
+
+Calculates Cohen's *d* with pooled standard deviation across the male and female groups for each Big Five trait separately.
+
+```{r}
+d.N<-d_pooled_sd(data = US.dat,var = "N",
+            group.var = "gender.cat",group.values = c("Male","Female"),
+            infer=T)
+
+d.E<-d_pooled_sd(data = US.dat,var = "E",
+            group.var = "gender.cat",group.values = c("Male","Female"),
+            infer=T)
+
+d.O<-d_pooled_sd(data = US.dat,var = "O",
+            group.var = "gender.cat",group.values = c("Male","Female"),
+            infer=T)
+
+d.A<-d_pooled_sd(data = US.dat,var = "A",
+            group.var = "gender.cat",group.values = c("Male","Female"),
+            infer=T)
+
+d.C<-d_pooled_sd(data = US.dat,var = "C",
+            group.var = "gender.cat",group.values = c("Male","Female"),
+            infer=T)
+
+# compile to a table
+
+uni.d<-rbind(d.N,d.E,d.O,d.A,d.C)
+rownames(uni.d)<-c("N","E","O","A","C")
+
+round(uni.d,2)
+
+```
+
+Column D indicated Cohen's *d*. Females score higher in Neuroticism (N; *d* = -0.42) and Agreeableness (A; *d* = -0.50), while Males score higher in Openness (O; *d* = 0.30). Differences in Extraversion and Conscientiousness seem negligible (*d* \< \|.10\|) albeit statistically significant (*p* \< .001).
+
+The average difference across the Big Five traits would therefore be: *d* = `r round(mean(uni.d[,"D"]),2)`
+
+Other columns are interpreted as:
+
+-   n.Male and n.Female = sample sizes
+
+-   m.Male and m.Female = mean levels
+
+-   sd.Male and sd.Female = standard deviations
+
+-   pooled.sd = pooled standard deviation
+
+-   diff = the raw (non-standardized) difference
+
+-   t_stat = t statistic
+
+-   df = Welch modified degrees of freedom
+
+-   p = p-value
+
+## Multivariate difference using trait sum scores as variables
+
+Calculates Mahalanobis' *D* (standardized distance between the Male and Female group centroids in multivariate space) and a regularized variant of *D* that avoids overfitting the data. The latter is based on gender diagnosticity measures that can also be understood as femininity-masculinity dimension that travels trought the multivariate space.
+
+### Mahalanobis' *D*
+
+For calculation of Mahalanobis' *D*, correlation matrix of the multivariate set and vectors of standardized mean differences are needed. The ordering of the variables should be same in these inputs.
+
+```{r}
+
+d_vector<-uni.d[,"D"]
+cor_mat<-cor(US.dat[,c("N","E","O","A","C")])
+names(d_vector)==colnames(cor_mat)
+
+# print the correlation matrix
+round(cor_mat,2)
+
+# Calculate D
+D<-sqrt(t(d_vector) %*% solve(cor_mat) %*% d_vector)
+D
+```
+
+Mahalanobis' *D* is, of course, larger than any of the univariate *d*'s for single variables, here the standardized distance between the group centroids of Males and Females is *D* = ´r round(D,2)´
+
+### Regularized *D* with D_regularized -function
+
+Regularized *D* is calculated using a predictive approach whereby the binary sex-variable is predicted by the multivariate variable set with one of the regularized logistic regression variants. The predicted values for each individual are indicative of logit's of probabilities of being a Male or Female, based on which category is set as the reference. These femininity-masculinity scores (FM) can be used in similar ways to any other variable to calculate standardized distances between mean FM of Males and mean FM of females with pooled standard deviations. There are many other interesting features that can be informative of the multivariate/FM distributions.
+
+In the vanilla variant of D_regularized -function, the same partition of data is used for regulation and prediction. Regularization means that the beta-coefficients for variables in the multivariate set are penalized through a specified function (here, a default elastic net penalty with 10-fold cross-validation is used). The multivariate set is supplied to the function through mv.vars -argument.
+
+```{r}
+set.seed(3216)
+
+D_vanilla<-
+  D_regularized(data=US.dat,
+                mv.vars=c("N","E","O","A","C"),
+              group.var="gender.cat",
+              group.values = c("Male","Female"))
+round(D_vanilla$D,2)
+
+```
+
+With this approach, *D* = ´r round(D_vanilla$D[,"D"],2)´.
+
+We can also look at the regularized beta-coefficients.
+
+```{r}
+round(coefficients(D_vanilla$cv.mod,
+                   s = "lambda.min"),2)
+```
+
+
+The real power of this function, however, comes from the ability to use separate data folds for regulation and prediction. By this approach, the beta-weights for sex predictions are obtained from the regulation set (i.e., training set) and used in the prediction set (i.e., testing set) as measures of FM for each individual. It is possible to calculate ppc (probability of correctly classified), auc (area under the receiver operating characteristics), and also manually specified probabilities of falling within certain cutoffs of predicted probabilities from 0 to 1 for each group.
+
+
+
+```{r}
+
+# decide the size of the regularization (training data fold)
+size=round(min(table(US.dat$gender.cat))/2)
+
+D_out<-
+  D_regularized(data=US.dat,
+                mv.vars=c("N","E","O","A","C"),
+              group.var="gender.cat",
+              group.values = c("Male","Female"),
+              out = T,
+              size=size,pcc = T,auc = T,pred.prob = T)
+round(D_out$D,2)
+```
+
+From the output, we see that the sample sizes are smaller. These sample sizes are only indicative of the samples in prediction/testing dataset. pcc indicated probability of correctly classified individuals based on this approach, and auc is the area under the receiver operating characteristics. 
+Predicted probabilities of being a Male across certain cutoffs (defaults were used in this example) for both groups are obtained from P.table section of the output:
+
+```{r}
+round(100*D_out$P.table,1)
+```
+
+From this table we see that majority of males are nevertheless not very clearly classified as males based on the Big Five personality traits (11% in .80-1 range), and same is true for classifying females as females (7% in 0-0.20 range). The same pattern can also be observed from visually inspecting the distributions of the FM-scores, and their overlap. 
+
+```{r}
+
+(D<-unname(D_out$D[,"D"]))
+
+(OVL<-2*pnorm((-D/2)))
+
+## Proportion of overlap relative to the joint distribution
+
+(OVL2<-OVL/(2-OVL))
+
+# non-parametric overlap
+
+library(overlapping)
+
+np.overlap<-
+  overlap(x = list(D_out$pred.dat[
+  D_out$pred.dat$group=="Male","pred"],
+  D_out$pred.dat[
+  D_out$pred.dat$group=="Female","pred"]),
+  plot=T)
+
+# this corresponds to Proportion of overlap relative to the joint distribution (OVL2)
+(np.OVL2<-unname(np.overlap$OV))
+
+# from which Proportion of overlap relative to a single distribution (OVL) is approximated at
+(np.OVL<-(2*np.OVL2)/(1+np.OVL2))
+
+# compare the different overlap-estimates
+
+round(cbind(OVL,np.OVL,OVL2,np.OVL2),2)
+
+```
+
+## Multivariate difference using item scores as variables
+
+Recently there have been multiple studies in the field of personality psychology that have highlighted the importance of narrow personality traits. These narrow personality traits are usually either facets or nuances that are commonly each thought as being part of a certain Big Five trait, although their unique predictive utility suggests that they have trait-like properties (stability, cross-informant agreement etc.) that go beyond the broad Big Five domains. That is, the narrow traits can be considered as unique traits as well. Thus, it makes to sense if instead of Big Five traits sum scores, the item scores were used as the multivariate set based on which multivariate sex differences and other related indices are calculated.
+
+Because the number of the variables is notable increased (from five to fifty in this dataset), the use of regularization methods and different data partitions for training and testing are strongly recommended. For illustrative purposes, Mahalanobis' *D* and vanilla version of regularized *D* are also be calculated below.
+
+
+### Mahalanobis' *D*
+
+```{r}
+# place-holder vector for univariate Cohen d's for items
+d_vector_items<-rep(NA,length(per.items))
+
+# loop through the items and obtain d for each item
+
+
+for (i in 1:length(per.items)){
+  d_vector_items[i]<-
+    d_pooled_sd(data=US.dat,
+              var=per.items[i],
+            group.var="gender.cat",
+            group.values=c("Male","Female"))[,"D"]
+  
+}
+
+d_vector_items
+
+cor_mat_items<-cor(US.dat[,per.items])
+
+# Calculate D
+D_items<-
+  sqrt(t(d_vector_items) %*% solve(cor_mat_items) %*% d_vector_items)
+D_items
+```
+
+Item-based Mahalanobis' *D* is somewhat larger that any of those based  on Big Five domains. The standardized distance between the group centroids of Males and Females in a space comprised of personality items is *D* = ´r round(D_items,2)´
+
+### Regularized *D* with D_regularized -function
+
+It is straightforward to use D_regularized -function even with large variable sets.
+
+```{r}
+D_items_vanilla<-
+  D_regularized(data=US.dat,
+                mv.vars=per.items,
+              group.var="gender.cat",
+              group.values = c("Male","Female"))
+round(D_items_vanilla$D,2)
+
+```
+
+With this approach, *D* = ´r round(D_items_vanilla$D[,"D"],2)´.
+
+Now when we look at the regularized beta-coefficients it seems that almost every item has some very small degree of influence on the multivariate D.
+
+```{r}
+round(coefficients(D_items_vanilla$cv.mod,
+                   s = "lambda.min"),2)
+```
+
+
+Using separate fold for regularization and prediction for items. Domain-based results are printed for comparison.
+
+```{r}
+
+D_items_out<-
+  D_regularized(data=US.dat,
+                mv.vars=per.items,
+              group.var="gender.cat",
+              group.values = c("Male","Female"),
+              out = T,
+              size=size,pcc = T,auc = T,pred.prob = T)
+
+# Item-based D
+round(D_items_out$D,2)
+
+# Big Five domain-based D
+round(D_out$D,2)
+```
+
+With this approach, *D* = ´r round(D_items_out$D[,"D"],2)´ is slightly smaller than without using an independent partition of the data for prediction.
+ 
+Predicted probabilities of being a Male across certain cutoffs. Predicted probabilities from the Big Five domain model printed for comparison.
+
+```{r}
+round(100*D_items_out$P.table,1)
+round(100*D_out$P.table,1)
+```
+
+Comparing these tables, we see that there are more people classified in the extremes, but based on the pcc and auc -values printed above, the overall predictive performance is not drastically improved. 
+
+Overlaps should give this same information in another format:
+
+```{r}
+
+(D_items<-unname(D_items_out$D[,"D"]))
+
+(OVL_items<-2*pnorm((-D_items/2)))
+
+## Proportion of overlap relative to the joint distribution
+
+(OVL2_items<-OVL_items/(2-OVL_items))
+
+# non-parametric overlap
+
+np.overlap_items<-
+  overlap(x = list(D_items_out$pred.dat[
+  D_items_out$pred.dat$group=="Male","pred"],
+  D_items_out$pred.dat[
+  D_items_out$pred.dat$group=="Female","pred"]),
+  plot=T)
+
+# this corresponds to Proportion of overlap relative to the joint distribution (OVL2)
+(np.OVL2_items<-unname(np.overlap_items$OV))
+
+# from which Proportion of overlap relative to a single distribution (OVL) is approximated at
+(np.OVL_items<-(2*np.OVL2_items)/(1+np.OVL2_items))
+
+# compare the different overlap-estimates
+
+round(cbind(OVL_items,np.OVL_items,
+            OVL2_items,np.OVL2_items),2)
+
+# print Big Five domain based overlaps for comparison
+
+round(cbind(OVL,np.OVL,OVL2,np.OVL2),2)
+```
+# Session Information
+
+```{r}
+sessionInfo()
 ```
