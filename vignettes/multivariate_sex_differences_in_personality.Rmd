@@ -15,11 +15,11 @@ knitr::opts_chunk$set(
 )
 ```
 
-This vignette details the procedures by which multivariate sex differences in personality traits of multiple bandwidhts (trait domains and items) can be calculated by using regularized logistic regression and gender diagnosticity approach with *multid* package. The data are answers to the Big Five Personality Test, constructed with items from the International Personality Item Pool, obtained from https://openpsychometrics.org/.
+This vignette details the procedures by which multivariate sex differences in personality traits can be calculated by using regularized logistic regression and gender diagnosticity approach with *multid* package. The data used in this vignette are "answers to the Big Five Personality Test, constructed with items from the International Personality Item Pool" and can be obtained from https://openpsychometrics.org/.
 
 The predictive approach as implemented with regularized methods also allows for examination of group-membership probabilities and their distributions across individuals. In the context of statistical predictions of sex, these distributions are an updated variant to gender-typicality distributions used in gender diagnosticity methodology [(Lippa & Connelly, 1990)](https://doi.org/10.1037/0022-3514.59.5.1051).
 
-Studies in which the demonstrated methods of sex difference estimation have thus far been used:
+Studies in which the methods demonstrated in this vignette have been used:
 
 1.  [Lönnqvist, J. E., & Ilmarinen, V. J. (2021). Using a continuous measure of genderedness to assess sex differences in the attitudes of the political elite. *Political Behavior, 43*, 1779–1800.](https://doi.org/10.1007/s11109-021-09681-2)
 
@@ -37,7 +37,7 @@ library(multid)
 
 ## Data
 
-In this exemplary vignette, openly available data "Answers to the Big Five Personality Test, constructed with items from the International Personality Item Pool" from <https://openpsychometrics.org> will be used. The dataset is directly downloaded from the page (by this approach <https://stackoverflow.com/a/66351588/8995170>) and therefore each step of the analysis can be fully reproduced.
+In this vignette, openly available data "Answers to the Big Five Personality Test, constructed with items from the International Personality Item Pool" from <https://openpsychometrics.org> will be used. The dataset is directly downloaded from the page (by this approach <https://stackoverflow.com/a/66351588/8995170>) and therefore each step presented in the following script can be fully reproduced.
 
 ```{r importdata}
 # create a temporary directory
@@ -83,7 +83,7 @@ table(dat[,per.items]==0)
 
 range(dat[,per.items],na.rm=T)
 
-# calculate sum scores for Big Five
+# calculate sum scores for Big Five (reverse coded items subtracted from 6)
 
 dat$N<-rowMeans(
   cbind(dat[,c("N1","N3","N5","N6","N7","N8","N9","N10")],
@@ -107,9 +107,9 @@ dat$C<-rowMeans(
 
 ```
 
-# Sex differences in one country
+# Sex differences
 
-For the purpose of this example, only US responses will be analyzed for sex differences. Only include participants reported being male (gender=1) or female (gender=2), and who did not have any missing responses.
+For the purpose of this example, only US responses will be analyzed for sex differences. Furthermore, participants who reported being male (gender=1) or female (gender=2), and who did not have any missing responses are included.
 
 ```{r}
 US.dat<-
