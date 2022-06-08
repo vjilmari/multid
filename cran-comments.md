@@ -1,15 +1,14 @@
 ## Update
 
-This is an update (version 0.5.0). Changes to this version can be found below.
+This is an update (version 0.5.0.9000). Changes to this version can be found below.
 
 ## Changes
 
-* Added option to obtain scaled estimates in ml_dadas. Scaling is done for both difference score components and the difference scores, based on random intercept SDs and random slope SD, respectively, in a reduced model without the predictor and the interaction between predictor and moderator
-* Added option to test for random effect covariation with likelihood ratio test in ml_dadas from a reduced model without the predictor and the interaction between predictor and moderator
-* Added option to include covariates in sem_dadas
-* Added variance test with sem in sem_dadas
-* Added variance test via parametric bootstrap in ml_dadas
-* Added cvv_manual -function for calculation of coefficients of variance variation from manually inputted sample sizes and variances of multiple variables
+* Bug fixed in D_regularized_out
+* Addend.data argument added to all D_regularized -functions. In _fold -functions, test-partition of the data is appended, else the entire data frame is added.
+* Include ICC2 (group-mean reliability) for vpc_at. Enables calculation of sub-group mean-level reliabilities, in case the "at" is a group
+* Include reliability_dms that calculates difference score reliability coefficient for data that is difference score between two mean values across some upper-level units (e.g., sex differences across countries)
+* Vignette on estimation of multivariate sex differences with multid addede
 
 ## Test environments
 * local R installation, R 4.2.0
