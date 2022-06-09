@@ -1,3 +1,7 @@
+# multid 0.6.0.9000
+
+* Development version
+
 # multid 0.6.0
 
 * Bug fixed in D_regularized_out
