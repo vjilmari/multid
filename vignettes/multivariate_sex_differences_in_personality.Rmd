@@ -254,7 +254,7 @@ round(D_out$D,2)
 
 From the output, we see that the sample sizes are smaller as compared to univariate estimates, because the sample sizes are only indicative of the samples in prediction/testing dataset.
 
-Standardized multivariate difference between males and females was estimated at *D* = `r round(D_out$D[,"D"],2)`. Very similar sex difference estimate to Mahalanobis' *D*.
+Standardized multivariate difference between males and females was estimated at *D* = `r round(D_out$D[,"D"],2)`. Very similar in magnitude to multivariate sex difference indexed by Mahalanobis' *D*.
 
 There are additional features in this output that might be of interest. Similarly to univariate *d* estimates, we get descriptive statistics for both groups on FM-score metric, as well as an estimate of pooled estimate of standard deviation that is also used for calculation of D. **pcc** indicates probability of correctly classified individuals, and **auc** is the area under the receiver operating characteristics. These are both commonly used indices of predictive performance. In this exemplary case, the performance of broad Big Five domains in predicting sex. Detailing predicted probabilities of being a male across certain cutoffs (defaults were used in this example) for both groups can be obtained from **P.table** part of the output:
 
@@ -263,6 +263,18 @@ round(100*D_out$P.table,1)
 ```
 
 From this table we see that majority of males are nevertheless not very clearly classified as males based on the Big Five personality traits (11% in .80-1 range), and same is true for classifying females as females (7% in 0-0.20 range).
+
+For examining the regularized beta weights obtained at the training phase, call **coefficients** on the **cv.mod** object of the output. Argument **s** is the value of the penalty parameter lambda by which the predictions are calculate. The default "lambda.min" uses the values where the mean cross-validated error is minimized, and "lambda.1se" uses the largest value of lambda such that error is within 1 standard error of the minimum. To obtain predicted values for a certain **s**, it must be supplied already to **D_regularized** -function, but the weights given by different approaches can be examined irregardless of the chosen value of **s**. It is also possible to plot the cross-validation curve to visualize how "lambda.min" and "lambda.1se" were obtained. For more information on regularized regression conducted with the glmnet package, please refer to <https://glmnet.stanford.edu/articles/glmnet.html>.
+
+```{r}
+coefficients(D_out$cv.mod,
+             s = "lambda.min")
+
+coefficients(D_out$cv.mod,
+             s = "lambda.1se")
+
+plot(D_out$cv.mod)
+```
 
 #### Overlap
 
