@@ -3,7 +3,8 @@
 * Development version
 * Switched from sample to dplyr::sample_n for bootstrap example in the multivariate sex difference vignette
 * Minor changes to style and text in the multivariate sex difference vignette
-* added more descriptive statistics to reliability_dms output
+* Additional descriptive statistics to reliability_dms output
+* Allow vpc_at for models with no intercept-slope covariation (conditional level-2 variances are same for all requested level-1 values)
 
 # multid 0.6.0
 
