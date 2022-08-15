@@ -22,7 +22,8 @@ Imports:
     pROC (>= 1.18.0),
     lavaan (>= 0.6.9),
     emmeans (>= 1.6.3),
-    lme4 (>= 1.1.27.1)
+    lme4 (>= 1.1.27.1),
+    quantreg (>= 5.88)
 Suggests: 
     knitr,
     rmarkdown,
