@@ -4,7 +4,15 @@
 \alias{qcc}
 \title{Quantile correlation coefficient}
 \usage{
-qcc(x, y, tau = c(0.1, 0.5, 0.9), data, method = "br")
+qcc(
+  x,
+  y,
+  tau = c(0.1, 0.5, 0.9),
+  data,
+  method = "br",
+  boot_n = NULL,
+  ci_level = 0.95
+)
 }
 \arguments{
 \item{x}{Name of x variable. Character string.}
@@ -16,19 +24,26 @@ qcc(x, y, tau = c(0.1, 0.5, 0.9), data, method = "br")
 \item{data}{Data frame.}
 
 \item{method}{The algorithmic method used to compute the fit (default "br"). @seealso \code{\link[quantreg]{rq}}}
+
+\item{boot_n}{Number of bootstrap redraws (default NULL = no bootstrap inference).}
+
+\item{ci_level}{Level for percentile bootstrap confidence interval. Numeric values between 0 and 1. Default .95.}
 }
 \value{
-Returns bivariate correlations at different tau values (quantiles) of the variables and a linear Pearson's correlation estimate for comparison.
+\item{r}{Pearson's correlation estimate for comparison.}
+\item{rho_tau}{Correlations at different tau values (quantiles).}
+\item{r_boot_est}{Pearson's correlation bootstrap estimates.}
+\item{rho_tau_boot_est}{Bootstrap estimates for correlations at different tau values (quantiles).}
 }
 \description{
-For computation of tail dependence as correlations estimated at different variable quantiles (Choi & Shin, 2022; Lee et al., 2022) summarized across two quantile regression models where x and y switch roles as independent/dependent variable.
+For computation of tail dependence as correlations estimated at different variable quantiles (Choi & Shin, 2022; Lee et al., 2022) summarized across two quantile regression models where x and y switch roles as independent/dependent variables.
 }
 \examples{
-d <- data.frame(
-  x = rnorm(100),
-  y = rnorm(100)
-)
-qcc(x="x",y="y",data=d)
+set.seed(2321)
+d <- data.frame(x = rnorm(2000))
+d$y <- 0.10 * d$x + (0.20) * d$x^2 + 0.40 * d$x^3 + (-0.20) * d$x^4 + rnorm(2000)
+qcc_boot <- qcc(x = "x", y = "y", data = d, tau = 1:9 / 10, boot_n = 50)
+qcc_boot$rho_tau
 }
 \references{
 Choi, J.-E., & Shin, D. W. (2022). Quantile correlation coefficient: A new tail dependence measure. Statistical Papers, 63(4), 1075–1104. https://doi.org/10.1007/s00362-021-01268-7
