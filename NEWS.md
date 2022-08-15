@@ -5,7 +5,7 @@
 * Minor changes to style and text in the multivariate sex difference vignette
 * Additional descriptive statistics to reliability_dms output
 * Allow vpc_at for models with no intercept-slope covariation (conditional level-2 variances are same for all requested level-1 values)
-* Add function qcc for quantile correlation coefficient
+* Added function qcc for quantile correlation coefficient
 
 # multid 0.6.0
 
