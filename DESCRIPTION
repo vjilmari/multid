@@ -25,8 +25,8 @@ Imports:
     lme4 (>= 1.1.27.1),
     quantreg (>= 5.88)
 Suggests: 
-    knitr,
-    rmarkdown,
+    knitr (>= 1.39),
+    rmarkdown (>= 2.14),
     overlapping (>= 1.7),
     rio (>= 0.5.29)
-VignetteBuilder: knitr
+VignetteBuilder: knitr (>= 1.39)
