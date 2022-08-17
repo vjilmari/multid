@@ -6,6 +6,7 @@
 * Additional descriptive statistics to reliability_dms output
 * Allow vpc_at for models with no intercept-slope covariation (conditional level-2 variances are same for all requested level-1 values)
 * Added function qcc for quantile correlation coefficient
+* Updated README
 
 # multid 0.6.0
 
