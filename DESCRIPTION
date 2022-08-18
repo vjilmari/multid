@@ -29,4 +29,4 @@ Suggests:
     rmarkdown (>= 2.14),
     overlapping (>= 1.7),
     rio (>= 0.5.29)
-VignetteBuilder: knitr (>= 1.39)
+VignetteBuilder: knitr
