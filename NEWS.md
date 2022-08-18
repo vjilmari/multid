@@ -1,6 +1,5 @@
-# multid 0.6.0.9000
+# multid 0.7.0
 
-* Development version
 * Switched from sample to dplyr::sample_n for bootstrap example in the multivariate sex difference vignette
 * Minor changes to style and text in the multivariate sex difference vignette
 * Additional descriptive statistics to reliability_dms output
