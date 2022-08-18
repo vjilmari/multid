@@ -21,7 +21,7 @@ cross-validation and regularization to avoid overfitting
 
 See fully reproducible exemplary [vignette on multivariate sex
 differences in personality with regularized
-regression](https://cran.r-project.org/web/packages/multid/vignettes/multivariate_sex_differences_in_personality.html),
+regression](https://CRAN.R-project.org/package=multid/vignettes/multivariate_sex_differences_in_personality.html),
 or examples presented below.
 
 Predictive approach as implemented with regularized methods also allows
