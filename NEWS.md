@@ -1,6 +1,7 @@
 # multid 0.7.0.9000
 
 * Development version
+* Add na.rm to qcc bootstrap summary over tau-values
 
 # multid 0.7.0
 
