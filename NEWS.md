@@ -1,3 +1,7 @@
+# multid 0.7.0.9000
+
+* Development version
+
 # multid 0.7.0
 
 * Switched from sample to dplyr::sample_n for bootstrap example in the multivariate sex difference vignette
