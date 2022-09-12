@@ -228,42 +228,65 @@ ml_dadas <- function(model,
     scaled_estimates_df <-
       rbind(
         c(
-          est = dadas[1, "estimate"],
+          est = dadas[
+            rownames(dadas) == diff_var_values[1],
+            "estimate"
+          ],
           scaling_SD =
             vpc_at_reduced[
-              vpc_at_reduced$lvl1.value ==
-                rownames(dadas[1, ]),
+              vpc_at_reduced[
+                ,
+                "lvl1.value"
+              ] == diff_var_values[1],
               "Intercept.sd"
             ],
-          scaled_est = dadas[1, "estimate"] /
+          scaled_est = dadas[
+            rownames(dadas) == diff_var_values[1],
+            "estimate"
+          ] /
             vpc_at_reduced[
-              vpc_at_reduced$lvl1.value ==
-                rownames(dadas[1, ]),
+              vpc_at_reduced[
+                ,
+                "lvl1.value"
+              ] == diff_var_values[1],
               "Intercept.sd"
             ]
         ),
         c(
-          est = dadas[2, "estimate"],
+          est = dadas[
+            rownames(dadas) == diff_var_values[2],
+            "estimate"
+          ],
           scaling_SD =
             vpc_at_reduced[
-              vpc_at_reduced$lvl1.value ==
-                rownames(dadas[2, ]),
+              vpc_at_reduced[
+                ,
+                "lvl1.value"
+              ] == diff_var_values[2],
               "Intercept.sd"
             ],
-          scaled_est = dadas[2, "estimate"] /
+          scaled_est = dadas[
+            rownames(dadas) == diff_var_values[2],
+            "estimate"
+          ] /
             vpc_at_reduced[
-              vpc_at_reduced$lvl1.value ==
-                rownames(dadas[2, ]),
+              vpc_at_reduced[
+                ,
+                "lvl1.value"
+              ] == diff_var_values[2],
               "Intercept.sd"
             ]
         ),
         c(
-          est = dadas[1, "estimate"] - dadas[2, "estimate"],
+          est = dadas[rownames(dadas) == diff_var_values[1], "estimate"] -
+            dadas[rownames(dadas) == diff_var_values[2], "estimate"],
           scaling_SD = slope_sd_reduced,
-          scaled_est = (dadas[1, "estimate"] - dadas[2, "estimate"]) /
+          scaled_est = (dadas[rownames(dadas) == diff_var_values[1], "estimate"] -
+            dadas[rownames(dadas) == diff_var_values[2], "estimate"]) /
             slope_sd_reduced
         )
       )
+    scaled_estimates_df
 
     rownames(scaled_estimates_df) <-
       c(diff_var_values, "difference")
