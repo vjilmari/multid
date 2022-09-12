@@ -14,7 +14,7 @@
 #' @param level Numeric. The confidence level required for the var_boot_test output (Default .95)
 #'
 #' @return
-#' \item{dadas}{A data frame including regression coefficients for component scores and dadas.}
+#' \item{dadas}{A data frame including main effect, interaction, regression coefficients for component scores, dadas, and comparison between interaction and main effect.}
 #' \item{scaled_estimates}{Scaled regression coefficients for difference score components and difference score.}
 #' \item{vpc_at_reduced}{Variance partition coefficients in the model without the predictor and interactions.}
 #' \item{re_cov_test}{Likelihood ratio significance test for random effect covariation.}
@@ -112,27 +112,59 @@ ml_dadas <- function(model,
       side = ">"
     )
 
+  # one-way dadas test
+
   ml_abstest <-
     data.frame(emmeans::contrast(temp.cont,
-      method = list(abs_test = c(1, -1)),
+      method = list(dadas = c(1, -1)),
       side = ">"
     ))
+
+  # test of magnitude difference between interaction and main effect
+
+  interaction_vs_main <-
+    data.frame(emmeans::contrast(temp.cont,
+      method = list(
+        interaction_vs_main =
+          c(1, -1 / 2)
+      )
+    ))
+
+  # obtain main effect and interaction for the output
+  model.coefs <- summary(model)$coefficients
+  main_effect <- model.coefs[predictor, ]
+  interaction.term <-
+    ifelse(paste0(predictor, ":", diff_var) %in% rownames(model.coefs),
+      paste0(predictor, ":", diff_var),
+      paste0(diff_var, ":", predictor)
+    )
+  interaction <- model.coefs[interaction.term, ]
+
+  mi.coefs <-
+    rbind(
+      main_effect,
+      interaction
+    )
+  colnames(mi.coefs) <-
+    c("estimate", "SE", "df", "t.ratio", "p.value")
+  # simple slopes
 
   trends.df <- data.frame(trends)
   colnames(trends.df) <- colnames(data.frame(temp.cont))
 
+  # combine to same output
+
   dadas <- rbind(
     trends.df,
     data.frame(temp.cont),
-    ml_abstest
+    ml_abstest,
+    interaction_vs_main
   )
+
   rownames(dadas) <- dadas$contrast
   dadas <- dadas[, 2:ncol(dadas)]
 
-  rownames(dadas) <- c(
-    rownames(dadas)[1:(nrow(dadas) - 1)],
-    "dadas"
-  )
+  dadas <- rbind(mi.coefs, dadas)
 
   output <- list(dadas = dadas)
 

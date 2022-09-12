@@ -39,7 +39,7 @@ ml_dadas(
 \item{seed}{Numeric. Seed number for bootstrap simulations.}
 }
 \value{
-\item{dadas}{A data frame including regression coefficients for component scores and dadas.}
+\item{dadas}{A data frame including main effect, interaction, regression coefficients for component scores, dadas, and comparison between interaction and main effect.}
 \item{scaled_estimates}{Scaled regression coefficients for difference score components and difference score.}
 \item{vpc_at_reduced}{Variance partition coefficients in the model without the predictor and interactions.}
 \item{re_cov_test}{Likelihood ratio significance test for random effect covariation.}
