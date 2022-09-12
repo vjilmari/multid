@@ -99,6 +99,8 @@ sem_dadas <- function(data,
       as.character(round(descriptives["diff", "SD"], 8))
     ), "\n",
     paste0("coef_sum:=b_11+b_21"), "\n",
+    paste0("main_effect:=(b_11+b_21)/2"), "\n",
+    paste0("interaction_vs_main_effect:=sqrt((b_11-b_21)^2)-sqrt(((b_11+b_21)/2)^2)"), "\n",
     paste0("diff_abs_magnitude:=sqrt(b_11^2)-sqrt(b_21^2)"), "\n",
     paste0("abs_coef_diff:=sqrt((b_11-b_21)^2)"), "\n",
     paste0("abs_coef_sum:=sqrt((b_11+b_21)^2)"), "\n",
@@ -143,7 +145,7 @@ sem_dadas <- function(data,
     rsquare = TRUE,
     level = level
   ))
-
+  pars
   # one-sided tests for absolute parameters
 
   labels <- c("abs_coef_diff", "abs_coef_sum", "dadas_two_sided")
@@ -155,6 +157,7 @@ sem_dadas <- function(data,
     "b_11", "b_21", "b_10", "b_20", "rescov_12",
     "coef_diff", "coef_diff_std",
     "coef_sum", "diff_abs_magnitude",
+    "main_effect", "interaction_vs_main_effect",
     "abs_coef_diff", "abs_coef_sum",
     "dadas_two_sided"
   )
@@ -166,6 +169,8 @@ sem_dadas <- function(data,
   # replace two-sided tests with one-sided for absolute parameters
 
   results[labels, "pvalue"] <- osts[, "p.pos"]
+
+  # replace two_sided_dadas name with dadas
 
   rownames(results) <- c(
     rownames(results)[1:(nrow(results) - 1)],
