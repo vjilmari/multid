@@ -22,7 +22,7 @@ cross-validation and regularization to avoid overfitting
 See fully reproducible exemplary [vignette on multivariate sex
 differences in personality with regularized
 regression](https://CRAN.R-project.org/package=multid/vignettes/multivariate_sex_differences_in_personality.html),
-or examples presented below.
+or the examples presented below.
 
 Predictive approach as implemented with regularized methods also allows
 for examination of group-membership probabilities and their
@@ -498,6 +498,7 @@ ggplot(D.ela_out$pred.dat,
 <img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
 
 ``` r
+
 # parametric overlap 
 
 ## Proportion of overlap relative to a single distribution (OVL)
@@ -529,6 +530,7 @@ np.overlap<-
 <img src="man/figures/README-unnamed-chunk-4-2.png" width="100%" />
 
 ``` r
+
 # this corresponds to Proportion of overlap relative to the joint distribution (OVL2)
 (np.OVL2<-unname(np.overlap$OV))
 #> [1] 0.5412493
@@ -558,19 +560,21 @@ round(sem_dadas(
    data = d, var1 = "var1", var2 = "var2",
    predictor = "x", center = TRUE, scale = TRUE
  )$results,3)
-#>                       est    se      z pvalue ci.lower ci.upper
-#> b_11                0.107 0.143  0.747  0.455   -0.174    0.388
-#> b_21               -0.078 0.110 -0.710  0.477   -0.294    0.138
-#> b_10               -0.031 0.151 -0.205  0.837   -0.327    0.265
-#> b_20                0.031 0.127  0.244  0.807   -0.218    0.280
-#> rescov_12          -0.153 0.140 -1.096  0.273   -0.428    0.121
-#> coef_diff           0.185 0.196  0.943  0.346   -0.200    0.570
-#> coef_diff_std       0.120 0.125  0.960  0.337   -0.125    0.365
-#> coef_sum            0.029 0.163  0.176  0.860   -0.291    0.349
-#> diff_abs_magnitude  0.029 0.163  0.176  0.860   -0.291    0.349
-#> abs_coef_diff       0.185 0.196  0.943  0.173   -0.200    0.570
-#> abs_coef_sum        0.029 0.163  0.176  0.430   -0.291    0.349
-#> dadas               0.157 0.220  0.710  0.239   -0.275    0.588
+#>                               est    se      z pvalue ci.lower ci.upper
+#> b_11                        0.107 0.143  0.747  0.455   -0.174    0.388
+#> b_21                       -0.078 0.110 -0.710  0.477   -0.294    0.138
+#> b_10                       -0.031 0.151 -0.205  0.837   -0.327    0.265
+#> b_20                        0.031 0.127  0.244  0.807   -0.218    0.280
+#> rescov_12                  -0.153 0.140 -1.096  0.273   -0.428    0.121
+#> coef_diff                   0.185 0.196  0.943  0.346   -0.200    0.570
+#> coef_diff_std               0.120 0.125  0.960  0.337   -0.125    0.365
+#> coef_sum                    0.029 0.163  0.176  0.860   -0.291    0.349
+#> main_effect                 0.014 0.082  0.176  0.860   -0.146    0.175
+#> interaction_vs_main_effect  0.171 0.192  0.890  0.374   -0.206    0.547
+#> diff_abs_magnitude          0.029 0.163  0.176  0.860   -0.291    0.349
+#> abs_coef_diff               0.185 0.196  0.943  0.173   -0.200    0.570
+#> abs_coef_sum                0.029 0.163  0.176  0.430   -0.291    0.349
+#> dadas                       0.157 0.220  0.710  0.239   -0.275    0.588
 
 # multilevel example
 
@@ -593,10 +597,13 @@ round(ml_dadas(fit,
                predictor = "w",
                diff_var = "x",
                diff_var_values = c(0.5, -0.5))$dadas, 3)
-#>          estimate    SE    df t.ratio p.value
-#> -0.5       -0.077 0.177 8.053  -0.435   0.675
-#> 0.5        -0.279 0.136 9.326  -2.048   0.070
-#> abs_diff    0.202 0.228 7.071   0.886   0.202
-#> abs_sum     0.356 0.219 6.952   1.630   0.074
-#> dadas      -0.154 0.354 8.053  -0.435   0.662
+#>                     estimate    SE    df t.ratio p.value
+#> main_effect           -0.178 0.109 6.952  -1.630   0.147
+#> interaction           -0.202 0.228 7.071  -0.886   0.405
+#> -0.5                  -0.077 0.177 8.053  -0.435   0.675
+#> 0.5                   -0.279 0.136 9.326  -2.048   0.070
+#> abs_diff               0.202 0.228 7.071   0.886   0.202
+#> abs_sum                0.356 0.219 6.952   1.630   0.074
+#> dadas                 -0.154 0.354 8.053  -0.435   0.662
+#> interaction_vs_main    0.024 0.277 8.196   0.087   0.933
 ```

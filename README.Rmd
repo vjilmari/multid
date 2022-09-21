@@ -25,7 +25,7 @@ knitr::opts_chunk$set(
 
 *multid* provides tools for regularized measurement of multivariate differences between two groups (e.g., sex differences). Regularization via logistic regression variants enables inclusion of large number of correlated variables in the multivariate set while providing k-fold cross-validation and regularization to avoid overfitting (**D_regularized** -function).
 
-See fully reproducible exemplary [vignette on multivariate sex differences in personality with regularized regression](https://CRAN.R-project.org/package=multid/vignettes/multivariate_sex_differences_in_personality.html), or examples presented below.
+See fully reproducible exemplary [vignette on multivariate sex differences in personality with regularized regression](https://CRAN.R-project.org/package=multid/vignettes/multivariate_sex_differences_in_personality.html), or the examples presented below.
 
 Predictive approach as implemented with regularized methods also allows for examination of group-membership probabilities and their distributions across individuals. In the context of statistical predictions of sex, these distributions are an updated variant to gender-typicality distributions used in gender diagnosticity methodology [(Lippa & Connelly, 1990)](https://doi.org/10.1037/0022-3514.59.5.1051).
 
