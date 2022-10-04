@@ -12,6 +12,7 @@
 #' @param nsim Numeric. Number of bootstrap simulations.
 #' @param seed Numeric. Seed number for bootstrap simulations.
 #' @param level Numeric. The confidence level required for the var_boot_test output (Default .95)
+#' @param abs_diff_test Numeric. A value against which absolute difference between component score predictions is tested (Default 0).
 #'
 #' @return
 #' \item{dadas}{A data frame including main effect, interaction, regression coefficients for component scores, dadas, and comparison between interaction and main effect.}
@@ -53,7 +54,8 @@ ml_dadas <- function(model,
                      var_boot_test = FALSE,
                      nsim = NULL,
                      level = .95,
-                     seed = NULL) {
+                     seed = NULL,
+                     abs_diff_test=0) {
 
   # reorder diff_var_values
   diff_var_values <-
@@ -147,10 +149,26 @@ ml_dadas <- function(model,
     )
   colnames(mi.coefs) <-
     c("estimate", "SE", "df", "t.ratio", "p.value")
+
   # simple slopes
 
   trends.df <- data.frame(trends)
   colnames(trends.df) <- colnames(data.frame(temp.cont))
+
+  # absolute difference test
+
+  adt <-
+    emmeans::contrast(trends,
+                      method = mlist,
+                      side = ">",
+                      null=abs_diff_test
+    )
+  adt<-data.frame(adt)[1,]
+  adt$contrast<-
+    paste0(adt$contrast,"_test_null",adt$null)
+  adt<-
+    adt[,-which(colnames(adt)=="null")]
+
 
   # combine to same output
 
@@ -158,7 +176,8 @@ ml_dadas <- function(model,
     trends.df,
     data.frame(temp.cont),
     ml_abstest,
-    interaction_vs_main
+    interaction_vs_main,
+    adt
   )
 
   rownames(dadas) <- dadas$contrast

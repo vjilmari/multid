@@ -14,7 +14,8 @@ ml_dadas(
   var_boot_test = FALSE,
   nsim = NULL,
   level = 0.95,
-  seed = NULL
+  seed = NULL,
+  abs_diff_test = 0
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ ml_dadas(
 \item{level}{Numeric. The confidence level required for the var_boot_test output (Default .95)}
 
 \item{seed}{Numeric. Seed number for bootstrap simulations.}
+
+\item{abs_diff_test}{Numeric. A value against which absolute difference between component score predictions is tested (Default 0).}
 }
 \value{
 \item{dadas}{A data frame including main effect, interaction, regression coefficients for component scores, dadas, and comparison between interaction and main effect.}
