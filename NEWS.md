@@ -2,7 +2,8 @@
 
 * Development version
 * Added na.rm to qcc bootstrap summary over tau-values
-* Added main and interaction effects, and comparison of their absolute magnitudes to ml_dadas and sem_dadas outputs 
+* Added main and interaction effects, and comparison of their absolute magnitudes to ml_dadas and sem_dadas outputs
+* Added abs_coef_diff_test in sem_dadas to enable tests for slope difference that is not against null
 
 # multid 0.7.0
 

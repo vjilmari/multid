@@ -10,6 +10,7 @@
 #' @param center Logical. Are var1 and var2 centered around their grand mean? (Default FALSE)
 #' @param level Numeric. The confidence level required for the result output (Default .95)
 #' @param sampling.weights Character string. Name of sampling weights variable.
+#' @param abs_coef_diff_test Numeric. A value against which absolute difference between component score predictions is tested (Default 0).
 #'
 #' @return
 #' \item{descriptives}{Means, standard deviations, and intercorrelations.}
@@ -32,9 +33,11 @@
 #' )
 #' sem_dadas(
 #'   data = d, var1 = "var1", var2 = "var2",
-#'   predictor = "x", center = TRUE, scale = TRUE
+#'   predictor = "x", center = TRUE, scale = TRUE,
+#'   abs_coef_diff_test = 0.20
 #' )$results
 #' }
+
 sem_dadas <- function(data,
                       var1,
                       var2,
@@ -44,7 +47,8 @@ sem_dadas <- function(data,
                       covariates = NULL,
                       estimator = "MLR",
                       level = .95,
-                      sampling.weights = NULL) {
+                      sampling.weights = NULL,
+                      abs_coef_diff_test = 0) {
   if (center) {
     pooled_mean <-
       mean(c(mean(data[, var1]), mean(data[, var2])))
@@ -128,6 +132,19 @@ sem_dadas <- function(data,
     )
   }
 
+  # include absolute coefficient difference test
+
+  if (!is.null(abs_coef_diff_test)) {
+    model <- paste0(model, "\n")
+    model <- paste0(
+      model,
+      paste0(
+        "abs_coef_diff_test:=sqrt((b_11-b_21)^2)-",
+        abs_coef_diff_test
+      )
+    )
+  }
+
   # fit model
 
   fit <-
@@ -145,10 +162,13 @@ sem_dadas <- function(data,
     rsquare = TRUE,
     level = level
   ))
-  pars
+
   # one-sided tests for absolute parameters
 
-  labels <- c("abs_coef_diff", "abs_coef_sum", "dadas_two_sided")
+  labels <- c(
+    "abs_coef_diff", "abs_coef_sum",
+    "dadas_two_sided", "abs_coef_diff_test"
+  )
 
   osts <- pars[pars$label %in% labels, ]
   osts$p.pos <- stats::pnorm(osts[, "z"], lower.tail = F)
@@ -159,7 +179,7 @@ sem_dadas <- function(data,
     "coef_sum", "diff_abs_magnitude",
     "main_effect", "interaction_vs_main_effect",
     "abs_coef_diff", "abs_coef_sum",
-    "dadas_two_sided"
+    "dadas_two_sided", "abs_coef_diff_test"
   )
 
   results <- pars[pars$label %in% res.pars, 4:ncol(pars)]
@@ -171,11 +191,9 @@ sem_dadas <- function(data,
   results[labels, "pvalue"] <- osts[, "p.pos"]
 
   # replace two_sided_dadas name with dadas
+  rownames(results)[rownames(results) == "dadas_two_sided"] <- "dadas"
 
-  rownames(results) <- c(
-    rownames(results)[1:(nrow(results) - 1)],
-    "dadas"
-  )
+  # different output for r-squared
 
   rsquared <- pars[pars[, "op"] == "r2", c(1, 5)]
   rownames(rsquared) <- NULL
