@@ -30,18 +30,18 @@
 #'
 #' dat <- data.frame(
 #'   group = rep(c(LETTERS[1:n1]), each = n2),
-#'   x = sample(c(-0.5, 0.5), n1 * n2, replace = TRUE),
-#'   w = rep(sample(1:5, n1, replace = TRUE), each = n2),
+#'   w = sample(c(-0.5, 0.5), n1 * n2, replace = TRUE),
+#'   x = rep(sample(1:5, n1, replace = TRUE), each = n2),
 #'   y = sample(1:5, n1 * n2, replace = TRUE)
 #' )
 #' library(lmerTest)
-#' fit <- lmerTest::lmer(y ~ x * w + (x | group),
+#' fit <- lmerTest::lmer(y ~ x * w + (w | group),
 #'   data = dat
 #' )
 #'
 #' round(ml_dadas(fit,
-#'   predictor = "w",
-#'   diff_var = "x",
+#'   predictor = "x",
+#'   diff_var = "w",
 #'   diff_var_values = c(0.5, -0.5)
 #' )$dadas, 3)
 #' }
@@ -55,7 +55,7 @@ ml_dadas <- function(model,
                      nsim = NULL,
                      level = .95,
                      seed = NULL,
-                     abs_diff_test=0) {
+                     abs_diff_test = 0) {
 
   # reorder diff_var_values
   diff_var_values <-
@@ -159,15 +159,15 @@ ml_dadas <- function(model,
 
   adt <-
     emmeans::contrast(trends,
-                      method = mlist,
-                      side = ">",
-                      null=abs_diff_test
+      method = mlist,
+      side = ">",
+      null = abs_diff_test
     )
-  adt<-data.frame(adt)[1,]
-  adt$contrast<-
-    paste0(adt$contrast,"_test_null",adt$null)
-  adt<-
-    adt[,-which(colnames(adt)=="null")]
+  adt <- data.frame(adt)[1, ]
+  adt$contrast <-
+    paste0(adt$contrast, "_test_null", adt$null)
+  adt <-
+    adt[, -which(colnames(adt) == "null")]
 
 
   # combine to same output
@@ -305,10 +305,37 @@ ml_dadas <- function(model,
             slope_sd_reduced
         )
       )
-    scaled_estimates_df
+
+    divergence <-
+      c(
+        est = scaled_estimates_df[1, "est"] -
+          scaled_estimates_df[2, "est"],
+        scaling_SD = NA,
+        scaled_est = scaled_estimates_df[1, "scaled_est"] -
+          scaled_estimates_df[2, "scaled_est"]
+      )
+
+    component_correlation <-
+      c(
+        est = NA,
+        scaling_SD = NA,
+        scaled_est =
+          (scaled_estimates_df[1, "scaling_SD"]^2 +
+            scaled_estimates_df[2, "scaling_SD"]^2 -
+            scaled_estimates_df[3, "scaling_SD"]^2) /
+            (2 * scaled_estimates_df[1, "scaling_SD"] *
+              scaled_estimates_df[2, "scaling_SD"])
+      )
 
     rownames(scaled_estimates_df) <-
       c(diff_var_values, "difference")
+
+    scaled_estimates_df <-
+      rbind(
+        scaled_estimates_df,
+        divergence,
+        component_correlation
+      )
   }
 
   if (re_cov_test) {
