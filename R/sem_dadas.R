@@ -102,6 +102,17 @@ sem_dadas <- function(data,
       "coef_diff_std:=((b_11-b_21)*sqrt(pred_var))/",
       as.character(round(descriptives["diff", "SD"], 8))
     ), "\n",
+    paste0(
+      "b_11_std:=((b_11)*sqrt(pred_var))/",
+      as.character(round(descriptives["Y1", "SD"], 8))
+    ), "\n",
+    paste0(
+      "b_21_std:=((b_21)*sqrt(pred_var))/",
+      as.character(round(descriptives["Y2", "SD"], 8))
+    ), "\n",
+    paste0(
+      "divergence_std:=b_11_std-b_21_std"
+    ), "\n",
     paste0("coef_sum:=b_11+b_21"), "\n",
     paste0("main_effect:=(b_11+b_21)/2"), "\n",
     paste0("interaction_vs_main_effect:=sqrt((b_11-b_21)^2)-sqrt(((b_11+b_21)/2)^2)"), "\n",
@@ -175,7 +186,7 @@ sem_dadas <- function(data,
 
   res.pars <- c(
     "b_11", "b_21", "b_10", "b_20", "rescov_12",
-    "coef_diff", "coef_diff_std",
+    "coef_diff", "coef_diff_std", "divergence_std",
     "coef_sum", "diff_abs_magnitude",
     "main_effect", "interaction_vs_main_effect",
     "abs_coef_diff", "abs_coef_sum",
