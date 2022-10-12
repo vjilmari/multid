@@ -135,6 +135,7 @@ ml_dadas <- function(model,
   # obtain main effect and interaction for the output
   model.coefs <- summary(model)$coefficients
   main_effect <- model.coefs[predictor, ]
+  moderator_effect <- model.coefs[diff_var, ]
   interaction.term <-
     ifelse(paste0(predictor, ":", diff_var) %in% rownames(model.coefs),
       paste0(predictor, ":", diff_var),
@@ -145,6 +146,7 @@ ml_dadas <- function(model,
   mi.coefs <-
     rbind(
       main_effect,
+      moderator_effect,
       interaction
     )
   colnames(mi.coefs) <-

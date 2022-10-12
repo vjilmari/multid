@@ -104,15 +104,17 @@ sem_dadas <- function(data,
     ), "\n",
     paste0(
       "b_11_std:=((b_11)*sqrt(pred_var))/",
-      as.character(round(descriptives["Y1", "SD"], 8))
+      as.character(round(descriptives[var1, "SD"], 8))
     ), "\n",
     paste0(
       "b_21_std:=((b_21)*sqrt(pred_var))/",
-      as.character(round(descriptives["Y2", "SD"], 8))
+      as.character(round(descriptives[var2, "SD"], 8))
     ), "\n",
     paste0(
       "std_coef_diff:=b_11_std-b_21_std"
     ), "\n",
+    paste0("intercept_diff:=b_10-b_20"), "\n",
+    paste0("turning_point:=(-1)*(b_10-b_20)/(b_11-b_21)"), "\n",
     paste0("coef_sum:=b_11+b_21"), "\n",
     paste0("main_effect:=(b_11+b_21)/2"), "\n",
     paste0("interaction_vs_main_effect:=sqrt((b_11-b_21)^2)-sqrt(((b_11+b_21)/2)^2)"), "\n",
@@ -190,7 +192,8 @@ sem_dadas <- function(data,
     "coef_sum", "diff_abs_magnitude",
     "main_effect", "interaction_vs_main_effect",
     "abs_coef_diff", "abs_coef_sum",
-    "dadas_two_sided", "abs_coef_diff_test"
+    "dadas_two_sided", "abs_coef_diff_test",
+    "turning_point"
   )
 
   results <- pars[pars$label %in% res.pars, 4:ncol(pars)]
