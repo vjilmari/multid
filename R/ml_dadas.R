@@ -306,7 +306,7 @@ ml_dadas <- function(model,
         )
       )
 
-    divergence <-
+    coef_diff <-
       c(
         est = scaled_estimates_df[1, "est"] -
           scaled_estimates_df[2, "est"],
@@ -333,7 +333,7 @@ ml_dadas <- function(model,
     scaled_estimates_df <-
       rbind(
         scaled_estimates_df,
-        divergence,
+        coef_diff,
         component_correlation
       )
   }
