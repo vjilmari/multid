@@ -1,4 +1,4 @@
-# multid 0.7.0.9000
+# multid 0.7.1
 
 * Added na.rm to qcc bootstrap summary over tau-values
 * Added main and interaction effects, and comparison of their absolute magnitudes to ml_dadas and sem_dadas outputs
