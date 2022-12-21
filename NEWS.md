@@ -1,3 +1,7 @@
+# multid 0.7.1.9000
+
+* Development version
+
 # multid 0.7.1
 
 * Added na.rm to qcc bootstrap summary over tau-values
