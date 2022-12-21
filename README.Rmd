@@ -336,7 +336,7 @@ D.ela.zero_out$P.table
 
 This example shows how the degree of overlap between the predicted values across the two groups can be visualized and estimated.
 
-For parametric variants, see [Del Giudice (in press)](https://marcodgdotnet.files.wordpress.com/2019/04/delgiudice_measuring_sex-differences-similarities_pre.pdf).
+For parametric variants, see [Del Giudice (2022)](https://marcodgdotnet.files.wordpress.com/2022/10/delgiudice_2022_measuring_sex_differences-similarities_chapter.pdf).
 
 For non-parametric variants, see [Pastore (2018)](https://doi.org/10.21105/joss.01023) and [Pastore & Calcagnì (2019)](https://doi.org/10.3389/fpsyg.2019.01089).
 
