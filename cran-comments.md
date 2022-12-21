@@ -1,18 +1,18 @@
 ## Update
 
-This is an update (to version 0.7.0). Changes to this version can be found below.
+This is an update (to version 0.7.0.9000). Changes to this version can be found below.
 
 ## Changes
 
-* Switched from sample to dplyr::sample_n for bootstrap example in the multivariate sex difference vignette
-* Minor changes to style and text in the multivariate sex difference vignette
-* Additional descriptive statistics to reliability_dms output
-* Allow vpc_at for models with no intercept-slope covariation (conditional level-2 variances are same for all requested level-1 values)
-* Added function qcc for quantile correlation coefficient
-* Updated README
+* Added na.rm to qcc bootstrap summary over tau-values
+* Added main and interaction effects, and comparison of their absolute magnitudes to ml_dadas and sem_dadas outputs
+* Added moderator/intercept difference estimates for dadas-functions
+* Added abs_coef_diff_test in sem_dadas and ml_dadas to enable tests for slope difference that is not against null but a different numeric value
+* Added an estimate of scaled difference of slopes for ml_dadas and a derived estimate of component correlation
+* Fixed URLs and output in README
 
 ## Test environments
-* local R installation, R 4.2.1
+* local R installation, R 4.2.2
 * win-builder (devel)
 * Linux, using devtools::check_rhub()
 
