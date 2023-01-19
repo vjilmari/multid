@@ -9,7 +9,7 @@
 #' @param s Which lambda value is used for predicted values? Either "lambda.min" (default) or "lambda.1se".
 #' @param type.measure Which measure is used during cross-validation. Default "deviance".
 #' @param rename.output Logical. Should the output values be renamed according to the group.values? Default TRUE.
-#' @param out Logical. Should results and predictions be calculated on out-of-bad data set? (Default FALSE)
+#' @param out Logical. Should results and predictions be calculated on out-of-bag data set? (Default FALSE)
 #' @param size Integer. Number of cases in regularization data per each group. Default 1/4 of cases.
 #' @param fold Logical. Is regularization applied across sample folds with separate predictions for each fold? (Default FALSE)
 #' @param fold.var Character string. Name of the fold variable. (default NULL)
