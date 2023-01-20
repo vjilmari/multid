@@ -2,6 +2,7 @@
 
 * Development version
 * Fixed a typo in D_regularized manual
+* Added difference between two dependent correlations -function (diff_two_dep_cors) which enables simultaneous estimation and testing of Cohen's q under variable dependency
 
 # multid 0.7.1
 
