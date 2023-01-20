@@ -1,6 +1,7 @@
 # multid 0.7.1.9000
 
 * Development version
+* Fixed a typo in D_regularized manual
 
 # multid 0.7.1
 
