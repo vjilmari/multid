@@ -26,7 +26,7 @@ D_regularized(
 )
 }
 \arguments{
-\item{data}{A data frame.}
+\item{data}{A data frame or list containing two data frames (regularization and estimation data, in that order).}
 
 \item{mv.vars}{Character vector. Variable names in the multivariate variable set.}
 
