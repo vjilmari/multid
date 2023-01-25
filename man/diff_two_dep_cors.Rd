@@ -4,7 +4,7 @@
 \alias{diff_two_dep_cors}
 \title{Difference between two dependent Pearson's correlations (with common index)}
 \usage{
-diff_two_dep_cors(data, y, x1, x2, level = 0.95)
+diff_two_dep_cors(data, y, x1, x2, level = 0.95, missing = "default")
 }
 \arguments{
 \item{data}{Data frame.}
@@ -16,6 +16,8 @@ diff_two_dep_cors(data, y, x1, x2, level = 0.95)
 \item{x2}{Character. Variable name.}
 
 \item{level}{Numeric. The confidence level required for the result output (Default .95)}
+
+\item{missing}{Character. Treatment of missing values (e.g., "ML", default = listwise deletion)}
 }
 \value{
 Parameter estimates from the fitted structural path model.
