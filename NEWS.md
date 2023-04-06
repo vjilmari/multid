@@ -6,6 +6,7 @@
 * Added possibility to use manually constructed regularization and estimation datasets, supplied as a list of two dataframes to "data"-argument in D_regularized
 * Improved the output of diff_two_dep_cors and included an agument for missing data ("ML")
 * Improved clarity in multivariate sex difference vignette
+* Added value_correlation -function for testing and quantifying how ipsatizing values influences associations with other variables
 
 # multid 0.7.1
 
