@@ -99,6 +99,8 @@ value_correlation <- function(data,
       paste0("cor_ip_pr:=(cov_rv_pr-cov_cf_pr)/sd_ip"), "\n",
       paste0("cov_ip_pr:=(cov_rv_pr-cov_cf_pr)"), "\n",
       paste0("cor_diff_rv_pr_vs_ip_pr:=cor_rv_pr-cor_ip_pr"), "\n",
+      paste0("cor_equi_low_rv_pr_vs_ip_pr:=cor_diff_rv_pr_vs_ip_pr+", sesoi), "\n",
+      paste0("cor_equi_hig_rv_pr_vs_ip_pr:=cor_diff_rv_pr_vs_ip_pr-", sesoi), "\n",
       paste0("cov_diff_rv_pr_vs_ip_pr:=cov_rv_pr-cov_ip_pr"), "\n",
       paste0("cov_equi_low_rv_pr_vs_ip_pr:=cov_diff_rv_pr_vs_ip_pr+", sesoi), "\n",
       paste0("cov_equi_hig_rv_pr_vs_ip_pr:=cov_diff_rv_pr_vs_ip_pr-", sesoi), "\n"
@@ -130,6 +132,9 @@ value_correlation <- function(data,
     "cor_rv_pr", "cor_ip_pr", "cor_cf_pr", "cor_rv_cf",
     "var_diff_rv_cf",
     "var_diff_rv_ip",
+    "cor_diff_rv_pr_vs_ip_pr",
+    "cor_equi_low_rv_pr_vs_ip_pr",
+    "cor_equi_hig_rv_pr_vs_ip_pr",
     "cov_diff_rv_pr_vs_ip_pr",
     "cov_equi_low_rv_pr_vs_ip_pr",
     "cov_equi_hig_rv_pr_vs_ip_pr"
@@ -148,6 +153,18 @@ value_correlation <- function(data,
   results <- results[res_order, ]
 
   # add equivalence test to results with two one-sided tests
+  results["cor_equi_low_rv_pr_vs_ip_pr", "pvalue"] <-
+    stats::pnorm(results["cor_equi_low_rv_pr_vs_ip_pr", "z"], lower.tail = F)
+
+  results["cor_equi_low_rv_pr_vs_ip_pr", "ci.lower"] <- NA
+  results["cor_equi_low_rv_pr_vs_ip_pr", "ci.upper"] <- NA
+
+  results["cor_equi_hig_rv_pr_vs_ip_pr", "pvalue"] <-
+    stats::pnorm(results["cor_equi_hig_rv_pr_vs_ip_pr", "z"], lower.tail = T)
+
+  results["cor_equi_hig_rv_pr_vs_ip_pr", "ci.lower"] <- NA
+  results["cor_equi_hig_rv_pr_vs_ip_pr", "ci.upper"] <- NA
+
   results["cov_equi_low_rv_pr_vs_ip_pr", "pvalue"] <-
     stats::pnorm(results["cov_equi_low_rv_pr_vs_ip_pr", "z"], lower.tail = F)
 
