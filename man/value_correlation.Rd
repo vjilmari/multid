@@ -9,7 +9,7 @@ value_correlation(
   rv,
   cf,
   correlate,
-  scale_by_rv = TRUE,
+  scale_by_rv = FALSE,
   standardize_correlate = FALSE,
   estimator = "ML",
   level = 0.95,
@@ -20,15 +20,15 @@ value_correlation(
 \arguments{
 \item{data}{A data frame.}
 
-\item{rv}{Character string. Variable name of the non-ipsatized value variable (raw value score).}
+\item{rv}{Character string or vector. Variable name(s) of the non-ipsatized value variable(s) (raw value score).}
 
 \item{cf}{Character string. Variable name of the common factor that is used for ipsatizing raw value scores.}
 
 \item{correlate}{Character string. Name of the variable to which associations with values are examined.}
 
-\item{scale_by_rv}{Logical. Is standard deviation of the raw non-ipsatized value score used for scaling the common factor as well? (Default TRUE)}
+\item{scale_by_rv}{Logical. Is standard deviation of the raw non-ipsatized value score used for scaling the common factor as well? (Default FALSE)}
 
-\item{standardize_correlate}{Logical. Is the correlate standardized? (Default FALSE)}
+\item{standardize_correlate}{Logical. Should the correlate be standardized? (Default FALSE)}
 
 \item{estimator}{Character string. Estimator used in SEM (Default "ML").}
 
@@ -36,7 +36,7 @@ value_correlation(
 
 \item{sampling.weights}{Character string. Name of sampling weights variable.}
 
-\item{sesoi}{Numeric. Smallest effect size of interest. Is used for equivalence testing the value covariance with the correlate (Default 0).}
+\item{sesoi}{Numeric. Smallest effect size of interest. Used for equivalence testing differences in ipsatized and non-ipsatized value associations (Default 0).}
 }
 \value{
 \item{parameter_estimates}{Parameter estimates from the structural equation model.}
@@ -50,14 +50,20 @@ Testing and quantifying how much ipsatization (profile centering) influence asso
 \dontrun{
 set.seed(342356)
 d <- data.frame(
-  rv = rnorm(50),
-  cf = rnorm(50),
-  x = rnorm(50)
+ rv1 = rnorm(50),
+ rv2 = rnorm(50),
+ rv3 = rnorm(50),
+ rv4 = rnorm(50),
+ x = rnorm(50)
 )
-value_correlation(
-  data = d, rv = "rv", cf = "cf",
-  correlate = "x",
-  sesoi = 0.10
-)$results
+d$cf<-rowMeans(d[,c("rv1","rv2","rv3","rv4")])
+fit<-value_correlation(
+ data = d, rv = c("rv1","rv2","rv3","rv4"), cf = "cf",
+ correlate = "x",scale_by_rv = TRUE,
+ standardize_correlate = TRUE,
+ sesoi = 0.10
+)
+round(fit$variability_summary,3)
+round(fit$association_summary,3)
 }
 }
