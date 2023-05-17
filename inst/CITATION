@@ -1,6 +1,6 @@
 citHeader("To cite multid in publications use:")
 
-bibentry(entry = "Manual",
+bibentry(bibtype = "Manual",
   title        = "multid: Multivariate Difference between Two Groups",
   author       = c(person(given = "Ville-Juhani",family = "Ilmarinen",
   role = c("aut", "cre"),
