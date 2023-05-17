@@ -13,7 +13,7 @@ This is an update (to version 0.8.0). Changes to this version can be found below
 * Added ddsc_sem -function for deconstructing difference score correlation with structural equation modeling
 
 ## Test environments
-* local R installation, R 4.2.2
+* local R installation, R 4.3.0
 * win-builder (devel)
 * Linux, using devtools::check_rhub()
 
