@@ -7,6 +7,7 @@
 * Improved the output of diff_two_dep_cors and included an agument for missing data ("ML")
 * Improved clarity in multivariate sex difference vignette
 * Added value_correlation -function for testing and quantifying how ipsatizing values influences associations with other variables
+* Added ddsc_sem -function for deconstructing difference score correlation with structural equation modeling 
 
 # multid 0.7.1
 
