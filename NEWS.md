@@ -1,6 +1,5 @@
-# multid 0.7.1.9000
+# multid 0.8.0
 
-* Development version
 * Fixed a typo in D_regularized manual
 * Added difference between two dependent correlations -function (diff_two_dep_cors) which enables simultaneous estimation and testing of Cohen's q under variable dependency
 * Added possibility to use manually constructed regularization and estimation datasets, supplied as a list of two dataframes to "data"-argument in D_regularized
