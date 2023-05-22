@@ -1,6 +1,7 @@
 # multid 0.8.0.9000
 
 * Development version
+* Renamed variance_test output in ddsc_sem
 
 # multid 0.8.0
 
