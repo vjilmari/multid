@@ -241,7 +241,7 @@ ddsc_ml <- function(model = NULL,
     scaling_SDs <- c(sd_y1, sd_y2, sd_pooled, sd_diff)
   }
 
-  names(scaling_SDs) <- c("SD_y1", "SD_y2", "SD_pooled", "SD_diff")
+  names(scaling_SDs) <- c("SD_y1", "SD_y2", "SD_pooled", "SD_diff_score")
 
   # format list for contrast values
   at.list <- list(moderator_values)
@@ -567,6 +567,9 @@ ddsc_ml <- function(model = NULL,
     )[, 2:6]
   )
 
+  scaling_SDs["VR"] <- unname(scaling_SDs["SD_y1"]^2)/
+    (scaling_SDs["SD_y2"]^2)
+
   output <- list(
     results = results,
     descriptives = descriptives,
@@ -574,7 +577,8 @@ ddsc_ml <- function(model = NULL,
     model = model,
     reduced_model = reduced_model,
     lvl2_data = lvl2_data,
-    ddsc_sem_fit = ddsc_sem_fit
+    ddsc_sem_fit = ddsc_sem_fit,
+    SDs = scaling_SDs
   )
 
   if (re_cov_test) {
