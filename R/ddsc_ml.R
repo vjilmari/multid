@@ -72,6 +72,7 @@ ddsc_ml <- function(model = NULL,
                     seed = NULL,
                     covariates = NULL,
                     scaling_sd = "observed") {
+
   # reorder moderator_values
   # moderator_values <-
   #  moderator_values[order(moderator_values)]
@@ -79,97 +80,97 @@ ddsc_ml <- function(model = NULL,
   # if data not supplied, obtain it from the lmer -object
   # obtain also lvl2_unit and model dependent variable
   if (!is.null(model)) {
-  data <- data.frame(model@frame)
+    data <- data.frame(model@frame)
 
-  lvl2_unit <- attr(stats::terms(stats::formula(model)), "term.labels")[
-    grepl("\\|", attr(stats::terms(stats::formula(model)), "term.labels"))
-  ]
+    lvl2_unit <- attr(stats::terms(stats::formula(model)), "term.labels")[
+      grepl("\\|", attr(stats::terms(stats::formula(model)), "term.labels"))
+    ]
 
-  lvl2_unit <- sub(".*\\|\\s*", "", lvl2_unit)
-  lvl2_unit <- gsub("\\s+", "", lvl2_unit)
+    lvl2_unit <- sub(".*\\|\\s*", "", lvl2_unit)
+    lvl2_unit <- gsub("\\s+", "", lvl2_unit)
 
-  DV <- as.character(stats::formula(model)[[2]])
-}
+    DV <- as.character(stats::formula(model)[[2]])
+  }
   # reconstruct the data so that y1 is 0.5 and y2 -0.5
   # this helps in getting correct signs for all estimates
   # as well as effect coding properly
   data[, moderator] <-
-  ifelse(data[, moderator] == moderator_values[1], 0.5,
-    ifelse(data[, moderator] == moderator_values[2], -0.5, NA)
+    ifelse(data[, moderator] == moderator_values[1], 0.5,
+           ifelse(data[, moderator] == moderator_values[2], -0.5, NA)
+    )
+
+  # calculate lvl2 means and save to data frame
+
+  lvl2_means_y1 <- tapply(data[data[, moderator] == moderator_values[1], DV],
+                          data[data[, moderator] == moderator_values[1], lvl2_unit],
+                          mean,
+                          na.rm = TRUE
   )
 
-# calculate lvl2 means and save to data frame
+  lvl2_means_y2 <- tapply(data[data[, moderator] == moderator_values[2], DV],
+                          data[data[, moderator] == moderator_values[2], lvl2_unit],
+                          mean,
+                          na.rm = TRUE
+  )
 
-lvl2_means_y1 <- tapply(data[data[, moderator] == moderator_values[1], DV],
-  data[data[, moderator] == moderator_values[1], lvl2_unit],
-  mean,
-  na.rm = TRUE
-)
+  lvl2_means_x <- tapply(data[data[, moderator] == moderator_values[2], predictor],
+                         data[data[, moderator] == moderator_values[2], lvl2_unit],
+                         mean,
+                         na.rm = TRUE
+  )
 
-lvl2_means_y2 <- tapply(data[data[, moderator] == moderator_values[2], DV],
-  data[data[, moderator] == moderator_values[2], lvl2_unit],
-  mean,
-  na.rm = TRUE
-)
+  lvl2_data <- data.frame(
+    y1 = lvl2_means_y1,
+    y2 = lvl2_means_y2,
+    x = lvl2_means_x
+  )
 
-lvl2_means_x <- tapply(data[data[, moderator] == moderator_values[2], predictor],
-  data[data[, moderator] == moderator_values[2], lvl2_unit],
-  mean,
-  na.rm = TRUE
-)
-
-lvl2_data <- data.frame(
-  y1 = lvl2_means_y1,
-  y2 = lvl2_means_y2,
-  x = lvl2_means_x
-)
-
-names(lvl2_data) <- c(
-  "means_y1",
-  "means_y2",
-  predictor
-)
+  names(lvl2_data) <- c(
+    "means_y1",
+    "means_y2",
+    predictor
+  )
 
   # obtain descriptives
-ddsc_sem_fit <-
-  multid::ddsc_sem(
-    data = lvl2_data[stats::complete.cases(lvl2_data), ],
-    x = predictor,
-    y1 = "means_y1",
-    y2 = "means_y2"
-  )
-descriptives <- ddsc_sem_fit$descriptives
-sem_variance_test <- ddsc_sem_fit$variance_test
+  ddsc_sem_fit <-
+    multid::ddsc_sem(
+      data = lvl2_data[stats::complete.cases(lvl2_data), ],
+      x = predictor,
+      y1 = "means_y1",
+      y2 = "means_y2"
+    )
+  descriptives <- ddsc_sem_fit$descriptives
+  sem_variance_test <- ddsc_sem_fit$variance_test
 
-# check if the predictor is properly scaled if model was the input
-if (abs(descriptives[predictor, "SD"] - 1) > .005 &
-  !is.null(model)) {
-  warning(paste0(
-    "Predictor not properly standardized, SD = ",
-    descriptives[predictor, "SD"]
-  ))
-}
-
-# construct and run a model if not provided as input
-if (is.null(model) & !is.null(DV)) {
-  # standardize the predictor with country-level mean and sd
-  data[, predictor] <- (data[, predictor] - descriptives[predictor, "M"]) /
-    descriptives[predictor, "SD"]
-
-  model_formula <-
-    stats::as.formula(paste0(
-      DV, "~",
-      moderator, "*", predictor, "+",
-      paste0(covariates, collapse = "+"),
-      ifelse(is.null(covariates), "(", "+("),
-      moderator, "|", lvl2_unit, ")"
+  # check if the predictor is properly scaled if model was the input
+  if (abs(descriptives[predictor, "SD"] - 1) > .005 &
+      !is.null(model)) {
+    warning(paste0(
+      "Predictor not properly standardized, SD = ",
+      descriptives[predictor, "SD"]
     ))
+  }
 
-  model <- lmerTest::lmer(
-    formula = model_formula, data = data,
-    control = lme4::lmerControl(optimizer = "bobyqa")
-  )
-}
+  # construct and run a model if not provided as input
+  if (is.null(model) & !is.null(DV)) {
+    # standardize the predictor with country-level mean and sd
+    data[, predictor] <- (data[, predictor] - descriptives[predictor, "M"]) /
+      descriptives[predictor, "SD"]
+
+    model_formula <-
+      stats::as.formula(paste0(
+        DV, "~",
+        moderator, "*", predictor, "+",
+        paste0(covariates, collapse = "+"),
+        ifelse(is.null(covariates), "(", "+("),
+        moderator, "|", lvl2_unit, ")"
+      ))
+
+    model <- lmerTest::lmer(
+      formula = model_formula, data = data,
+      control = lme4::lmerControl(optimizer = "bobyqa")
+    )
+  }
 
   # fit a reduced model without predictor and cross-level interaction
 
@@ -178,10 +179,10 @@ if (is.null(model) & !is.null(DV)) {
 
   # obtain random effects and DV as a character vector
   DV <- as.character(stats::formula(model,
-    random.only = TRUE
+                                    random.only = TRUE
   ))[2]
   RE <- as.character(stats::formula(model,
-    random.only = TRUE
+                                    random.only = TRUE
   ))[3]
 
   # define the interaction term correctly
@@ -220,8 +221,8 @@ if (is.null(model) & !is.null(DV)) {
 
     slope_sd_reduced <-
       vc[vc$var1 == moderator &
-        !is.na(vc$var1) &
-        is.na(vc$var2), "sdcor"]
+           !is.na(vc$var1) &
+           is.na(vc$var2), "sdcor"]
 
     # compile scaling SDs
 
@@ -292,8 +293,8 @@ if (is.null(model) & !is.null(DV)) {
 
   trends_rscale <-
     rbind(trend_1_rscale[1],
-      trend_2_rscale[2],
-      adjust = "none"
+          trend_2_rscale[2],
+          adjust = "none"
     )
 
   # obtain trends scaled with difference score SD
@@ -342,8 +343,8 @@ if (is.null(model) & !is.null(DV)) {
   # obtain contrasts for unstandardized slopes
   temp.cont <-
     emmeans::contrast(trends,
-      method = mlist,
-      side = ">"
+                      method = mlist,
+                      side = ">"
     )
 
   temp.cont.df <- data.frame(temp.cont)
@@ -351,16 +352,16 @@ if (is.null(model) & !is.null(DV)) {
   # obtain contrasts for pooled sd standardized slopes
   temp.cont_bscale <-
     emmeans::contrast(trends_bscale,
-      method = mlist,
-      side = ">"
+                      method = mlist,
+                      side = ">"
     )
   temp.cont_bscale.df <- data.frame(temp.cont_bscale)
   rownames(temp.cont_bscale.df) <- c("abs_diff_bscale", "abs_sum_bscale")
   # obtain contrasts for separately standardized slopes
   temp.cont_rscale <-
     emmeans::contrast(trends_rscale,
-      method = mlist,
-      side = ">"
+                      method = mlist,
+                      side = ">"
     )
   temp.cont_rscale.df <- data.frame(temp.cont_rscale)
   rownames(temp.cont_rscale.df) <- c("abs_diff_rscale", "abs_sum_rscale")
@@ -369,48 +370,48 @@ if (is.null(model) & !is.null(DV)) {
 
   ml_abstest <-
     data.frame(emmeans::contrast(temp.cont,
-      method = list(dadas = c(1, -1)),
-      side = ">"
+                                 method = list(dadas = c(1, -1)),
+                                 side = ">"
     ))
   rownames(ml_abstest) <- "dadas"
   ml_abstest_bscale <-
     data.frame(emmeans::contrast(temp.cont_bscale,
-      method = list(dadas = c(1, -1)),
-      side = ">"
+                                 method = list(dadas = c(1, -1)),
+                                 side = ">"
     ))
   rownames(ml_abstest_bscale) <- "dadas_bscale"
   ml_abstest_rscale <-
     data.frame(emmeans::contrast(temp.cont_rscale,
-      method = list(dadas = c(1, -1)),
-      side = ">"
+                                 method = list(dadas = c(1, -1)),
+                                 side = ">"
     ))
   rownames(ml_abstest_rscale) <- "dadas_rscale"
   # test of magnitude difference between interaction and main effect
 
   interaction_vs_main <-
     data.frame(emmeans::contrast(temp.cont,
-      method = list(
-        interaction_vs_main =
-          c(1, -1 / 2)
-      )
+                                 method = list(
+                                   interaction_vs_main =
+                                     c(1, -1 / 2)
+                                 )
     ))
   rownames(interaction_vs_main) <- "interaction_vs_main"
 
   interaction_vs_main_bscale <-
     data.frame(emmeans::contrast(temp.cont_bscale,
-      method = list(
-        interaction_vs_main =
-          c(1, -1 / 2)
-      )
+                                 method = list(
+                                   interaction_vs_main =
+                                     c(1, -1 / 2)
+                                 )
     ))
   rownames(interaction_vs_main_bscale) <- "interaction_vs_main_bscale"
 
   interaction_vs_main_rscale <-
     data.frame(emmeans::contrast(temp.cont_rscale,
-      method = list(
-        interaction_vs_main =
-          c(1, -1 / 2)
-      )
+                                 method = list(
+                                   interaction_vs_main =
+                                     c(1, -1 / 2)
+                                 )
     ))
   rownames(interaction_vs_main_rscale) <- "interaction_vs_main_rscale"
 
@@ -420,8 +421,8 @@ if (is.null(model) & !is.null(DV)) {
   moderator_effect <- model.coefs[moderator, ]
   interaction.term <-
     ifelse(paste0(predictor, ":", moderator) %in% rownames(model.coefs),
-      paste0(predictor, ":", moderator),
-      paste0(moderator, ":", predictor)
+           paste0(predictor, ":", moderator),
+           paste0(moderator, ":", predictor)
     )
   interaction <- model.coefs[interaction.term, ]
 
@@ -467,14 +468,21 @@ if (is.null(model) & !is.null(DV)) {
 
   # compile cross-over point effect
   cop_effs <-
-    data.frame(rbind(emmeans::contrast(mod_eff, adjust = "none"),
-      emmeans::contrast(trends, adjust = "none"),
+    data.frame(rbind(
+      emmeans::contrast(mod_eff,
+                        adjust = "none",
+                        method = list(mod_eff = c(1, -1))
+      ),
+      emmeans::contrast(trends,
+                        adjust = "none",
+                        method = list(int = c(1, -1))
+      ),
       adjust = "none"
     ))
 
   cross_over_point <-
     (-1) * cop_effs[1, "estimate"] /
-      cop_effs[2, "estimate"]
+    cop_effs[2, "estimate"]
 
   # absolute difference test
 
@@ -493,7 +501,10 @@ if (is.null(model) & !is.null(DV)) {
   # Estimates for slope non-parallelism
 
   # obtain difference score correlation
-  r_xy1y2 <- data.frame(emmeans::contrast(trends_diffscale, adjust = "none"))
+  r_xy1y2 <- data.frame(emmeans::contrast(trends_diffscale,
+                                          adjust = "none",
+                                          method = list(r_xy1y2 = c(1, -1))
+  ))
   rownames(r_xy1y2) <- c("r_xy1y2")
 
   # obtain Cohen's q
@@ -601,9 +612,9 @@ if (is.null(model) & !is.null(DV)) {
 
     re_cov_reduced <-
       vc[vc$var1 == "(Intercept)" &
-        vc$var2 == moderator &
-        !is.na(vc$var1) &
-        !is.na(vc$var2), c("vcov", "sdcor")]
+           vc$var2 == moderator &
+           !is.na(vc$var1) &
+           !is.na(vc$var2), c("vcov", "sdcor")]
 
     # compile to a frame
 
@@ -631,12 +642,12 @@ if (is.null(model) & !is.null(DV)) {
 
     boot.fit <-
       lme4::bootMer(reduced_model,
-        FUN = ranefmat,
-        nsim = nsim,
-        seed = seed,
-        use.u = FALSE,
-        type = c("parametric"),
-        verbose = FALSE
+                    FUN = ranefmat,
+                    nsim = nsim,
+                    seed = seed,
+                    use.u = FALSE,
+                    type = c("parametric"),
+                    verbose = FALSE
       )
 
     # obtain the variance estimates at lower-level values across bootstraps
@@ -654,12 +665,12 @@ if (is.null(model) & !is.null(DV)) {
 
     intvar1.t0 <-
       unname(boot.fit$t0[1] +
-        2 * boot.fit$t0[2] * moderator_values[1] +
-        boot.fit$t0[4] * moderator_values[1]^2)
+               2 * boot.fit$t0[2] * moderator_values[1] +
+               boot.fit$t0[4] * moderator_values[1]^2)
 
     intvar2.t0 <- unname(boot.fit$t0[1] +
-      2 * boot.fit$t0[2] * moderator_values[2] +
-      boot.fit$t0[4] * moderator_values[2]^2)
+                           2 * boot.fit$t0[2] * moderator_values[2] +
+                           boot.fit$t0[4] * moderator_values[2]^2)
 
     # estimate for the difference in variance and in variance ratio
 
@@ -769,13 +780,13 @@ if (is.null(model) & !is.null(DV)) {
   # Compile output based on arguments
   if (var_boot_test) {
     output <- c(output,
-      boot_var_diffs = list(boot_var_diffs)
+                boot_var_diffs = list(boot_var_diffs)
     )
   }
 
   if (re_cov_test) {
     output <- c(output,
-      re_cov_test = list(re_cov_test_df)
+                re_cov_test = list(re_cov_test_df)
     )
   }
 
