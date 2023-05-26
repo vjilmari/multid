@@ -137,7 +137,8 @@ ddsc_ml <- function(model = NULL,
       data = lvl2_data[stats::complete.cases(lvl2_data), ],
       x = predictor,
       y1 = "means_y1",
-      y2 = "means_y2"
+      y2 = "means_y2",
+      covariates = covariates
     )
   descriptives <- ddsc_sem_fit$descriptives
   sem_variance_test <- ddsc_sem_fit$variance_test
