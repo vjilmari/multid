@@ -1,6 +1,5 @@
-# multid 0.8.0.9000
+# multid 0.9.0
 
-* Development version
 * Renamed variance_test output in ddsc_sem
 * Added ddsc_ml -function for deconstructing difference score correlation with multi-level modeling 
 
