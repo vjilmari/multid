@@ -91,7 +91,8 @@ ddsc_ml <- function(model = NULL,
 
     DV <- as.character(stats::formula(model)[[2]])
   }
-  # reconstruct the data so that y1 is 0.5 and y2 -0.5
+  # reconstruct the data so that values supplies as y1 become 0.5
+  # and values supplied as y2 become -0.5
   # this helps in getting correct signs for all estimates
   # as well as effect coding properly
   data[, moderator] <-
@@ -131,7 +132,7 @@ ddsc_ml <- function(model = NULL,
     predictor
   )
 
-  # obtain descriptives
+  # obtain descriptives via supplying the lvl2 data to ddsc_sem
   ddsc_sem_fit <-
     multid::ddsc_sem(
       data = lvl2_data[stats::complete.cases(lvl2_data), ],
@@ -142,7 +143,7 @@ ddsc_ml <- function(model = NULL,
   descriptives <- ddsc_sem_fit$descriptives
   sem_variance_test <- ddsc_sem_fit$variance_test
 
-  # check if the predictor is properly scaled if model was the input
+  # if model was supplied as input check if the predictor is properly scaled
   if (abs(descriptives[predictor, "SD"] - 1) > .005 &
       !is.null(model)) {
     warning(paste0(
@@ -151,33 +152,52 @@ ddsc_ml <- function(model = NULL,
     ))
   }
 
+  # check if there are only two observation at level-1 for each participant
+  # to provide correct modeling choice
+  two_obs_per_sub<-nrow(data)==2*length(unique(data[,lvl2_unit]))
+
   # construct and run a model if not provided as input
   if (is.null(model) & !is.null(DV)) {
-    # standardize the predictor with country-level mean and sd
+    # standardize the predictor with level-2 mean and sd
     data[, predictor] <- (data[, predictor] - descriptives[predictor, "M"]) /
       descriptives[predictor, "SD"]
 
-    model_formula <-
+    # if more than 2, fit random slope, if not, fit only random intercept
+
+    if(!two_obs_per_sub){
+      model_formula <-
+        stats::as.formula(paste0(
+          DV, "~",
+          moderator, "*", predictor, "+",
+          paste0(covariates, collapse = "+"),
+          ifelse(is.null(covariates), "(", "+("),
+          moderator, "|", lvl2_unit, ")"
+        ))
+
+    } else {model_formula <-
       stats::as.formula(paste0(
         DV, "~",
         moderator, "*", predictor, "+",
         paste0(covariates, collapse = "+"),
         ifelse(is.null(covariates), "(", "+("),
-        moderator, "|", lvl2_unit, ")"
-      ))
+        "1|", lvl2_unit, ")"
+      ))}
 
     model <- lmerTest::lmer(
       formula = model_formula, data = data,
       control = lme4::lmerControl(optimizer = "bobyqa")
     )
+
+
+
   }
 
   # fit a reduced model without predictor and cross-level interaction
 
-  # obtain fixed effects as character vector
+  # obtain the necessary fixed effects as character vector
   FEs <- attributes(stats::terms(model))$term.labels
 
-  # obtain random effects and DV as a character vector
+  # obtain the necessary random effects and DV as a character vector
   DV <- as.character(stats::formula(model,
                                     random.only = TRUE
   ))[2]
@@ -206,17 +226,26 @@ ddsc_ml <- function(model = NULL,
   reduced_model <-
     stats::update(model, new.formula)
 
-  vpc_at_reduced <-
-    vpc_at(
-      model = reduced_model,
-      lvl1.var = moderator,
-      lvl1.values = moderator_values
-    )
+  # get variance partition coefficients if random slope model
+
+  if(!two_obs_per_sub){
+    vpc_at_reduced <-
+      vpc_at(
+        model = reduced_model,
+        lvl1.var = moderator,
+        lvl1.values = moderator_values
+      )
+
+  } else {
+    vpc_at_reduced<-NULL
+  }
+
+
 
   # get scaling SDs from the reduced model if requested
   # if not, use observed (default)
 
-  if (scaling_sd == "model") {
+  if (scaling_sd == "model" & !two_obs_per_sub) {
     # get sds from variance partition
 
     slope_sd_reduced <-
@@ -387,6 +416,7 @@ ddsc_ml <- function(model = NULL,
     ))
   rownames(ml_abstest_rscale) <- "dadas_rscale"
   # test of magnitude difference between interaction and main effect
+  # this necessitates effect coding
 
   interaction_vs_main <-
     data.frame(emmeans::contrast(temp.cont,
@@ -451,6 +481,8 @@ ddsc_ml <- function(model = NULL,
   # cross-over point
 
   # moderator effect exactly at predictor midpoint
+  # which is zero, because it is standardized
+
   at.list.mod <- list()
   at.list.mod[[predictor]] <- 0
   at.list.mod[[moderator]] <- moderator_values
@@ -512,7 +544,7 @@ ddsc_ml <- function(model = NULL,
     atanh(trends_rscale.df[trends_rscale.df$contrast == moderator_values[1], "estimate"]) -
     atanh(trends_rscale.df[trends_rscale.df$contrast == moderator_values[2], "estimate"])
 
-  # obtain Cohen's q for pooled sd standardized slopes
+  # obtain harmonized q with pooled sd standardized slopes
   q_b11_b21 <-
     atanh(trends_bscale.df[trends_bscale.df$contrast == moderator_values[1], "estimate"]) -
     atanh(trends_bscale.df[trends_bscale.df$contrast == moderator_values[2], "estimate"])
@@ -533,7 +565,7 @@ ddsc_ml <- function(model = NULL,
     mi.coefs
   )
 
-  # combine singe number outputs
+  # combine single number outputs
   sn_results <-
     data.frame(
       estimate =
