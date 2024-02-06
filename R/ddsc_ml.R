@@ -162,7 +162,7 @@ ddsc_ml <- function(model = NULL,
     data[, predictor] <- (data[, predictor] - descriptives[predictor, "M"]) /
       descriptives[predictor, "SD"]
 
-    # if more than 2, fit random slope, if not, fit only random intercept
+    # if more than 2 observations, fit random slope, if not, fit only random intercept
 
     if(!two_obs_per_sub){
       model_formula <-
@@ -174,7 +174,8 @@ ddsc_ml <- function(model = NULL,
           moderator, "|", lvl2_unit, ")"
         ))
 
-    } else {model_formula <-
+    } else {
+      model_formula <-
       stats::as.formula(paste0(
         DV, "~",
         moderator, "*", predictor, "+",
@@ -183,11 +184,12 @@ ddsc_ml <- function(model = NULL,
         "1|", lvl2_unit, ")"
       ))}
 
-    model <- lmerTest::lmer(
-      formula = model_formula, data = data,
-      control = lme4::lmerControl(optimizer = "bobyqa")
-    )
-
+    suppressMessages({
+      model <- lmerTest::lmer(
+        formula = model_formula, data = data,
+        control = lme4::lmerControl(optimizer = "bobyqa")
+      )
+    })
 
 
   }
@@ -223,8 +225,10 @@ ddsc_ml <- function(model = NULL,
 
   # update to reduced model
 
-  reduced_model <-
-    stats::update(model, new.formula)
+  suppressMessages({
+    reduced_model <-
+      stats::update(model, new.formula)
+  })
 
   # get variance partition coefficients if random slope model
 
@@ -239,7 +243,6 @@ ddsc_ml <- function(model = NULL,
   } else {
     vpc_at_reduced<-NULL
   }
-
 
 
   # get scaling SDs from the reduced model if requested
@@ -487,16 +490,18 @@ ddsc_ml <- function(model = NULL,
   at.list.mod[[predictor]] <- 0
   at.list.mod[[moderator]] <- moderator_values
 
-  mod_eff <-
-    emmeans::emmeans(
-      object = model,
-      specs = moderator,
-      # var = predictor,
-      lmerTest.limit = nrow(model@frame),
-      disable.pbkrtest = TRUE,
-      infer = c(FALSE, TRUE),
-      at = at.list.mod
-    )
+  suppressMessages({
+    mod_eff <-
+      emmeans::emmeans(
+        object = model,
+        specs = moderator,
+        # var = predictor,
+        lmerTest.limit = nrow(model@frame),
+        disable.pbkrtest = TRUE,
+        infer = c(FALSE, TRUE),
+        at = at.list.mod
+      )
+  })
 
   # compile cross-over point effect
   cop_effs <-
@@ -631,16 +636,23 @@ ddsc_ml <- function(model = NULL,
 
     # update to model without the covariance
 
-    no.cov.mod <-
-      stats::update(model, no.cov.formula)
+    suppressMessages({
+      no.cov.mod <-
+        stats::update(model, no.cov.formula)
+    })
+
 
     # test against the less reduced model
 
-    re.cov.test <-
-      stats::anova(
-        no.cov.mod,
-        reduced_model
-      )
+    suppressMessages({
+      re.cov.test <-
+        stats::anova(
+          no.cov.mod,
+          reduced_model
+        )
+    })
+
+
 
     # obtain important numbers
     vc <-
