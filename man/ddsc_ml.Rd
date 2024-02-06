@@ -14,6 +14,7 @@ ddsc_ml(
   lvl2_unit = NULL,
   re_cov_test = FALSE,
   var_boot_test = FALSE,
+  boot_slopes = FALSE,
   nsim = NULL,
   level = 0.95,
   seed = NULL,
@@ -39,6 +40,8 @@ ddsc_ml(
 \item{re_cov_test}{Logical. Significance test for random effect covariation? (Default FALSE)}
 
 \item{var_boot_test}{Logical. Compare variance by lower-level groups at the upper-level in a reduced model with bootstrap? (Default FALSE)}
+
+\item{boot_slopes}{Logical. Are bootstap estimates and percentile confidence intervals obtained for the estimates presented in results? (Default FALSE)}
 
 \item{nsim}{Numeric. Number of bootstrap simulations.}
 
