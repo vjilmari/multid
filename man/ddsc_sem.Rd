@@ -15,7 +15,10 @@ ddsc_sem(
   level = 0.95,
   sampling.weights = NULL,
   q_sesoi = 0,
-  min_cross_over_point_location = 0
+  min_cross_over_point_location = 0,
+  boot_ci = FALSE,
+  boot_n = 5000,
+  boot_ci_type = "perc"
 )
 }
 \arguments{
@@ -40,6 +43,12 @@ ddsc_sem(
 \item{q_sesoi}{Numeric. The smallest effect size of interest for Cohen's q estimates (Default 0; See Lakens et al. 2018).}
 
 \item{min_cross_over_point_location}{Numeric. Z-score for the minimal slope cross-over point of interest (Default 0).}
+
+\item{boot_ci}{Logical. Calculate confidence intervals based on bootstrap (Default FALSE).}
+
+\item{boot_n}{Numeric. How many bootstrap redraws (Default 5000).}
+
+\item{boot_ci_type}{If bootstrapping was used, the type of interval required. The value should be one of "norm", "basic", "perc" (default), or "bca.simple".}
 }
 \value{
 \item{descriptives}{Means, standard deviations, and intercorrelations.}
