@@ -605,6 +605,9 @@ ddsc_ml <- function(model = NULL,
   scaling_SDs["VR"] <- unname(scaling_SDs["SD_y1"]^2) /
     (scaling_SDs["SD_y2"]^2)
 
+  # add confidence intervals to the result frame
+  results <- cbind(results, ci_to_ddsc_ml(results, level))
+
   # bootstrap slopes if requested
   if (boot_slopes) {
     results <- boot_ddsc_ml_fixef(
