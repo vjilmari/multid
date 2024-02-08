@@ -1,6 +1,10 @@
 #' Deconstructing difference score correlation with multi-level modeling
 #'
+#' Deconstructs a bivariate association between x and a difference score y1-y2 with multi-level modeling approach.
+#' Within each upper-level unit (lvl2_unit) there can be multiple observations of y1 and y2.
 #' Can be used for either pre-fitted lmer-models or to long format data.
+#' A difference score correlation is indicative that slopes for y1 as function of x and y2 as function of x are non-parallel.
+#' Deconstructing the bivariate association to these slopes allows for understanding the pattern and magnitude of this non-parallelism.
 #'
 #' @param model Multilevel model fitted with lmerTest.
 #' @param data Data frame.

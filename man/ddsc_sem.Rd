@@ -58,7 +58,9 @@ ddsc_sem(
 \item{results}{Summary of key results.}
 }
 \description{
-Deconstructing difference score correlation with structural equation modeling
+Deconstructs a bivariate association between x and a difference score y1-y2 with SEM.
+A difference score correlation is indicative that slopes for y1 as function of x and y2 as function of x are non-parallel.
+Deconstructing the bivariate association to these slopes allows for understanding the pattern and magnitude of this non-parallelism.
 }
 \examples{
 \dontrun{
