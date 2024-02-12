@@ -6,6 +6,7 @@
 * Added confidence intervals for ddsc_ml results table
 * Added a possibility to bootstrap in ddsc_sem
 * ml_dadas and sem_dadas deprecated (superceded by ddsc_ml and ddsc_sem)
+* Added plot_ddsc function for directly plotting ddsc_sem results
 
 # multid 0.9.0
 

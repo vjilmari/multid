@@ -9,6 +9,12 @@
 #' @param x_label Character. Label for variable X. If NULL (default), variable name is used.
 #' @param y_labels Character vector. Labels for variable y1 and y2. If NULL (default), variable names are used.
 #' @param densities Logical. Are y-variable densities plotted? Default TRUE.
+#' @param point_alpha Numeric. Opacity for data points (default 0.50)
+#' @param dens_alpha Numeric. Opacity for density distributions (default 0.75)
+#' @param col_widths Numeric vector. Widths of the plot columns: slope figures and density figures; default c(3, 1).
+#' @param row_heights Numeric vector. Heights of the plot rows: components, difference score, slope coefs; default c(2, 1, 0.5).
+#' @param coef_locations Numeric vector. Locations for printed coefficients. Quantiles of the range of x-variable. Default c(0, 1/3, 2/3).
+#' @param coef_names Character vector. Names of the printed coefficients. Default c("b_11", "b_21", "r_x_y1-y2").
 #'
 #' @export
 #'
@@ -33,7 +39,13 @@ plot_ddsc <- function(ddsc_object,
                       y2_color = "orange",
                       x_label = NULL,
                       y_labels = NULL,
-                      densities = TRUE) {
+                      densities = TRUE,
+                      point_alpha = 0.5,
+                      dens_alpha = 0.75,
+                      col_widths = c(3, 1),
+                      row_heights = c(2, 1, 0.5),
+                      coef_locations = c(0/3, 1/3, 2/3),
+                      coef_names = c("b_11", "b_21", "r_x_y1-y2")) {
 
   comb_plot <- NULL
   x <- NULL
@@ -84,21 +96,21 @@ plot_ddsc <- function(ddsc_object,
     DV_type = c("Y1", "Y2", "Y1-Y2"),
     phrase = c(
       paste0(
-        "hr_x_y1 = ", round(results[which(rownames(results) == "b_11"), "est"], 2),
+        coef_names[1]," = ", round(results[which(rownames(results) == "b_11"), "est"], 2),
         ", ",
         ifelse(results[which(rownames(results) == "b_11"), "pvalue"] < .001, "p < .001",
           paste0("p = ", round(results[which(rownames(results) == "b_11"), "pvalue"], 3))
         )
       ),
       paste0(
-        "hr_x_y2 = ", round(results[which(rownames(results) == "b_21"), "est"], 2),
+        coef_names[2]," = ", round(results[which(rownames(results) == "b_21"), "est"], 2),
         ", ",
         ifelse(results[which(rownames(results) == "b_21"), "pvalue"] < .001, "p < .001",
           paste0("p = ", round(results[which(rownames(results) == "b_21"), "pvalue"], 3))
         )
       ),
       paste0(
-        "r_x_y1-y2 = ", round(results[which(rownames(results) == "r_xy1_y2"), "est"], 2),
+        coef_names[3]," = ", round(results[which(rownames(results) == "r_xy1_y2"), "est"], 2),
         ", ",
         ifelse(results[which(rownames(results) == "r_xy1_y2"), "pvalue"] < .001, "p < .001",
           paste0("p = ", round(results[which(rownames(results) == "r_xy1_y2"), "pvalue"], 3))
@@ -134,7 +146,7 @@ plot_ddsc <- function(ddsc_object,
         paste0(y2_label)
       )
     ) +
-    ggplot2::geom_point(alpha = 0.5) +
+    ggplot2::geom_point(alpha = point_alpha) +
     ggplot2::ylab(paste0(
       "Component score\n",
       "(", y1_label, " or ", y2_label, ")"
@@ -152,7 +164,7 @@ plot_ddsc <- function(ddsc_object,
     ggplot2::aes(x = x, y = y)
   ) +
     ggplot2::geom_smooth(method = "lm", formula = "y~x", color = diff_color) +
-    ggplot2::geom_point(alpha = 0.5, color = diff_color) +
+    ggplot2::geom_point(alpha = point_alpha, color = diff_color) +
     ggplot2::ylab(paste0(
       "Difference score\n",
       "(", y1_label, "\U2212", y2_label, ")"
@@ -170,9 +182,9 @@ plot_ddsc <- function(ddsc_object,
 
   coef_x_locations <-
     c(
-      min(data[, x_scaled]),
-      min(data[, x_scaled]) + x_range * 1 / 3,
-      min(data[, x_scaled]) + x_range * 2 / 3
+      min(data[, x_scaled]) + x_range * coef_locations[1],
+      min(data[, x_scaled]) + x_range * coef_locations[2],
+      min(data[, x_scaled]) + x_range * coef_locations[3]
     )
 
   p3 <- ggplot2::ggplot(
@@ -210,7 +222,7 @@ plot_ddsc <- function(ddsc_object,
         data = pd_long[pd_long$DV_type != "Y1-Y2", ],
         ggplot2::aes(x = y, fill = DV_type)
       ) +
-      ggplot2::geom_density(alpha = .75) +
+      ggplot2::geom_density(alpha = dens_alpha) +
       ggplot2::scale_fill_manual(
         values = c(y1_color, y2_color),
         labels = c(
@@ -250,7 +262,7 @@ plot_ddsc <- function(ddsc_object,
         data = pd_long[pd_long$DV_type == "Y1-Y2", ],
         ggplot2::aes(x = y, fill = diff_color)
       ) +
-      ggplot2::geom_density(alpha = .75, show.legend = FALSE) +
+      ggplot2::geom_density(alpha = dens_alpha, show.legend = FALSE) +
       ggplot2::scale_fill_manual(values = diff_color) +
       ggplot2::xlab(NULL) +
       ggplot2::ylab("Density") +
@@ -290,15 +302,15 @@ plot_ddsc <- function(ddsc_object,
         p2, p2_dens + ggplot2::coord_flip(ylim = dens_minmax),
         p3,
         ncol = 2, nrow = 3,
-        widths = c(3, 1),
-        heights = c(2, 1, 0.5),
+        widths = col_widths,
+        heights = row_heights,
         common.legend = TRUE, align = "hv"
       )
     } else {
       comb_plot <-
         ggpubr::ggarrange(p1, p2, p3,
           ncol = 1,
-          heights = c(2, 1, 0.5),
+          heights = row_heights,
           common.legend = TRUE, align = "hv"
         )
     }

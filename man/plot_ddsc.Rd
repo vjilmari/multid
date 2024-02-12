@@ -11,7 +11,13 @@ plot_ddsc(
   y2_color = "orange",
   x_label = NULL,
   y_labels = NULL,
-  densities = TRUE
+  densities = TRUE,
+  point_alpha = 0.5,
+  dens_alpha = 0.75,
+  col_widths = c(3, 1),
+  row_heights = c(2, 1, 0.5),
+  coef_locations = c(0/3, 1/3, 2/3),
+  coef_names = c("b_11", "b_21", "r_x_y1-y2")
 )
 }
 \arguments{
@@ -28,6 +34,18 @@ plot_ddsc(
 \item{y_labels}{Character vector. Labels for variable y1 and y2. If NULL (default), variable names are used.}
 
 \item{densities}{Logical. Are y-variable densities plotted? Default TRUE.}
+
+\item{point_alpha}{Numeric. Opacity for data points (default 0.50)}
+
+\item{dens_alpha}{Numeric. Opacity for density distributions (default 0.75)}
+
+\item{col_widths}{Numeric vector. Widths of the plot columns: slope figures and density figures; default c(3, 1).}
+
+\item{row_heights}{Numeric vector. Heights of the plot rows: components, difference score, slope coefs; default c(2, 1, 0.5).}
+
+\item{coef_locations}{Numeric vector. Locations for printed coefficients. Quantiles of the range of x-variable. Default c(0, 1/3, 2/3).}
+
+\item{coef_names}{Character vector. Names of the printed coefficients. Default c("b_11", "b_21", "r_x_y1-y2").}
 }
 \description{
 Plots the slopes for y1 and y2 by x, and a slope for y1-y2 by x for comparison.
