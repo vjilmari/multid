@@ -34,8 +34,8 @@
 #' When used with \code{fold = TRUE}, size means size within a fold."
 #'
 #' For more details on these options, please refer to the [vignette](https://CRAN.R-project.org/package=multid/vignettes/multivariate_sex_differences_in_personality.html) and [README](https://CRAN.R-project.org/package=multid/readme/README.html) of the multid package.
-#' @references [Lönnqvist, J. E., & Ilmarinen, V. J. (2021). Using a continuous measure of genderedness to assess sex differences in the attitudes of the political elite. Political Behavior, 43, 1779–1800. https://doi.org/10.1007/s11109-021-09681-2](\doi{10.1007/s11109-021-09681-2})
-#' @references [Ilmarinen, V. J., Vainikainen, M. P., & Lönnqvist, J. E. (2023). Is there a g-factor of genderedness? Using a continuous measure of genderedness to assess sex differences in personality, values, cognitive ability, school grades, and educational track. European Journal of Personality, 37, 313-337. https://doi.org/10.1177/08902070221088155](\doi{10.1177/08902070221088155})
+#' @references Lönnqvist, J. E., & Ilmarinen, V. J. (2021). Using a continuous measure of genderedness to assess sex differences in the attitudes of the political elite. Political Behavior, 43, 1779–1800. \doi{https://doi.org/10.1007/s11109-021-09681-2}
+#' @references Ilmarinen, V. J., Vainikainen, M. P., & Lönnqvist, J. E. (2023). Is there a g-factor of genderedness? Using a continuous measure of genderedness to assess sex differences in personality, values, cognitive ability, school grades, and educational track. European Journal of Personality, 37, 313-337. \doi{https://doi.org/10.1177/08902070221088155}
 #' @seealso \code{\link[glmnet]{cv.glmnet}}
 #' @export
 #'
