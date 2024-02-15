@@ -17,7 +17,7 @@
 #' @param scaling_sd Character string (either default "observed" or "model"). Are the simple slopes scaled with observed or model-based SDs?
 #' @param re_cov_test Logical. Significance test for random effect covariation? (Default FALSE)
 #' @param var_boot_test Logical. Compare variance by lower-level groups at the upper-level in a reduced model with bootstrap? (Default FALSE)
-#' @param boot_slopes Logical. Are bootstap estimates and percentile confidence intervals obtained for the estimates presented in results? (Default FALSE)
+#' @param boot_slopes Logical. Are bootstrap estimates and percentile confidence intervals obtained for the estimates presented in results? (Default FALSE)
 #' @param nsim Numeric. Number of bootstrap simulations.
 #' @param seed Numeric. Seed number for bootstrap simulations.
 #' @param level Numeric. The confidence level required for the var_boot_test output (Default .95)
