@@ -81,7 +81,7 @@ cross-validation procedure is applied within the regularization set and the weig
 then used in the estimation data partition. The size of regularization set is defined with \code{size}.
 When used with \code{fold = TRUE}, size means size within a fold."
 
-For more details on these options, please refer to the \href{https://cran.r-project.org/web/packages/multid/vignettes/multivariate_sex_differences_in_personality.html}{vignette} and \href{https://cran.r-project.org/web/packages/multid/readme/README.html}{README} of the multid package.
+For more details on these options, please refer to the \href{https://CRAN.R-project.org/package=multid/vignettes/multivariate_sex_differences_in_personality.html}{vignette} and \href{https://CRAN.R-project.org/package=multid/readme/README.html}{README} of the multid package.
 }
 \examples{
 D_regularized(
@@ -137,9 +137,9 @@ D_regularized(
 )$D
 }
 \references{
-\href{https://doi.org/10.1007/s11109-021-09681-2}{Lönnqvist, J. E., & Ilmarinen, V. J. (2021). Using a continuous measure of genderedness to assess sex differences in the attitudes of the political elite. Political Behavior, 43, 1779–1800. https://doi.org/10.1007/s11109-021-09681-2}
+\href{\doi{10.1007/s11109-021-09681-2}}{Lönnqvist, J. E., & Ilmarinen, V. J. (2021). Using a continuous measure of genderedness to assess sex differences in the attitudes of the political elite. Political Behavior, 43, 1779–1800. https://doi.org/10.1007/s11109-021-09681-2}
 
-\href{https://doi.org/10.1177/08902070221088155}{Ilmarinen, V. J., Vainikainen, M. P., & Lönnqvist, J. E. (2023). Is there a g-factor of genderedness? Using a continuous measure of genderedness to assess sex differences in personality, values, cognitive ability, school grades, and educational track. European Journal of Personality, 37, 313-337. https://doi.org/10.1177/08902070221088155}
+\href{\doi{10.1177/08902070221088155}}{Ilmarinen, V. J., Vainikainen, M. P., & Lönnqvist, J. E. (2023). Is there a g-factor of genderedness? Using a continuous measure of genderedness to assess sex differences in personality, values, cognitive ability, school grades, and educational track. European Journal of Personality, 37, 313-337. https://doi.org/10.1177/08902070221088155}
 }
 \seealso{
 \code{\link[glmnet]{cv.glmnet}}
