@@ -1,6 +1,5 @@
-# multid 0.9.0.9000
+# multid 1.0.0
 
-* Development version
 * Added a possibility to run ddsc_ml with just two observations per upper-level unit
 * Added a possibility to obtain bootstrap estimates and percentile confidence intervals for non-scaled parameter estimates in ddsc_ml results-table
 * Added confidence intervals for ddsc_ml results table
