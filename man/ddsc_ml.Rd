@@ -41,7 +41,7 @@ ddsc_ml(
 
 \item{var_boot_test}{Logical. Compare variance by lower-level groups at the upper-level in a reduced model with bootstrap? (Default FALSE)}
 
-\item{boot_slopes}{Logical. Are bootstap estimates and percentile confidence intervals obtained for the estimates presented in results? (Default FALSE)}
+\item{boot_slopes}{Logical. Are bootstrap estimates and percentile confidence intervals obtained for the estimates presented in results? (Default FALSE)}
 
 \item{nsim}{Numeric. Number of bootstrap simulations.}
 
