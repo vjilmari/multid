@@ -81,7 +81,7 @@ cross-validation procedure is applied within the regularization set and the weig
 then used in the estimation data partition. The size of regularization set is defined with \code{size}.
 When used with \code{fold = TRUE}, size means size within a fold."
 
-For more details on these options, please refer to the \href{https://cran.r-project.org/web/packages/multid/vignettes/multivariate_sex_differences_in_personality.html}{vignette} and \href{https://github.com/vjilmari/multid/blob/main/README.md}{README} of the multid package.
+For more details on these options, please refer to the \href{https://cran.r-project.org/web/packages/multid/vignettes/multivariate_sex_differences_in_personality.html}{vignette} and \href{https://cran.r-project.org/web/packages/multid/readme/README.html}{README} of the multid package.
 }
 \examples{
 D_regularized(
