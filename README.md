@@ -10,6 +10,8 @@ version](https://www.r-pkg.org/badges/version-ago/multid)](https://www.r-pkg.org
 
 [![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/multid)](https://cranlogs.r-pkg.org/badges/grand-total/multid)
 
+[![DOI](https://zenodo.org/badge/323575627.svg)](https://zenodo.org/badge/latestdoi/323575627)
+
 <!-- badges: end -->
 
 *multid* provides tools for regularized measurement of multivariate
