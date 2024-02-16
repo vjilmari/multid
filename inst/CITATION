@@ -9,9 +9,11 @@ bibentry(bibtype = "Manual",
   url          = "https://CRAN.R-project.org/package=multid",
   year         = 2021,
   note         = sprintf("R package version %s", meta$Version),
+  doi          = "10.5281/zenodo.10669345",
 
   textVersion  =
   paste("Ilmarinen, V. J. (2021).",
         "multid: Multivariate Difference between Two Groups.",
-        "https://CRAN.R-project.org/package=multid")
+        "https://CRAN.R-project.org/package=multid.",
+        "doi:10.5281/zenodo.10669345")
 )
