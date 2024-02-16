@@ -1,3 +1,7 @@
+# multid 1.0.0.9000
+
+* Development version
+
 # multid 1.0.0
 
 * Added a possibility to run ddsc_ml with just two observations per upper-level unit
