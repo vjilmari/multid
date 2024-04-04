@@ -15,6 +15,7 @@
 #' @param row_heights Numeric vector. Heights of the plot rows: components, difference score, slope coefs; default c(2, 1, 0.5).
 #' @param coef_locations Numeric vector. Locations for printed coefficients. Quantiles of the range of x-variable. Default c(0, 1/3, 2/3).
 #' @param coef_names Character vector. Names of the printed coefficients. Default c("b_11", "b_21", "r_x_y1-y2").
+#' @param coef_text_size Numeric. Text size of the printed coefficients. Default 4.
 #'
 #' @export
 #'
@@ -45,7 +46,8 @@ plot_ddsc <- function(ddsc_object,
                       col_widths = c(3, 1),
                       row_heights = c(2, 1, 0.5),
                       coef_locations = c(0/3, 1/3, 2/3),
-                      coef_names = c("b_11", "b_21", "r_x_y1-y2")) {
+                      coef_names = c("b_11", "b_21", "r_x_y1-y2"),
+                      coef_text_size = 4) {
 
   comb_plot <- NULL
   x <- NULL
@@ -201,7 +203,8 @@ plot_ddsc <- function(ddsc_object,
         c(
           unique(ggplot2::ggplot_build(p1)$data[[1]]$colour),
           unique(ggplot2::ggplot_build(p2)$data[[1]]$colour)
-        ), parse = FALSE
+        ), parse = FALSE,
+      size = coef_text_size
     ) +
     ggplot2::theme(
       axis.text = ggplot2::element_blank(),

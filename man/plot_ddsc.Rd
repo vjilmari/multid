@@ -17,7 +17,8 @@ plot_ddsc(
   col_widths = c(3, 1),
   row_heights = c(2, 1, 0.5),
   coef_locations = c(0/3, 1/3, 2/3),
-  coef_names = c("b_11", "b_21", "r_x_y1-y2")
+  coef_names = c("b_11", "b_21", "r_x_y1-y2"),
+  coef_text_size = 4
 )
 }
 \arguments{
@@ -46,6 +47,8 @@ plot_ddsc(
 \item{coef_locations}{Numeric vector. Locations for printed coefficients. Quantiles of the range of x-variable. Default c(0, 1/3, 2/3).}
 
 \item{coef_names}{Character vector. Names of the printed coefficients. Default c("b_11", "b_21", "r_x_y1-y2").}
+
+\item{coef_text_size}{Numeric. Text size of the printed coefficients. Default 4.}
 }
 \description{
 Plots the slopes for y1 and y2 by x, and a slope for y1-y2 by x for comparison.
