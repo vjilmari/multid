@@ -18,6 +18,7 @@
 #' @param coef_text_size Numeric. Text size of the printed coefficients. Default 4.
 #' @param x_scale Character. "Standardized" or "raw" (original scale). Default is "standardized".
 #' @param y_scale Character. "Scaled"/"standardized" with harmonized SD "raw" (original scale). Default is "standardized".
+#' @param show_dens_x_labels Logical. Show x-labels on the density plots. Default TRUE.
 #'
 #' @export
 #'
@@ -51,7 +52,8 @@ plot_ddsc <- function(ddsc_object,
                       coef_names = c("b_11", "b_21", "r_x_y1-y2"),
                       coef_text_size = 4,
                       y_scale="standardized",
-                      x_scale="scaled") {
+                      x_scale="scaled",
+                      show_dens_x_labels=TRUE) {
 
   comb_plot <- NULL
   x <- NULL
