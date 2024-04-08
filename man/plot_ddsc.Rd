@@ -18,7 +18,9 @@ plot_ddsc(
   row_heights = c(2, 1, 0.5),
   coef_locations = c(0/3, 1/3, 2/3),
   coef_names = c("b_11", "b_21", "r_x_y1-y2"),
-  coef_text_size = 4
+  coef_text_size = 4,
+  y_scale = "standardized",
+  x_scale = "scaled"
 )
 }
 \arguments{
@@ -49,6 +51,10 @@ plot_ddsc(
 \item{coef_names}{Character vector. Names of the printed coefficients. Default c("b_11", "b_21", "r_x_y1-y2").}
 
 \item{coef_text_size}{Numeric. Text size of the printed coefficients. Default 4.}
+
+\item{y_scale}{Character. "Scaled"/"standardized" with harmonized SD "raw" (original scale). Default is "standardized".}
+
+\item{x_scale}{Character. "Standardized" or "raw" (original scale). Default is "standardized".}
 }
 \description{
 Plots the slopes for y1 and y2 by x, and a slope for y1-y2 by x for comparison.

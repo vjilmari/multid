@@ -16,6 +16,8 @@
 #' @param coef_locations Numeric vector. Locations for printed coefficients. Quantiles of the range of x-variable. Default c(0, 1/3, 2/3).
 #' @param coef_names Character vector. Names of the printed coefficients. Default c("b_11", "b_21", "r_x_y1-y2").
 #' @param coef_text_size Numeric. Text size of the printed coefficients. Default 4.
+#' @param x_scale Character. "Standardized" or "raw" (original scale). Default is "standardized".
+#' @param y_scale Character. "Scaled"/"standardized" with harmonized SD "raw" (original scale). Default is "standardized".
 #'
 #' @export
 #'
@@ -47,7 +49,9 @@ plot_ddsc <- function(ddsc_object,
                       row_heights = c(2, 1, 0.5),
                       coef_locations = c(0/3, 1/3, 2/3),
                       coef_names = c("b_11", "b_21", "r_x_y1-y2"),
-                      coef_text_size = 4) {
+                      coef_text_size = 4,
+                      y_scale="standardized",
+                      x_scale="scaled") {
 
   comb_plot <- NULL
   x <- NULL
@@ -57,17 +61,36 @@ plot_ddsc <- function(ddsc_object,
 
   results <- ddsc_object$results
   data <- ddsc_object$data
-  x_scaled <- rownames(ddsc_object$descriptives)[6]
-  y1_scaled <- rownames(ddsc_object$descriptives)[2]
-  y2_scaled <- rownames(ddsc_object$descriptives)[4]
+
+  if (x_scale=="raw") {
+    x_name <- rownames(ddsc_object$descriptives)[5]
+
+  } else {
+    x_name <- rownames(ddsc_object$descriptives)[6]
+  }
+
+  if (y_scale=="raw") {
+    y1_name <- rownames(ddsc_object$descriptives)[1]
+    y2_name <- rownames(ddsc_object$descriptives)[3]
+    diff_score_name <- rownames(ddsc_object$descriptives)[7]
+
+  } else {
+    y1_name <- rownames(ddsc_object$descriptives)[2]
+    y2_name <- rownames(ddsc_object$descriptives)[4]
+    diff_score_name <- rownames(ddsc_object$descriptives)[8]
+  }
+
+  #x_name <- rownames(ddsc_object$descriptives)[6]
+  #y1_name <- rownames(ddsc_object$descriptives)[2]
+  #y2_name <- rownames(ddsc_object$descriptives)[4]
 
   if (is.null(x_label)) {
-    x_label <- paste0("X: ", x_scaled)
+    x_label <- paste0("X: ", x_name)
   }
 
   if (is.null(y_labels)) {
-    y1_label <- paste0("Y1: ", y1_scaled)
-    y2_label <- paste0("Y2: ", y2_scaled)
+    y1_label <- paste0("Y1: ", y1_name)
+    y2_label <- paste0("Y2: ", y2_name)
   } else {
     y1_label <- y_labels[1]
     y2_label <- y_labels[2]
@@ -126,12 +149,12 @@ plot_ddsc <- function(ddsc_object,
   pd_long <-
     data.frame(
       y = c(
-        data[, y1_scaled],
-        data[, y2_scaled],
-        data[, "diff_score_scaled"]
+        data[, y1_name],
+        data[, y2_name],
+        data[, diff_score_name]
       ),
       DV_type = rep(c("Y1", "Y2", "Y1-Y2"), each = nrow(data)),
-      x = rep(data[, x_scaled], times = 3)
+      x = rep(data[, x_name], times = 3)
     )
   # plots
 
@@ -184,9 +207,9 @@ plot_ddsc <- function(ddsc_object,
 
   coef_x_locations <-
     c(
-      min(data[, x_scaled]) + x_range * coef_locations[1],
-      min(data[, x_scaled]) + x_range * coef_locations[2],
-      min(data[, x_scaled]) + x_range * coef_locations[3]
+      min(data[, x_name]) + x_range * coef_locations[1],
+      min(data[, x_name]) + x_range * coef_locations[2],
+      min(data[, x_name]) + x_range * coef_locations[3]
     )
 
   p3 <- ggplot2::ggplot(

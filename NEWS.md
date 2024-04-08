@@ -2,6 +2,7 @@
 
 * Development version
 * Added coef_text_size to plot_ddsc
+* Added x_scale and y_scale for plot_ddsc
 
 # multid 1.0.0
 
