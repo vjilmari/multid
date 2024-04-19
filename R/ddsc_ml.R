@@ -160,6 +160,22 @@ ddsc_ml <- function(model = NULL,
   # check if there are only two observation at level-1 for each participant
   # to provide correct modeling choice
   two_obs_per_sub <- nrow(data) == 2 * length(unique(data[, lvl2_unit]))
+  # this checks whether there are multiple observations of both conditions for each subject
+  multiple_obs_per_sub <-
+  length(data[
+    data[, moderator] == moderator_values[1],
+    DV
+  ]) > length(unique(data[
+    ,
+    lvl2_unit
+  ])) &
+    length(data[
+      data[, moderator] == moderator_values[2],
+      DV
+    ]) > length(unique(data[
+      ,
+      lvl2_unit
+    ]))
 
   # construct and run a model if not provided as input
   if (is.null(model) & !is.null(DV)) {
@@ -169,7 +185,7 @@ ddsc_ml <- function(model = NULL,
 
     # if more than 2 observations, fit random slope, if not, fit only random intercept
 
-    if (!two_obs_per_sub) {
+    if (multiple_obs_per_sub) {
       model_formula <-
         stats::as.formula(paste0(
           DV, "~",
@@ -235,7 +251,7 @@ ddsc_ml <- function(model = NULL,
 
   # get variance partition coefficients if random slope model
 
-  if (!two_obs_per_sub) {
+  if (multiple_obs_per_sub) {
     vpc_at_reduced <-
       vpc_at(
         model = reduced_model,
@@ -250,7 +266,7 @@ ddsc_ml <- function(model = NULL,
   # get scaling SDs from the reduced model if requested
   # if not, use observed (default)
 
-  if (scaling_sd == "model" & !two_obs_per_sub) {
+  if (scaling_sd == "model" & multiple_obs_per_sub) {
     # get sds from variance partition
 
     slope_sd_reduced <-
