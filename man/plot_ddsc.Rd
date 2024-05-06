@@ -20,7 +20,8 @@ plot_ddsc(
   coef_names = c("b_11", "b_21", "r_x_y1-y2"),
   coef_text_size = 4,
   y_scale = "standardized",
-  x_scale = "scaled"
+  x_scale = "scaled",
+  show_dens_x_labels = TRUE
 )
 }
 \arguments{
@@ -55,6 +56,8 @@ plot_ddsc(
 \item{y_scale}{Character. "Scaled"/"standardized" with harmonized SD "raw" (original scale). Default is "standardized".}
 
 \item{x_scale}{Character. "Standardized" or "raw" (original scale). Default is "standardized".}
+
+\item{show_dens_x_labels}{Logical. Show x-labels on the density plots. Default TRUE.}
 }
 \description{
 Plots the slopes for y1 and y2 by x, and a slope for y1-y2 by x for comparison.

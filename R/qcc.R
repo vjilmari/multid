@@ -15,6 +15,9 @@
 #' \item{rho_tau}{Correlations at different tau values (quantiles).}
 #' \item{r_boot_est}{Pearson's correlation bootstrap estimates.}
 #' \item{rho_tau_boot_est}{Bootstrap estimates for correlations at different tau values (quantiles).}
+#'
+#' @details Note that when quantile regression coefficients for y on x and x on y have a different sign, the quantile correlation is defined as zero (see Choi & Shin, 2022, p. 1080).
+#'
 #' @references Choi, J.-E., & Shin, D. W. (2022). Quantile correlation coefficient: A new tail dependence measure. Statistical Papers, 63(4), 1075–1104. https://doi.org/10.1007/s00362-021-01268-7
 #' @references Lee, J. A., Bardi, A., Gerrans, P., Sneddon, J., van Herk, H., Evers, U., & Schwartz, S. (2022). Are value–behavior relations stronger than previously thought? It depends on value importance. European Journal of Personality, 36(2), 133–148. https://doi.org/10.1177/08902070211002965
 #' @export
@@ -38,7 +41,19 @@ qcc <- function(x, y, tau = c(.1, .5, .9), data, method = "br", boot_n = NULL, c
 
   b2 <- rq2$coefficients[rownames(rq2$coefficients) == y, ]
 
-  rho_tau <- sign(b1) * sqrt(b1 * b2)
+  rho_tau <- numeric(length(b1))  # Initialize rho_tau as a numeric vector
+
+  for (j in 1:length(b1)) {
+    if (b1[j] * b2[j] > 0) {
+      rho_tau[j] <- sign(b1[j]) * sqrt(b1[j] * b2[j])
+    } else {
+      rho_tau[j] <- 0
+    }
+  }
+
+  names(rho_tau)<-names(b1)
+
+  #rho_tau <- sign(b1) * sqrt(b1 * b2)
 
   r <- stats::cor(data[, x], data[, y], method = "pearson")
 

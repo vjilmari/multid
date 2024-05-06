@@ -3,7 +3,8 @@
 * Development version
 * Added coef_text_size to plot_ddsc
 * Added x_scale and y_scale for plot_ddsc
-* Fix problem in checking for multiple observation data in ml_ddsc
+* Fixed problem in checking for multiple observation data in ml_ddsc
+* Defined sign difference in quantile correlation coefficient (qcc) resulting as rho_tau = zero, not NaN as previously
 
 # multid 1.0.0
 

@@ -38,6 +38,9 @@ qcc(
 \description{
 For computation of tail dependence as correlations estimated at different variable quantiles (Choi & Shin, 2022; Lee et al., 2022) summarized across two quantile regression models where x and y switch roles as independent/dependent variables.
 }
+\details{
+Note that when quantile regression coefficients for y on x and x on y have a different sign, the quantile correlation is defined as zero (see Choi & Shin, 2022, p. 1080).
+}
 \examples{
 set.seed(2321)
 d <- data.frame(x = rnorm(2000))
