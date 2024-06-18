@@ -47,6 +47,16 @@ Studies in which these methods have been used:
     Journal of Personality, 37*,
     313-337.](https://doi.org/10.1177/08902070221088155)
 
+3.  [Ilmarinen, V. J. & Lönnqvist, J. E. (2024). Deconstructing the
+    Gender-Equality Paradox. *Journal of Personality and Social
+    Psychology*.](https://doi.org/10.1037/pspp0000508)
+
+4.  [Leikas, S., Ilmarinen, V. J., Vainikainen, M. P., &
+    Lönnqvist, J. E. (2024). “Male-typicality Disadvantage” in
+    Educational Outcomes Is Reflected in Personal Values, but Not in
+    Personality Traits. *Collabra: Psychology, 10*,
+    118840.](https://doi.org/10.1525/collabra.118840)
+
 *multid* also includes a function for testing several hypotheses that
 are typically compressed to correlation between predictor (x) and an
 algebraic difference score (y1-y2) by deconstructing this difference
