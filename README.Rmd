@@ -37,7 +37,7 @@ Studies in which these methods have been used:
 
 2.  [Ilmarinen, V. J., Vainikainen, M. P., & Lönnqvist, J. E. (2023). Is there a g-factor of genderedness? Using a continuous measure of genderedness to assess sex differences in personality, values, cognitive ability, school grades, and educational track. *European Journal of Personality, 37*, 313-337.](https://doi.org/10.1177/08902070221088155)
 
-3.  [Ilmarinen, V. J. & Lönnqvist, J. E. (2024). Deconstructing the Gender-Equality Paradox. *Journal of Personality and Social Psychology*.](https://doi.org/10.1037/pspp0000508)
+3.  [Ilmarinen, V. J. & Lönnqvist, J. E. (2024). Deconstructing the Gender-Equality Paradox. *Journal of Personality and Social Psychology*.](https://doi.org/10.31234/osf.io/8jytb)
 
 4.  [Leikas, S., Ilmarinen, V. J., Vainikainen, M. P., & Lönnqvist, J. E. (2024). “Male-typicality Disadvantage” in Educational Outcomes Is Reflected in Personal Values, but Not in Personality Traits. *Collabra: Psychology, 10*, 118840.](https://doi.org/10.1525/collabra.118840)
 
