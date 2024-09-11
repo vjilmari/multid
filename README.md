@@ -49,7 +49,7 @@ Studies in which these methods have been used:
 
 3.  [Ilmarinen, V. J. & Lönnqvist, J. E. (2024). Deconstructing the
     Gender-Equality Paradox. *Journal of Personality and Social
-    Psychology*.](https://doi.org/10.31234/osf.io/8jytb)
+    Psychology, 127*, 217-237.](https://doi.org/10.1037/pspp0000508)
 
 4.  [Leikas, S., Ilmarinen, V. J., Vainikainen, M. P., &
     Lönnqvist, J. E. (2024). “Male-typicality Disadvantage” in
