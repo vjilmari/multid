@@ -57,6 +57,12 @@ Studies in which these methods have been used:
     Personality Traits. *Collabra: Psychology, 10*,
     118840.](https://doi.org/10.1525/collabra.118840)
 
+5.  [Sortheix, F. M., Ilmarinen, V. J., Mannerström, R., &
+    Salmela-Aro, K. (2025). Gender and values in 20 years of the
+    European Social Survey: Are gender-typical values linked to
+    parenthood? *European Journal of
+    Personality*.](https://doi.org/10.1177/08902070251332098)
+
 *multid* also includes a function for testing several hypotheses that
 are typically compressed to correlation between predictor (x) and an
 algebraic difference score (y1-y2) by deconstructing this difference
