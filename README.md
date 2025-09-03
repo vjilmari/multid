@@ -549,11 +549,11 @@ np.overlap<-
 
 # this corresponds to Proportion of overlap relative to the joint distribution (OVL2)
 (np.OVL2<-unname(np.overlap$OV))
-#> [1] 0.6980442
+#> [1] 0.6980037
 
 # from which Proportion of overlap relative to a single distribution (OVL) is approximated at
 (np.OVL<-(2*np.OVL2)/(1+np.OVL2))
-#> [1] 0.8221744
+#> [1] 0.8221462
 
 # compare overlaps
 
