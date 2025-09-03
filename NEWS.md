@@ -5,6 +5,7 @@
 * Added x_scale and y_scale for plot_ddsc
 * Fixed problem in checking for multiple observation data in ml_ddsc
 * Defined sign difference in quantile correlation coefficient (qcc) resulting as rho_tau = zero, not NaN as previously
+* Updated description and roxygenNote version to DESCRIPTION
 
 # multid 1.0.0
 
