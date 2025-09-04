@@ -32,7 +32,7 @@ D_regularized(
 
 \item{group.var}{The name of the group variable.}
 
-\item{group.values}{Vector of length 2, group values (e.g. c("male", "female) or c(0,1)).}
+\item{group.values}{Vector of length 2, group values (e.g. c("male", "female") or c(0,1)).}
 
 \item{alpha}{Alpha-value for penalizing function ranging from 0 to 1: 0 = ridge regression, 1 = lasso, 0.5 = elastic net (default).}
 
