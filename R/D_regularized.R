@@ -3,7 +3,7 @@
 #' @param data A data frame or list containing two data frames (regularization and estimation data, in that order).
 #' @param mv.vars Character vector. Variable names in the multivariate variable set.
 #' @param group.var The name of the group variable.
-#' @param group.values Vector of length 2, group values (e.g. c("male", "female) or c(0,1)).
+#' @param group.values Vector of length 2, group values (e.g. c("male", "female") or c(0,1)).
 #' @param alpha Alpha-value for penalizing function ranging from 0 to 1: 0 = ridge regression, 1 = lasso, 0.5 = elastic net (default).
 #' @param nfolds Number of folds used for obtaining lambda (range from 3 to n-1, default 10).
 #' @param s Which lambda value is used for predicted values? Either "lambda.min" (default) or "lambda.1se".
