@@ -1,3 +1,7 @@
+# multid 1.0.1.9000
+
+* Development version
+
 # multid 1.0.1
 
 * Added coef_text_size to plot_ddsc

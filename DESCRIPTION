@@ -1,6 +1,6 @@
 Package: multid
 Title: Multivariate Difference Between Two Groups
-Version: 1.0.1
+Version: 1.0.1.9000
 Authors@R: 
     person(given = "Ville-Juhani",
            family = "Ilmarinen",
