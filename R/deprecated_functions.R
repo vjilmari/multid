@@ -12,3 +12,4 @@
 #' }
 #'
 #' @name multid-deprecated
+NULL
