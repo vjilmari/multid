@@ -48,8 +48,10 @@ D_regularized_fold_out <-
 
     data.grouped <- dplyr::group_by(
       data,
-      group.var.num,
-      fold.num
+      !!rlang::sym("group.var.num"),
+      !!rlang::sym("fold.num")
+      #group.var.num,
+      #fold.num
     )
 
     train.data <- dplyr::sample_n(data.grouped,

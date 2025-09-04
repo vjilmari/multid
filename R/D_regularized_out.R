@@ -31,7 +31,7 @@ D_regularized_out <-
 
       data$row.nmbr <- rownames(data)
 
-      data.grouped <- dplyr::group_by(data, group.var.num)
+      data.grouped <- dplyr::group_by(data, !!rlang::sym("group.var.num"))
 
       train.data <- dplyr::sample_n(data.grouped,
                                     size = size,
