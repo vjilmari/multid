@@ -6,6 +6,8 @@
 * Fixed problem in checking for multiple observation data in ml_ddsc
 * Defined sign difference in quantile correlation coefficient (qcc) resulting as rho_tau = zero, not NaN as previously
 * Updated description and roxygenNote version to DESCRIPTION
+* Fixed several typos and minor problems (e.g, location of deprecated_functions.R)
+* Fixed a problem related to "no visible binding for global variable" in D_regularized_out dplyr-pipes
 
 # multid 1.0.0
 
