@@ -1,3 +1,7 @@
+# multid 1.0.2.9000
+
+* Development version
+
 # multid 1.0.2
 
 * Data download in multivariate_sex_differences -vignette now fails gracefully
