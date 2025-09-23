@@ -1,6 +1,7 @@
 # multid 1.0.1.9000
 
 * Development version
+* Data download in multivariate_sex_differences now fails gracefully
 
 # multid 1.0.1
 
