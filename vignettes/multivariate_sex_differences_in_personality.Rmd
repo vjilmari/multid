@@ -54,29 +54,31 @@ library(overlapping)
 
 ## Data
 
-This vignette uses openly available data from the "Big Five Personality Test," which is constructed with items from the International Personality Item Pool. The dataset can be downloaded directly from <https://openpsychometrics.org> (by approach presented here <https://stackoverflow.com/a/66351588/8995170>), and there is no need to download it to your drive in order to reproduce the analyses described in this vignette.
+This vignette uses openly available data from the "Big Five Personality Test,"  which is constructed with items from the International Personality Item Pool.  The dataset can be downloaded directly from <https://openpsychometrics.org> (by approach presented here <https://stackoverflow.com/a/66351588/8995170>). 
+However, since CRAN checks do not allow internet resources to be required,  this vignette will use the full dataset if it can be retrieved, and otherwise  fall back to a smaller built-in subset (`example_big5`) that comes with the package.
 
 ```{r importdata}
-# create a temporary directory
 td <- tempdir()
+tf <- tempfile(tmpdir = td, fileext = ".zip")
+url <- "http://openpsychometrics.org/_rawdata/BIG5.zip"
 
-# create a temporary file
-tf <- tempfile(tmpdir=td, fileext=".zip")
+ok <- tryCatch({
+  utils::download.file(url, tf, quiet = TRUE)
+  TRUE
+}, error = function(e) FALSE,
+   warning = function(w) FALSE)
 
-# download file from internet into temporary location
-download.file("http://openpsychometrics.org/_rawdata/BIG5.zip", tf)
+if (ok) {
+  file_names <- unzip(tf, list = TRUE)
+  unzip(tf, exdir = td, overwrite = TRUE)
+  dat <- rio::import(file.path(td, "BIG5/data.csv"))
+  unlink(td)
+  message("Using full BIG5 dataset from ", url)
+} else {
+  dat <- example_big5
+  message("Could not retrieve external dataset. Using built-in fallback dataset `example_big5` (200 US participants).")
+}
 
-# list zip archive
-file_names <- unzip(tf, list=TRUE)
-
-# extract files from zip file
-unzip(tf, exdir=td, overwrite=TRUE)
-
-# use when zip file has only one file
-dat <- import(file.path(td, "BIG5/data.csv"))
-
-# delete the files and directories
-unlink(td)
 ```
 
 ### Variable transformations
