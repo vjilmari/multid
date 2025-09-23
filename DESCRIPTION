@@ -34,3 +34,5 @@ Suggests:
     overlapping (>= 1.7),
     rio (>= 0.5.29)
 VignetteBuilder: knitr
+Depends: 
+    R (>= 3.5)
