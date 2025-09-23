@@ -24,7 +24,7 @@ This approach can be used to measure multivariate differences between any two gr
 
 The regularized method enables the examination of group-membership probabilities and their distributions across individuals. In the context of statistical predictions of sex, these distributions are an updated version of the gender-typicality distributions used in the gender diagnosticity methodology [(Lippa & Connelly, 1990)](https://doi.org/10.1037/0022-3514.59.5.1051).
 
-For more information and empirical examples of how multivariate sex difference estimation and gender diagnosticity methodology can be integrated, please see [Ilmarinen, Vainikainen, and Lönnqvist (2022)](https://doi.org/10.1177/08902070221088155) and [Lönnqvist and Ilmarinen (2021)](https://doi.org/10.1007/s11109-021-09681-2).
+For more information and empirical examples of how multivariate sex difference estimation and gender diagnosticity methodology can be integrated, please see [Ilmarinen, Vainikainen, and Lönnqvist (2023)](https://doi.org/10.1177/08902070221088155) and [Lönnqvist and Ilmarinen (2021)](https://doi.org/10.1007/s11109-021-09681-2).
 
 # Preparations
 
@@ -354,7 +354,7 @@ After obtaining the bootstrap confidence interval, it can be reported that the m
 
 ## Multivariate difference using item scores as variables
 
-Recently, there have been numerous studies in the field of personality psychology emphasizing the significance of narrow personality traits in predicting criteria, beyond the commonly used broad trait domains such as the Big Five [(e.g., Seeboth & Mõttus, 2018)](https://doi.org/10.1002/per.2147). These narrow personality traits are usually either facets or nuances that are commonly modeled as being part of a certain Big Five trait, although their unique predictive utility suggests that they have trait-like properties (stability, cross-informant agreement etc.) that go beyond the broad Big Five domains [(e.g., Mõttus et al., 2019)](https://psycnet.apa.org/record/2018-35082-001). Consequently, narrower traits can be regarded as distinct traits. Thus, it is interesting to investigate whether using item scores as the variable set in multivariate estimation would provide better predictions of sex and different estimates of sex differences [(see Ilmarinen et al., 2022)](https://doi.org/10.1177/08902070221088155).
+Recently, there have been numerous studies in the field of personality psychology emphasizing the significance of narrow personality traits in predicting criteria, beyond the commonly used broad trait domains such as the Big Five [(e.g., Seeboth & Mõttus, 2018)](https://doi.org/10.1002/per.2147). These narrow personality traits are usually either facets or nuances that are commonly modeled as being part of a certain Big Five trait, although their unique predictive utility suggests that they have trait-like properties (stability, cross-informant agreement etc.) that go beyond the broad Big Five domains [(e.g., Mõttus et al., 2019)](https://psycnet.apa.org/record/2018-35082-001). Consequently, narrower traits can be regarded as distinct traits. Thus, it is interesting to investigate whether using item scores as the variable set in multivariate estimation would provide better predictions of sex and different estimates of sex differences [(see Ilmarinen et al., 2023)](https://doi.org/10.1177/08902070221088155).
 
 However, due to the increased number of variables (from five to fifty in this dataset), regularization methods and different data partitions for training and testing are highly recommended to prevent overfitting of the data. For illustrative purposes, Mahalanobis’ *D* is also calculated below.
 
@@ -461,7 +461,7 @@ The overlap between FM-distributions of males and females is somewhat smaller wh
 
 # References
 
--   [Ilmarinen, V. J., Vainikainen, M. P., & Lönnqvist, J. E. (2022). Is there a g-factor of genderedness? Using a continuous measure of genderedness to assess sex differences in personality, values, cognitive ability, school grades, and educational track. *European Journal of Personality*.](https://doi.org/10.1177/08902070221088155)
+-   [Ilmarinen, V. J., Vainikainen, M. P., & Lönnqvist, J. E. (2023). Is there a g-factor of genderedness? Using a continuous measure of genderedness to assess sex differences in personality, values, cognitive ability, school grades, and educational track. *European Journal of Personality, 37*(3), 313--337.](https://doi.org/10.1177/08902070221088155)
 
 -   [Lippa, R. A., & Connelly, S. (1990). Gender diagnosticity: A new Bayesian approach to gender-related individual differences. *Journal of Personality and Social Psychology, 59*(5), 1051--1065.](https://doi.org/10.1037/0022-3514.59.5.1051)
 
