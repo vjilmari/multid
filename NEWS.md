@@ -1,6 +1,5 @@
-# multid 1.0.1.9000
+# multid 1.0.2
 
-* Development version
 * Data download in multivariate_sex_differences -vignette now fails gracefully
 * Included an exemplary dataset (example_big5) for multivariate_sex_differences -vignette
 
