@@ -10,7 +10,7 @@ version](https://www.r-pkg.org/badges/version-ago/multid)](https://www.r-pkg.org
 
 [![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/multid)](https://cranlogs.r-pkg.org/badges/grand-total/multid)
 
-[![DOI](https://zenodo.org/badge/323575627.svg)](https://doi.org/10.32614/CRAN.package.multid)
+[![DOI](https://zenodo.org/badge/323575627.svg)](https://zenodo.org/doi/10.5281/zenodo.10669345)
 
 <!-- badges: end -->
 
