@@ -107,23 +107,51 @@ ddsc_ml <- function(model = NULL,
 
   # calculate lvl2 means and save to data frame
 
-  lvl2_means_y1 <- tapply(data[data[, moderator] == moderator_values[1], DV],
-    data[data[, moderator] == moderator_values[1], lvl2_unit],
-    mean,
-    na.rm = TRUE
-  )
+  if (!is.null(model)) {
+    # Use model weights (all 1s if unweighted model)
+    weights_vec <- stats::weights(model)
 
-  lvl2_means_y2 <- tapply(data[data[, moderator] == moderator_values[2], DV],
-    data[data[, moderator] == moderator_values[2], lvl2_unit],
-    mean,
-    na.rm = TRUE
-  )
+    lvl2_means_y1 <- tapply(
+      seq_len(nrow(data))[data[, moderator] == moderator_values[1]],
+      data[data[, moderator] == moderator_values[1], lvl2_unit],
+      function(idx) stats::weighted.mean(data[idx, DV], weights_vec[idx], na.rm = TRUE)
+    )
 
-  lvl2_means_x <- tapply(data[data[, moderator] == moderator_values[2], predictor],
-    data[data[, moderator] == moderator_values[2], lvl2_unit],
-    mean,
-    na.rm = TRUE
-  )
+    lvl2_means_y2 <- tapply(
+      seq_len(nrow(data))[data[, moderator] == moderator_values[2]],
+      data[data[, moderator] == moderator_values[2], lvl2_unit],
+      function(idx) stats::weighted.mean(data[idx, DV], weights_vec[idx], na.rm = TRUE)
+    )
+
+    lvl2_means_x <- tapply(
+      seq_len(nrow(data))[data[, moderator] == moderator_values[2]],
+      data[data[, moderator] == moderator_values[2], lvl2_unit],
+      function(idx) stats::weighted.mean(data[idx, predictor], weights_vec[idx], na.rm = TRUE)
+    )
+
+  } else {
+    # Old behavior: simple unweighted means
+    lvl2_means_y1 <- tapply(
+      data[data[, moderator] == moderator_values[1], DV],
+      data[data[, moderator] == moderator_values[1], lvl2_unit],
+      mean,
+      na.rm = TRUE
+    )
+
+    lvl2_means_y2 <- tapply(
+      data[data[, moderator] == moderator_values[2], DV],
+      data[data[, moderator] == moderator_values[2], lvl2_unit],
+      mean,
+      na.rm = TRUE
+    )
+
+    lvl2_means_x <- tapply(
+      data[data[, moderator] == moderator_values[2], predictor],
+      data[data[, moderator] == moderator_values[2], lvl2_unit],
+      mean,
+      na.rm = TRUE
+    )
+  }
 
   lvl2_data <- data.frame(
     y1 = lvl2_means_y1,
@@ -131,11 +159,7 @@ ddsc_ml <- function(model = NULL,
     x = lvl2_means_x
   )
 
-  names(lvl2_data) <- c(
-    "means_y1",
-    "means_y2",
-    predictor
-  )
+  names(lvl2_data) <- c("means_y1", "means_y2", predictor)
 
   # obtain descriptives via supplying the lvl2 data to ddsc_sem
   ddsc_sem_fit <-

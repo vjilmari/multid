@@ -1,6 +1,7 @@
 # multid 1.0.2.9000
 
 * Development version
+* When model is supplied to ddsc_ml, level-2 dataset and related descriptives are calculated with model weights if supplied
 
 # multid 1.0.2
 
