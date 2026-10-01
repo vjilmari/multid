@@ -2,6 +2,9 @@
 
 * Development version
 * When model is supplied to ddsc_ml, level-2 dataset and related descriptives are calculated with model weights if supplied
+* Forward the D_regularized wrapper argumnet nfolds to D_regularized_out and D_regularized_vanilla
+* Update README text, citations, and examples
+* Update vignette on multivariate group differences
 
 # multid 1.0.2
 
