@@ -5,6 +5,7 @@
 * Forward the D_regularized wrapper argumnet nfolds to D_regularized_out and D_regularized_vanilla
 * Update README text, citations, and examples
 * Update vignette on multivariate group differences
+* Fix low panel bakcground in plot_ddsc
 
 # multid 1.0.2
 

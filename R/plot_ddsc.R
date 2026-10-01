@@ -199,7 +199,8 @@ plot_ddsc <- function(ddsc_object,
     ggplot2::xlab(x_label) +
     ggplot2::theme(
       legend.title = ggplot2::element_blank(),
-      legend.position = "top"
+      legend.position = "top",
+      panel.background = ggplot2::element_blank()
     )
 
   # obtain locations for printed coefficients
