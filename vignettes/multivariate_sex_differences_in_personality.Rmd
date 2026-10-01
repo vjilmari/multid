@@ -24,7 +24,7 @@ This approach can be used to measure multivariate differences between any two gr
 
 The regularized method enables the examination of group-membership probabilities and their distributions across individuals. In the context of statistical predictions of sex, these distributions are an updated version of the gender-typicality distributions used in the gender diagnosticity methodology [(Lippa & Connelly, 1990)](https://doi.org/10.1037/0022-3514.59.5.1051).
 
-For more information and empirical examples of how multivariate sex difference estimation and gender diagnosticity methodology can be integrated, please see [Ilmarinen, Vainikainen, and Lönnqvist (2023)](https://doi.org/10.1177/08902070221088155) and [Lönnqvist and Ilmarinen (2021)](https://doi.org/10.1007/s11109-021-09681-2).
+For more information and empirical examples of how multivariate sex difference estimation and gender diagnosticity methodology can be integrated, please see [Ilmarinen, Vainikainen, and Lönnqvist (2023)](https://doi.org/10.1177/08902070221088155), [Lönnqvist and Ilmarinen (2021)](https://doi.org/10.1007/s11109-021-09681-2), and [Sortheix et al. (2026)](https://doi.org/10.1037/pspp0000623) .
 
 # Preparations
 
@@ -55,7 +55,7 @@ library(overlapping)
 ## Data
 
 This vignette uses openly available data from the "Big Five Personality Test,"  which is constructed with items from the International Personality Item Pool.  The dataset can be downloaded directly from <https://openpsychometrics.org> (by approach presented here <https://stackoverflow.com/a/66351588/8995170>). 
-However, since CRAN checks do not allow internet resources to be required,  this vignette will use the full dataset if it can be retrieved, and otherwise  fall back to a smaller built-in subset (`example_big5`) that comes with the package.
+However, since CRAN checks do not allow internet resources to be required,  this vignette will use the full dataset if it can be retrieved, and otherwise fall back to a smaller built-in subset (`example_big5`) that comes with the package.
 
 ```{r importdata}
 td <- tempdir()
@@ -169,8 +169,9 @@ rownames(uni.d)<-c("N","E","O","A","C")
 
 round(uni.d,2)
 
+
 ```
-The column labeled "D" indicates Cohen's *d*. Females score higher in Neuroticism (N; *d* = -0.42) and Agreeableness (A; *d* = -0.50), while males score higher in Openness (O; *d* = 0.30). Differences in Extraversion (E) and Conscientiousness (C) are statistically significant (*p* \< .001), but their magnitudes are negligible (*d* \< \|.10\|).
+The column labeled "D" indicates Cohen's *d*. Females score higher in Neuroticism (N; *d* = `r unname(round(d.N[1,"D"],2))`) and Agreeableness (A; *d* = `r unname(round(d.A[1,"D"],2))`), while males score higher in Openness (O; *d* = `r unname(round(d.O[1,"D"],2))`). Differences in Extraversion (E) and Conscientiousness (C) are statistically significant (*p* \< .001), but their magnitudes are negligible (*d* \< \|.10\|).
 
 The average absolute difference across the Big Five traits is therefore *d* = `r round(mean(abs(uni.d[,"D"])),2)`. However, this average absolute difference does not provide information about the overall distance between males and females. For examining questions regarding the overall distance in a certain domain, such as personality, one should use multivariate methods
 
