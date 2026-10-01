@@ -259,11 +259,11 @@ D.ela_out$P.table
 
 ```
 
-
+In the single-draw example above, the multivariate difference in the population was D = `r round(D.maha.pop[1, 1], 2)`. The estimated Mahalanobis’ D was D = `r round(D.maha[1, 1], 2)`, whereas the elastic net D estimate was D = `r unname(round(D.ela$D[, "D"], 2))`. When the data were split into a regularization set and an estimation set, the elastic net D estimate was D = `r unname(round(D.ela_out$D[, "D"], 2))`.
 
 ### Comparison of Mahalanobis' D and Regularized D when Sex Difference in Population Does Not Exist
 
-This example compares a measure of standardized distance between group centroids (Mahalanobis' D) and a regularized variant provided in the multid-package in small-sample scenario when the group centroids in the population are at the same location, D = 0. In this sample, Mahalanobis' D is measured at D = 0.5, elastic net D with same data used for regularization and estimation at D = 0.35, whereas elastic net D with independent estimation data shows D = 0.
+This example compares a measure of standardized distance between group centroids (Mahalanobis' D) and a regularized variant provided in the multid-package in small-sample scenario when the group centroids in the population are at the same location, D = 0. 
 
 ```{r}
 set.seed(8327482)
@@ -281,9 +281,10 @@ diag(cor_mat)<-1
 # population difference vector
 d_vector<-rep(d,k)
 
-# population Mahalanobis' D is exactly 1
+# population Mahalanobis' D is exactly 0
 
-sqrt(t(d_vector) %*% solve(cor_mat) %*% d_vector)
+D.maha.pop.zero<-sqrt(t(d_vector) %*% solve(cor_mat) %*% d_vector)
+D.maha.pop.zero
 
 # generate data
 
@@ -318,7 +319,8 @@ cov_mat_sample<-
   (cov(male.dat[,2:17])+cov(female.dat[,2:17]))/2
 
 # calculate sample Mahalanobis' D
-sqrt(t(d_vector_sample) %*% solve(cov_mat_sample) %*% d_vector_sample)
+D.maha.zero<-sqrt(t(d_vector_sample) %*% solve(cov_mat_sample) %*% d_vector_sample)
+D.maha.zero
 
 # calculate elastic net D
 
@@ -332,21 +334,20 @@ round(D.ela.zero$D,2)
 
 # use separate data for regularization and estimation
 
-D.ela.zero_out<-
+D.ela.out.zero<-
   D_regularized(data=dat,
               mv.vars=paste0("X",1:k),
               group.var = "sex",
               group.values = c("male","female"),
               out=T,size = 50,pcc = T, auc=T,pred.prob = T)
 
-round(D.ela.zero_out$D,2)
+round(D.ela.out.zero$D,2)
 
 # Table of predicted probabilites
-D.ela.zero_out$P.table
+D.ela.out.zero$P.table
 
 ```
-
-In the single-draw example above, the multivariate difference in the population was D = `r round(D.maha.pop[1, 1], 2)`. The estimated Mahalanobis’ D was D = `r round(D.maha[1, 1], 2)`, whereas the elastic net D estimate was D = `r unname(round(D.ela$D[, "D"], 2))`. When the data were split into a regularization set and an estimation set, the elastic net D estimate was D = `r unname(round(D.ela_out$D[, "D"], 2))`.
+In the single-draw example above, the multivariate difference in the population was D = `r round(D.maha.pop.zero[1, 1], 2)`. The estimated Mahalanobis’ D was D = `r round(D.maha.zero[1, 1], 2)`. The elastic net D estimate was D = `r unname(round(D.ela.zero$D[, "diff"], 2))` (not standardized because all individual coefficients were penalized to zero). When the data were split into a regularization set and an estimation set, the elastic net D estimate was D = `r unname(round(D.ela.out.zero$D[, "D"], 2))`.
 
 
 ### Distribution overlap

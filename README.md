@@ -385,15 +385,18 @@ D.ela_out$P.table
 #>   male      0.00      0.22      0.16      0.38    0.24
 ```
 
+In the single-draw example above, the multivariate difference in the
+population was D = 1. The estimated Mahalanobis’ D was D = 1.27, whereas
+the elastic net D estimate was D = 1.23. When the data were split into a
+regularization set and an estimation set, the elastic net D estimate was
+D = 0.9.
+
 ### Comparison of Mahalanobis’ D and Regularized D when Sex Difference in Population Does Not Exist
 
 This example compares a measure of standardized distance between group
 centroids (Mahalanobis’ D) and a regularized variant provided in the
 multid-package in small-sample scenario when the group centroids in the
-population are at the same location, D = 0. In this sample, Mahalanobis’
-D is measured at D = 0.5, elastic net D with same data used for
-regularization and estimation at D = 0.35, whereas elastic net D with
-independent estimation data shows D = 0.
+population are at the same location, D = 0.
 
 ``` r
 set.seed(8327482)
@@ -411,9 +414,10 @@ diag(cor_mat)<-1
 # population difference vector
 d_vector<-rep(d,k)
 
-# population Mahalanobis' D is exactly 1
+# population Mahalanobis' D is exactly 0
 
-sqrt(t(d_vector) %*% solve(cor_mat) %*% d_vector)
+D.maha.pop.zero<-sqrt(t(d_vector) %*% solve(cor_mat) %*% d_vector)
+D.maha.pop.zero
 #>      [,1]
 #> [1,]    0
 
@@ -450,7 +454,8 @@ cov_mat_sample<-
   (cov(male.dat[,2:17])+cov(female.dat[,2:17]))/2
 
 # calculate sample Mahalanobis' D
-sqrt(t(d_vector_sample) %*% solve(cov_mat_sample) %*% d_vector_sample)
+D.maha.zero<-sqrt(t(d_vector_sample) %*% solve(cov_mat_sample) %*% d_vector_sample)
+D.maha.zero
 #>           [,1]
 #> [1,] 0.5316555
 
@@ -468,21 +473,21 @@ round(D.ela.zero$D,2)
 
 # use separate data for regularization and estimation
 
-D.ela.zero_out<-
+D.ela.out.zero<-
   D_regularized(data=dat,
               mv.vars=paste0("X",1:k),
               group.var = "sex",
               group.values = c("male","female"),
               out=T,size = 50,pcc = T, auc=T,pred.prob = T)
 
-round(D.ela.zero_out$D,2)
+round(D.ela.out.zero$D,2)
 #>      n.male n.female m.male m.female sd.male sd.female pooled.sd diff    D
 #> [1,]     50       50   0.04     0.03    0.25      0.24      0.24 0.01 0.04
 #>      pcc.male pcc.female pcc.total  auc
 #> [1,]     0.58       0.46      0.52 0.51
 
 # Table of predicted probabilites
-D.ela.zero_out$P.table
+D.ela.out.zero$P.table
 #>         
 #>          [0,0.2) [0.2,0.4) [0.4,0.6) [0.6,0.8) [0.8,1]
 #>   female    0.00      0.04      0.94      0.02    0.00
@@ -490,10 +495,11 @@ D.ela.zero_out$P.table
 ```
 
 In the single-draw example above, the multivariate difference in the
-population was D = 1. The estimated Mahalanobis’ D was D = 1.27, whereas
-the elastic net D estimate was D = 1.23. When the data were split into a
-regularization set and an estimation set, the elastic net D estimate was
-D = 0.9.
+population was D = 0. The estimated Mahalanobis’ D was D = 0.53. The
+elastic net D estimate was D = 0 (not standardized because all
+individual coefficients were penalized to zero). When the data were
+split into a regularization set and an estimation set, the elastic net D
+estimate was D = 0.04.
 
 ### Distribution overlap
 
