@@ -58,10 +58,15 @@ Studies in which these methods have been used:
     118840.](https://doi.org/10.1525/collabra.118840)
 
 5.  [Sortheix, F. M., Ilmarinen, V. J., Mannerström, R., &
-    Salmela-Aro, K. (2025). Gender and values in 20 years of the
+    Salmela-Aro, K. (2026). Gender and values in 20 years of the
     European Social Survey: Are gender-typical values linked to
-    parenthood? *European Journal of
-    Personality*.](https://doi.org/10.1177/08902070251332098)
+    parenthood? *European Journal of Personality, 40*,
+    237-250.](https://doi.org/10.1177/08902070251332098)
+
+6.  [Sortheix, F. M., Ilmarinen, V. J., Mannerström, R., & Leikas, S.
+    (2026). Examining the gender equality paradox in values using a new
+    measure of value based gender typicality *Journal of Personality and
+    Social Psychology*.](https://doi.org/10.1037/pspp0000623)
 
 *multid* also includes a function for testing several hypotheses that
 are typically compressed to correlation between predictor (x) and an
@@ -285,10 +290,10 @@ round(D_regularized(
 
 ### Comparison of Mahalanobis’ D and Regularized D when Difference in Population Exists
 
-This example compares a measure of standardized distance between group
-centroids (Mahalanobis’ D) and a regularized variant provided in the
-multid-package in small-sample scenario when the distance between group
-centroids in the population is D = 1.
+This example compares a measure of standardized distance between two
+group centroids (Mahalanobis’ D) with a regularized variant provided in
+the multid package, using a small-sample scenario in which the
+population distance between group centroids is D = 1.
 
 ``` r
 set.seed(8327482)
@@ -308,9 +313,7 @@ d_vector<-rep(d,k)
 
 # population Mahalanobis' D is exactly 1
 
-sqrt(t(d_vector) %*% solve(cor_mat) %*% d_vector)
-#>      [,1]
-#> [1,]    1
+D.maha.pop<-sqrt(t(d_vector) %*% solve(cor_mat) %*% d_vector)
 
 # generate data
 library(MASS)
@@ -329,7 +332,7 @@ female.dat<-
 
 dat<-rbind(male.dat,female.dat)
 
-# sample Mahalanobis' D
+# Mahalanobis' D estimated from the sample
 
 # obtain mean differences
 
@@ -340,17 +343,15 @@ for (i in 1:k){
   
 }
 
-# sample pooled covariance matrix (use mean, because equal sample sizes)
+# obtain pooled covariance matrix (use mean, because equal sample sizes)
 
 cov_mat_sample<-
   (cov(male.dat[,2:17])+cov(female.dat[,2:17]))/2
 
 # calculate sample Mahalanobis' D
-sqrt(t(d_vector_sample) %*% solve(cov_mat_sample) %*% d_vector_sample)
-#>          [,1]
-#> [1,] 1.265318
+D.maha<-sqrt(t(d_vector_sample) %*% solve(cov_mat_sample) %*% d_vector_sample)
 
-# calculate elastic net D
+# calculate elastic net D estimate from the sample
 
 D.ela<-
   D_regularized(data=dat,
@@ -389,10 +390,10 @@ D.ela_out$P.table
 This example compares a measure of standardized distance between group
 centroids (Mahalanobis’ D) and a regularized variant provided in the
 multid-package in small-sample scenario when the group centroids in the
-population is are at the same location, D = 0. In this sample,
-Mahalanobis’ D is measured at D = 0.5, elastic net D with same data used
-for regularization and estimation at D = 0.35, whereas elastic net D
-with independent estimation data shows D = 0.
+population are at the same location, D = 0. In this sample, Mahalanobis’
+D is measured at D = 0.5, elastic net D with same data used for
+regularization and estimation at D = 0.35, whereas elastic net D with
+independent estimation data shows D = 0.
 
 ``` r
 set.seed(8327482)
@@ -488,6 +489,12 @@ D.ela.zero_out$P.table
 #>   male      0.00      0.02      0.92      0.06    0.00
 ```
 
+In the single-draw example above, the multivariate difference in the
+population was D = 1. The estimated Mahalanobis’ D was D = 1.27, whereas
+the elastic net D estimate was D = 1.23. When the data were split into a
+regularization set and an estimation set, the elastic net D estimate was
+D = 0.9.
+
 ### Distribution overlap
 
 This example shows how the degree of overlap between the predicted
@@ -511,7 +518,7 @@ ggplot(D.ela_out$pred.dat,
   xlab("Predicted log odds of being male (FM-score)")
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-4-1.png" alt="" width="100%" />
 
 ``` r
 
@@ -543,7 +550,7 @@ np.overlap<-
   plot=T)
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-2.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-4-2.png" alt="" width="100%" />
 
 ``` r
 
