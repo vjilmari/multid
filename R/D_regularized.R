@@ -145,7 +145,8 @@ D_regularized <-
         auc = auc,
         pred.prob = pred.prob,
         prob.cutoffs = prob.cutoffs,
-        append.data = append.data
+        append.data = append.data,
+        nfolds = nfolds
       )
     } # not out-of-bag and folds (fold)?
     else if (!out & fold) {
@@ -172,7 +173,8 @@ D_regularized <-
         s = s,
         type.measure = type.measure,
         rename.output = rename.output,
-        append.data = append.data
+        append.data = append.data,
+        nfolds = nfolds
       )
     }
   }
